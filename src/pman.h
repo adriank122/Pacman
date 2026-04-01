@@ -2,6 +2,7 @@
 #define PMAN_H
 
 #include "map.h"
+#include "platform_utils.h"
 
 
 struct SPman{

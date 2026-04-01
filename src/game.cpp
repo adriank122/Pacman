@@ -1,15 +1,14 @@
 #include "game.h"
+#include "platform_utils.h"
 #include <iostream>
-#include <windows.h>
 #include <stdlib.h>
-#include <conio.h>
 #include <fstream>
 
 using namespace std;
 
 void game_menu(SGame &game){
 
-    system("cls");
+    clear_screen();
 
     cout<<"\t\tPACMAN by Adrian Kaliciecki\n\n\n";
 
@@ -19,7 +18,8 @@ void game_menu(SGame &game){
     cout<<"3 -->\tRanking\n";
     cout<<"4 -->\tWyjscie\n\n";
 
-    char zn=getch();
+    while (!key_available()) { sleep_ms(50); }
+    char zn=get_char();
 
     switch (zn) {
     case '1':
@@ -46,7 +46,7 @@ void game_new(SGame &game, int level){
 
     //tutaj rozpoczynamy gre
 
-    system("cls");
+    clear_screen();
 
     if(level==1)
     {
@@ -60,7 +60,7 @@ void game_new(SGame &game, int level){
 
 
    while(game.pman.lives>0&&game.stoper>0&&game.food>0){
-        system("cls");
+        clear_screen();
         ghost_move(game.ghost1, game.map);
         ghost_move(game.ghost2, game.map);
         ghost_move(game.ghost3, game.map);
@@ -68,11 +68,11 @@ void game_new(SGame &game, int level){
         pman_move(game.pman, game.map);
         game_count(game);
         map_show(game.map);
-        Sleep(game.delay);
+        sleep_ms(game.delay);
 
     }
 
-   system("cls");
+   clear_screen();
 
    if(game.pman.lives<=0)
    {
@@ -80,10 +80,12 @@ void game_new(SGame &game, int level){
          save_ranking(game);
          show_ranking();
          cout<<"\n\n\nWcisnij 'm', aby wrocic do menu glownego.";
-         char zn=getch();
+         while (!key_available()) { sleep_ms(50); }
+         char zn=get_char();
          while(zn!='m')
          {
-             zn=getch();
+             while (!key_available()) { sleep_ms(50); }
+             zn=get_char();
          }
          game_menu(game);
    }
@@ -91,7 +93,8 @@ void game_new(SGame &game, int level){
    if(game.stoper<=0)
    {
        cout<<"Koniec gry!\n\n\nWyczerpales limit czasu.\n\n\nWcisnij enter, aby wrocic do menu\n\n";
-       char zn=getch();
+       while (!key_available()) { sleep_ms(50); }
+       char zn=get_char();
        if(zn)
        {
            game_menu(game);
@@ -101,10 +104,12 @@ void game_new(SGame &game, int level){
    {
        cout<<"Zjadles wszystkie ciasteczka i ukonczyles poziom!\n\n\nWcisnij 'o', aby przejsc do nastepnego poziomu.\n\n";
        cout<<"Wcisnij 'm', aby wrocic do menu glownego.\n\n";
-       char zn=getch();
+       while (!key_available()) { sleep_ms(50); }
+       char zn=get_char();
        while(zn!='m'&&zn!='o')
        {
-           zn=getch();
+           while (!key_available()) { sleep_ms(50); }
+           zn=get_char();
        }
        if(zn=='m')
        {
@@ -174,7 +179,7 @@ void game_instruction(SGame &game){
 
     //instrukcja
 
-    system("cls");
+    clear_screen();
 
     cout<<"\nW --> ruch do gory\n";
     cout<<"A --> ruch w lewo\n";
@@ -185,7 +190,8 @@ void game_instruction(SGame &game){
 
     cout<<"1 -->Wroc do menu\n";
 
-    char zn=getch();
+    while (!key_available()) { sleep_ms(50); }
+    char zn=get_char();
     if(zn=='1')
         game_menu(game);
     else
@@ -207,12 +213,13 @@ void game_init(SGame &game)
 
 void game_ranking(SGame game)
 {
-    system("cls");
+    clear_screen();
     cout<<"Lista wynikow graczy:\n";
     show_ranking();
     cout<<"\n\n\n";
     cout<<"1 --> Wroc do menu glownego";
-    char zn=getch();
+    while (!key_available()) { sleep_ms(50); }
+    char zn=get_char();
     if(zn=='1')
         game_menu(game);
     else

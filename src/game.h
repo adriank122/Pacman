@@ -1,9 +1,9 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <map.h>
-#include <pman.h>
-#include <ghost.h>
+#include "map.h"
+#include "pman.h"
+#include "ghost.h"
 
 
 struct SGame{

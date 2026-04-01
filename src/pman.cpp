@@ -1,6 +1,6 @@
 #include "pman.h"
+#include "platform_utils.h"
 #include <iostream>
-#include <conio.h>
 
 using namespace std;
 
@@ -22,9 +22,9 @@ void pman_move(SPman &pman, SMap &map){
         map.yp=9;
     }
 
-    if(_kbhit()){
+    if(key_available()){
 
-    char input=getch();
+    char input=get_char();
 
     int points=pman.points;
     int xp=map.xp, yp=map.yp;

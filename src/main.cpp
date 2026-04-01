@@ -1,5 +1,6 @@
 #include <iostream>
 #include "game.h"
+#include "platform_utils.h"
 
 using namespace std;
 
