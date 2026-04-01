@@ -8,9 +8,7 @@
 using namespace std;
 
 void clear_screen() {
-    // ANSI escape sequence for clearing screen (works on Linux/Unix)
-    cout << "\033[2J\033[1;1H";
-    cout.flush();
+    std::system("clear");
 }
 
 void sleep_ms(int milliseconds) {
