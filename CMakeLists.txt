@@ -16,6 +16,7 @@ set(CORE_SOURCES
     src/pman.cpp
     src/map.cpp
     src/platform_utils.cpp
+    src/cli_renderer.cpp
 )
 
 add_executable(pacman-cli ${CORE_SOURCES})
