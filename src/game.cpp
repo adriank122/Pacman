@@ -54,14 +54,13 @@ void game_new(SGame &game, int level, Renderer &renderer){
 
 
    while(game.pman.lives>0&&game.stoper>0&&game.food>0){
-        renderer.clear();
         ghost_move(game.ghost1, game.map);
         ghost_move(game.ghost2, game.map);
         ghost_move(game.ghost3, game.map);
         ghost_move(game.ghost4, game.map);
-        pman_move(game.pman, game.map);
+        pman_move(game.pman, game.map, renderer);
         game_count(game, renderer);
-        renderer.showMap(game.map);
+        renderer.showGameState(game);
         renderer.sleep(game.delay);
 
     }

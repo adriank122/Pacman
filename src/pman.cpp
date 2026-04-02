@@ -1,4 +1,5 @@
 #include "pman.h"
+#include "renderer.h"
 #include "platform_utils.h"
 #include <iostream>
 
@@ -10,7 +11,7 @@ void init_pman(SPman &pman)
     pman.points = 0;
 }
 
-void pman_move(SPman &pman, SMap &map){
+void pman_move(SPman &pman, SMap &map, Renderer &renderer){
 
     //tutaj opisuje ruchy pacmana
 
@@ -22,9 +23,9 @@ void pman_move(SPman &pman, SMap &map){
         map.yp=9;
     }
 
-    if(key_available()){
+    if(renderer.keyAvailable()){
 
-    char input=get_char();
+    char input=renderer.getChar();
 
     int points=pman.points;
     int xp=map.xp, yp=map.yp;

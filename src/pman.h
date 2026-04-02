@@ -4,12 +4,14 @@
 #include "map.h"
 #include "platform_utils.h"
 
+// Forward declaration
+class Renderer;
 
 struct SPman{
     int lives, points;
 };
 
-void pman_move(SPman &pman, SMap &map);
+void pman_move(SPman &pman, SMap &map, Renderer &renderer);
 void pman_boost();
 
 
