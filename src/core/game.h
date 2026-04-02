@@ -29,8 +29,7 @@ void game_count(SGame &game, rendering::Renderer &renderer);
 void game_new(SGame &game, int level, rendering::Renderer &renderer);
 void game_instruction(SGame &game, rendering::Renderer &renderer);
 void game_init(SGame &game);
-void show_leaderboard(rendering::Renderer &renderer);
-void save_leaderboard(SGame game, rendering::Renderer &renderer);
+void save_leaderboard(SGame game);
 void game_leaderboard(SGame game, rendering::Renderer &renderer);
 
 } // namespace core

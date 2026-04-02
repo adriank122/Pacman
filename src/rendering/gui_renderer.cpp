@@ -12,7 +12,7 @@ using namespace std;
 namespace pacman {
 namespace rendering {
 
-GUIRenderer::GUIRenderer() : currentScreen("menu"), window(nullptr) {
+GUIRenderer::GUIRenderer() : window(nullptr), currentScreen("menu") {
   int totalHeight = WINDOW_HEIGHT + UI_HEIGHT;
   window =
       new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, totalHeight), "PACMAN");
@@ -339,7 +339,7 @@ void GUIRenderer::showMap(const core::SMap &map) {
   }
 }
 
-void GUIRenderer::showGameCounter(const core::SGame &game) {}
+void GUIRenderer::showGameCounter(const core::SGame &) {}
 
 void GUIRenderer::showGameOver(const string &reason) {
   if (!window)

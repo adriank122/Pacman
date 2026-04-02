@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include <stdlib.h>
+#include <vector>
 
 using namespace std;
 
@@ -63,8 +64,7 @@ void game_new(SGame &game, int level, rendering::Renderer &renderer) {
 
   if (game.pman.lives <= 0) {
     renderer.showGameOver("lives");
-    save_leaderboard(game, renderer);
-    show_leaderboard(renderer);
+    save_leaderboard(game);
     cout << "\n\n\nPress 'm', to go back to main menu.";
     while (!renderer.keyAvailable()) {
       renderer.sleep(50);
@@ -120,8 +120,8 @@ void game_count(SGame &game, rendering::Renderer &renderer) {
       if (game.map.map[i][j] == '.' || game.map.map[i][j] == 'e')
         game.food++;
 
-  if (game.ghost1.xg == game.map.xp && game.ghost1.yg == game.map.yp ||
-      game.ghost2.xg == game.map.xp && game.ghost2.yg == game.map.yp) {
+  if ((game.ghost1.xg == game.map.xp && game.ghost1.yg == game.map.yp) ||
+      (game.ghost2.xg == game.map.xp && game.ghost2.yg == game.map.yp)) {
     game.pman.lives--;
     game.map.xp = 13;
     game.map.yp = 9;
@@ -173,37 +173,23 @@ void game_leaderboard(SGame game, rendering::Renderer &renderer) {
     game_leaderboard(game, renderer);
 }
 
-void show_leaderboard(rendering::Renderer &renderer) {
-  // Note: This is called from rendering components
-}
-
-void save_leaderboard(SGame game, rendering::Renderer &renderer) {
-  ifstream f;
-  int positions = 0;
+void save_leaderboard(SGame game) {
+  vector<string> leaderboard;
   string line;
-  f.open("leaderboard.txt");
-  while (!f.eof()) {
-    getline(f, line);
-    positions++;
+
+  // Read existing leaderboard
+  ifstream f("leaderboard.txt");
+  while (getline(f, line)) {
+    leaderboard.push_back(line);
   }
   f.close();
 
-  string tab[positions];
-
-  f.open("leaderboard.txt");
-  for (int i = 0; i < positions; i++) {
-    getline(f, line);
-    tab[i] = line;
+  // Write leaderboard with new entry
+  ofstream of("leaderboard.txt");
+  for (const auto &entry : leaderboard) {
+    of << entry << "\n";
   }
-
-  ofstream of;
-  of.open("leaderboard.txt");
-  string player_name = "Player";
-  for (int i = 0; i < positions; i++) {
-    of << tab[i] << "\n";
-  }
-
-  of << player_name << "-" << game.pman.points;
+  of << "Player-" << game.pman.points << "\n";
   of.close();
 }
 

@@ -174,8 +174,6 @@ void map_create2(SMap &map) {
 }
 
 void map_create3(SMap &map) {
-  int xp = map.xp, yp = map.yp;
-
   for (int i = 0; i < 17; i++)
     for (int j = 0; j < 20; j++)
       map.map[i][j] = 'x';
