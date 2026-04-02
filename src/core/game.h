@@ -1,9 +1,9 @@
 #ifndef PACMAN_CORE_GAME_H
 #define PACMAN_CORE_GAME_H
 
+#include "ghost.h"
 #include "map.h"
 #include "pman.h"
-#include "ghost.h"
 
 namespace pacman {
 
@@ -14,13 +14,13 @@ class Renderer;
 
 namespace core {
 
-struct SGame{
-    SPman pman;
-    SMap map;
-    SGhost ghost1, ghost2, ghost3, ghost4;
-    int timer;
-    int delay;
-    int food;
+struct SGame {
+  SPman pman;
+  SMap map;
+  SGhost ghost1, ghost2, ghost3, ghost4;
+  int timer;
+  int delay;
+  int food;
 };
 
 void game_menu(SGame &game, rendering::Renderer &renderer);

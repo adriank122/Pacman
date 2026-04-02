@@ -6,11 +6,11 @@
 namespace pacman {
 namespace core {
 
-struct SGhost{
-    int ifcookie;
-    char last_move;
-    int if_boost;
-    int xg, yg, lp;
+struct SGhost {
+  int ifcookie;
+  char last_move;
+  int if_boost;
+  int xg, yg, lp;
 };
 
 void init_ghost(SGhost &ghost, int x, int y);

@@ -4,10 +4,9 @@
 namespace pacman {
 namespace core {
 
-struct SMap
-{
-    char map[17][20];
-    int xp, yp, xg1, yg1, xg2, yg2;
+struct SMap {
+  char map[17][20];
+  int xp, yp, xg1, yg1, xg2, yg2;
 };
 
 void init_map(SMap &map);

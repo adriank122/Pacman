@@ -12,8 +12,8 @@ class Renderer;
 
 namespace core {
 
-struct SPman{
-    int lives, points;
+struct SPman {
+  int lives, points;
 };
 
 void pman_move(SPman &pman, SMap &map, rendering::Renderer &renderer);
@@ -24,4 +24,3 @@ void init_pman(SPman &pman);
 } // namespace pacman
 
 #endif // PACMAN_CORE_PMAN_H
-
