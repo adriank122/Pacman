@@ -9,9 +9,9 @@ struct SMap
 
 void init_map(SMap &map);
 
-void map_create1(SMap &map);  //fukncja do tworzenia tablicy
+void map_create1(SMap &map);
 void map_create2(SMap &map);
 void map_create3(SMap &map);
-void map_show(SMap map);    //funkcja do wyswietlania tablicy
+void map_show(SMap map);
 
 #endif // MAP_H

@@ -181,17 +181,14 @@ void map_create2(SMap &map)
     map.map[xp][yp]='O';
 }
 
-void map_create3(SMap &map){                  //poczatek tworzenia tablicy
-
-    //tutaj tworze mape
-
+void map_create3(SMap &map){
     int xp=map.xp, yp=map.yp;
 
-    for(int i=0; i<17; i++)         //wypelniamy tablice 'x'
+    for(int i=0; i<17; i++)
         for(int j=0; j<20; j++)
             map.map[i][j]='x';
 
-    for(int j=1; j<19; j++){        //wstawiamy ciasteczka
+    for(int j=1; j<19; j++){
         map.map[1][j]='.';
         map.map[3][j]='.';
         map.map[13][j]='.';
@@ -265,21 +262,15 @@ void map_create3(SMap &map){                  //poczatek tworzenia tablicy
     map.map[6][17]='.';
     map.map[10][17]='.';
 
-    map.map[1][1]='e';                 //wstawiamy dopalacze
+    map.map[1][1]='e';
     map.map[15][1]='e';
     map.map[1][18]='e';
     map.map[15][18]='e';
 
     map.map[map.xp][map.yp]='O';
+}
 
-
-
-}                                   //koniec tworzenia tablicy
-
-void map_show(SMap map){                    //wyswietlanie tablicy
-
-    //tutaj wyswietlam mape
-
+void map_show(SMap map){
     cout<<"\n";
     for(int i=0; i<17; i++){
         cout<<"\n\t";
@@ -287,5 +278,4 @@ void map_show(SMap map){                    //wyswietlanie tablicy
             cout<<setw(2)<<map.map[i][j];
     }
     cout<<"\n";
-
 }

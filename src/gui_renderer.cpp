@@ -179,7 +179,7 @@ void GUIRenderer::drawGameUI(const SGame& game, sf::RenderWindow& win) {
     
     // Draw status text
     stringstream ss;
-    ss << "Time: " << (game.stoper / 1000) << "s";
+    ss << "Time: " << (game.timer / 1000) << "s";
     drawText(ss.str(), 10, WINDOW_HEIGHT + 5, 12, sf::Color::Green, win);
     
     ss.str("");
@@ -224,10 +224,10 @@ void GUIRenderer::drawInstructions(sf::RenderWindow& win) {
     drawCenteredText("Press 1 to return to menu", 230, 12, sf::Color::Yellow, win);
 }
 
-void GUIRenderer::drawRanking(sf::RenderWindow& win) {
+void GUIRenderer::drawLeaderboard(sf::RenderWindow& win) {
     drawCenteredText("HIGH SCORES", 10, 20, sf::Color::Yellow, win);
     
-    ifstream rankFile("ranking.txt");
+    ifstream rankFile("leaderboard.txt");
     if (!rankFile.is_open()) {
         drawCenteredText("No ranking file found", 150, 16, sf::Color::Red, win);
         drawCenteredText("Press 1 to return to menu", 230, 12, sf::Color::Yellow, win);
@@ -337,11 +337,11 @@ void GUIRenderer::showInstructions() {
     window->display();
 }
 
-void GUIRenderer::showRanking() {
+void GUIRenderer::showLeaderboard() {
     if (!window) return;
     currentScreen = "ranking";
     
     window->clear(sf::Color::Black);
-    drawRanking(*window);
+    drawLeaderboard(*window);
     window->display();
 }

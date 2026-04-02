@@ -23,7 +23,7 @@ pacman-gui
 .DS_Store
 
 # Dependencies
-ranking.txt
+leaderboard.txt
 
 # Temporary files
 *.tmp

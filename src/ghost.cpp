@@ -16,27 +16,24 @@ void init_ghost(SGhost &ghost, int x, int y)
 }
 
 void ghost_move(SGhost &ghost, SMap &map){
-
-    //tutaj tworze ruchy ducha
-
     int x=ghost.xg, y=ghost.yg;
 
-    int possible=0;                                 //zmienna na możliwości ruchu ducha
+    int possible=0;
     int up=0, down=0, left=0, right=0;
 
-    if(map.map[x-1][y]!='x'&&map.map[x-1][y]!='A'){        //jeśli na górze nie ma 'x' i 'A'
+    if(map.map[x-1][y]!='x'&&map.map[x-1][y]!='A'){
         possible++;
         up=1;
     }
-    if(map.map[x+1][y]!='x'&&map.map[x+1][y]!='A'){        //jeśli na dole nie ma 'x' i 'A'
+    if(map.map[x+1][y]!='x'&&map.map[x+1][y]!='A'){
         possible++;
         down=1;
     }
-    if(map.map[x][y-1]!='x'&&map.map[x][y-1]!='A'){        //jeśli z prawej nie ma 'x' i 'A'
+    if(map.map[x][y-1]!='x'&&map.map[x][y-1]!='A'){
         possible++;
         left=1;
     }
-    if(map.map[x][y+1]!='x'&&map.map[x][y+1]!='A'){        //jeśli z lewej nie ma 'x' i 'A'
+    if(map.map[x][y+1]!='x'&&map.map[x][y+1]!='A'){
         possible++;
         right=1;
     }
@@ -1039,7 +1036,4 @@ void ghost_move(SGhost &ghost, SMap &map){
 }
 
 void ghost_boost(){
-
-    //tutaj tworze ruchy ducha po zjedzeniu przez pacmana wzmacniacza
-
 }

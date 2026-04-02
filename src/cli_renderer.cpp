@@ -32,12 +32,12 @@ void CLIRenderer::sleep(int milliseconds) {
 
 void CLIRenderer::showMenu() {
     clear();
-    cout<<"\t\tPACMAN by Adrian Kaliciecki\n\n\n";
-    cout<<"Wcisnij:\n\n";
-    cout<<"1 -->\tNowa gra\n";
-    cout<<"2 -->\tInstrukcja\n";
-    cout<<"3 -->\tRanking\n";
-    cout<<"4 -->\tWyjscie\n\n";
+    cout<<"\t\tPACMAN\n\n\n";
+    cout<<"Press:\n\n";
+    cout<<"1 -->\tNew Game\n";
+    cout<<"2 -->\tInstructions\n";
+    cout<<"3 -->\tLeaderboard\n";
+    cout<<"4 -->\tQuit\n\n";
 }
 
 void CLIRenderer::showGameState(const SGame &game) {
@@ -56,8 +56,8 @@ void CLIRenderer::showMap(const SMap &map) {
 }
 
 void CLIRenderer::showGameCounter(const SGame &game) {
-    cout<<"Pozostaly czas: "<<game.stoper/1000<<"\n\n";
-    cout<<"Punkty: "<<game.pman.points<<"\n\n";
+    cout<<"Time remaining: "<<game.timer/1000<<"\n\n";
+    cout<<"Points: "<<game.pman.points<<"\n\n";
     
     int food_count = 0;
     for(int i=0; i<17; i++) {
@@ -66,49 +66,49 @@ void CLIRenderer::showGameCounter(const SGame &game) {
                 food_count++;
         }
     }
-    cout<<"Suma ciasteczek: "<<food_count<<"\n\n";
-    cout<<"Ilosc zyc: "<<game.pman.lives<<"\n\n";
+    cout<<"Food count: "<<food_count<<"\n\n";
+    cout<<"Lives: "<<game.pman.lives<<"\n\n";
 }
 
 void CLIRenderer::showGameOver(const std::string &reason) {
     clear();
     if(reason == "lives") {
-        cout<<"Koniec gry!\n\n\nWyczerpales limit zyc.\n\n\nWpisz swoje imie i zatwierdz enterem:\n\n";
+        cout<<"Game Over!\n\n\nYou have run out of lives.\n\n\nEnter your name and press Enter:\n\n";
     } else if(reason == "time") {
-        cout<<"Koniec gry!\n\n\nWyczerpales limit czasu.\n\n\nWcisnij enter, aby wrocic do menu\n\n";
+        cout<<"Game Over!\n\n\nYou have run out of time.\n\n\nPress Enter to return to the menu\n\n";
     } else if(reason == "won") {
-        cout<<"Zjadles wszystkie ciasteczka i ukonczyles poziom!\n\n\nWcisnij 'o', aby przejsc do nastepnego poziomu.\n\n";
-        cout<<"Wcisnij 'm', aby wrocic do menu glownego.\n\n";
+        cout<<"You have eaten all the dots and completed the level!\n\n\nPress 'o' to proceed to the next level.\n\n";
+        cout<<"Press 'm' to return to the main menu.\n\n";
     }
 }
 
 void CLIRenderer::showInstructions() {
     clear();
-    cout<<"\nW --> ruch do gory\n";
-    cout<<"A --> ruch w lewo\n";
-    cout<<"S --> ruch do dolu\n";
-    cout<<"D --> ruch w prawo\n\n";
-    cout<<"Zbierz wszystkie ciasteczka, aby przejsc etap!\nNie daj sie zjesc duchom.\n";
-    cout<<"Masz trzy zycia\n\n\n\n";
-    cout<<"1 -->Wroc do menu\n";
+    cout<<"\nW --> move up\n";
+    cout<<"A --> move left\n";
+    cout<<"S --> move down\n";
+    cout<<"D --> move right\n\n";
+    cout<<"Collect all the dots to complete the level!\nDon't let the ghosts catch you.\n";
+    cout<<"You have three lives\n\n\n\n";
+    cout<<"1 -->Back to main menu\n";
 }
 
-void CLIRenderer::showRanking() {
+void CLIRenderer::showLeaderboard() {
     clear();
-    cout<<"Lista wynikow graczy:\n";
-    showRankingList();
+    cout<<"Leaderboard:\n";
+    showLeaderboardList();
     cout<<"\n\n\n";
-    cout<<"1 --> Wroc do menu glownego";
+    cout<<"1 -->Back to main menu";
 }
 
-void CLIRenderer::showRankingList() {
+void CLIRenderer::showLeaderboardList() {
     cout<<"\n\n\n";
-    string napis;
-    ifstream we;
-    we.open("ranking.txt");
-    while(!we.eof()) {
-        getline(we, napis);
-        cout<<napis<<"\n\n";
+    string row;
+    ifstream f;
+    f.open("leaderboard.txt");
+    while(!f.eof()) {
+        getline(f, row);
+        cout<<row<<"\n\n";
     }
-    we.close();
+    f.close();
 }

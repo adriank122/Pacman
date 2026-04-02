@@ -20,7 +20,7 @@ public:
     void showGameCounter(const SGame &game) override;
     void showGameOver(const std::string &reason) override;
     void showInstructions() override;
-    void showRanking() override;
+    void showLeaderboard() override;
     void clear() override;
     
     char getChar() override;
@@ -50,7 +50,7 @@ private:
     void drawMenu(sf::RenderWindow& win);
     void drawGameUI(const SGame& game, sf::RenderWindow& win);
     void drawInstructions(sf::RenderWindow& win);
-    void drawRanking(sf::RenderWindow& win);
+    void drawLeaderboard(sf::RenderWindow& win);
     void drawGameOver(const std::string& reason, sf::RenderWindow& win);
 };
 

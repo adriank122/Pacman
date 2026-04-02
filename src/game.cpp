@@ -9,13 +9,12 @@
 using namespace std;
 
 void game_menu(SGame &game, Renderer &renderer){
-
     renderer.showMenu();
 
     while (!renderer.keyAvailable()) { renderer.sleep(50); }
-    char zn=renderer.getChar();
+    char c=renderer.getChar();
 
-    switch (zn) {
+    switch (c) {
     case '1':
         game_init(game);
         game_new(game, 1, renderer);
@@ -24,7 +23,7 @@ void game_menu(SGame &game, Renderer &renderer){
         game_instruction(game, renderer);
         break;
     case '3':
-        game_ranking(game, renderer);
+        game_leaderboard(game, renderer);
         break;
     case '4':
         game_quit(renderer);
@@ -37,9 +36,6 @@ void game_menu(SGame &game, Renderer &renderer){
 }
 
 void game_new(SGame &game, int level, Renderer &renderer){
-
-    //tutaj rozpoczynamy gre
-
     renderer.clear();
 
     if(level==1)
@@ -53,7 +49,7 @@ void game_new(SGame &game, int level, Renderer &renderer){
     game_count(game, renderer);
 
 
-   while(game.pman.lives>0&&game.stoper>0&&game.food>0){
+   while(game.pman.lives>0&&game.timer>0&&game.food>0){
         ghost_move(game.ghost1, game.map);
         ghost_move(game.ghost2, game.map);
         ghost_move(game.ghost3, game.map);
@@ -70,25 +66,25 @@ void game_new(SGame &game, int level, Renderer &renderer){
    if(game.pman.lives<=0)
    {
          renderer.showGameOver("lives");
-         save_ranking(game, renderer);
-         show_ranking(renderer);
-         cout<<"\n\n\nWcisnij 'm', aby wrocic do menu glownego.";
+         save_leaderboard(game, renderer);
+         show_leaderboard(renderer);
+         cout<<"\n\n\nPress 'm', to go back to main menu.";
          while (!renderer.keyAvailable()) { renderer.sleep(50); }
-         char zn=renderer.getChar();
-         while(zn!='m')
+         char c=renderer.getChar();
+         while(c!='m')
          {
              while (!renderer.keyAvailable()) { renderer.sleep(50); }
-             zn=renderer.getChar();
+             c=renderer.getChar();
          }
          game_menu(game, renderer);
    }
 
-   if(game.stoper<=0)
+   if(game.timer<=0)
    {
        renderer.showGameOver("time");
        while (!renderer.keyAvailable()) { renderer.sleep(50); }
-       char zn=renderer.getChar();
-       if(zn)
+       char c=renderer.getChar();
+       if(c)
        {
            game_menu(game, renderer);
        }
@@ -97,17 +93,17 @@ void game_new(SGame &game, int level, Renderer &renderer){
    {
        renderer.showGameOver("won");
        while (!renderer.keyAvailable()) { renderer.sleep(50); }
-       char zn=renderer.getChar();
-       while(zn!='m'&&zn!='o')
+       char c=renderer.getChar();
+       while(c!='m'&&c!='o')
        {
            while (!renderer.keyAvailable()) { renderer.sleep(50); }
-           zn=renderer.getChar();
+           c=renderer.getChar();
        }
-       if(zn=='m')
+       if(c=='m')
        {
            game_menu(game, renderer);
        }
-       if(zn=='o')
+       if(c=='o')
        {
            game_init(game);
            game_new(game, 2, renderer);
@@ -117,13 +113,7 @@ void game_new(SGame &game, int level, Renderer &renderer){
 
 
 void game_count(SGame &game, Renderer &renderer){
-
-    //tutaj tworze liczniki
-
-    //              licznik czasu
-    game.stoper-=game.delay;
-
-    //              licznik jedzenia
+    game.timer-=game.delay;
     game.food=0;
 
     for(int i=0; i<17; i++)
@@ -131,7 +121,6 @@ void game_count(SGame &game, Renderer &renderer){
             if(game.map.map[i][j]=='.'||game.map.map[i][j]=='e')
                 game.food++;
 
-    //              licznik życia
     if(game.ghost1.xg==game.map.xp&&game.ghost1.yg==game.map.yp||game.ghost2.xg==game.map.xp&&game.ghost2.yg==game.map.yp)
     {
         game.pman.lives--;
@@ -144,27 +133,17 @@ void game_count(SGame &game, Renderer &renderer){
 }
 
 int game_quit(Renderer &renderer){
-
-    //tutaj tworze wyjscie z gry
-
     renderer.clear();
     return 1;
-
 }
 
-
-
-
-
 void game_instruction(SGame &game, Renderer &renderer){
-
-    //instrukcja
 
     renderer.showInstructions();
 
     while (!renderer.keyAvailable()) { renderer.sleep(50); }
-    char zn=renderer.getChar();
-    if(zn=='1')
+    char c=renderer.getChar();
+    if(c=='1')
         game_menu(game, renderer);
     else
         game_instruction(game, renderer);
@@ -175,7 +154,7 @@ void game_init(SGame &game)
 {
     init_map(game.map);
     init_pman(game.pman);
-    game.stoper=200000;
+    game.timer=200000;
     game.delay=300;
     init_ghost(game.ghost1, 15, 1);
     init_ghost(game.ghost2, 15, 18);
@@ -183,54 +162,54 @@ void game_init(SGame &game)
     init_ghost(game.ghost4, 1, 18);
 }
 
-void game_ranking(SGame game, Renderer &renderer)
+void game_leaderboard(SGame game, Renderer &renderer)
 {
-    renderer.showRanking();
+    renderer.showLeaderboard();
     while (!renderer.keyAvailable()) { renderer.sleep(50); }
-    char zn=renderer.getChar();
-    if(zn=='1')
+    char c=renderer.getChar();
+    if(c=='1')
         game_menu(game, renderer);
     else
-        game_ranking(game, renderer);
+        game_leaderboard(game, renderer);
 }
 
-void show_ranking(Renderer &renderer)
+void show_leaderboard(Renderer &renderer)
 {
     // Note: This is called from cli_renderer.cpp now, but keep for compatibility
 }
 
-void save_ranking(SGame game, Renderer &renderer)
+void save_leaderboard(SGame game, Renderer &renderer)
 {
-    ifstream we;
-    int iloscpozycji=0;
-    string napis;
-    we.open("ranking.txt");
-    while(!we.eof())
+    ifstream f;
+    int positions=0;
+    string line;
+    f.open("leaderboard.txt");
+    while(!f.eof())
     {
-        getline(we, napis);
-        iloscpozycji++;
+        getline(f, line);
+        positions++;
     }
-    we.close();
+    f.close();
 
-    string tab[iloscpozycji];
+    string tab[positions];
 
-    we.open("ranking.txt");
-    for(int i=0; i<iloscpozycji; i++)
+    f.open("leaderboard.txt");
+    for(int i=0; i<positions; i++)
     {
-        getline(we, napis);
-        tab[i]=napis;
+        getline(f, line);
+        tab[i]=line;
     }
 
-    ofstream wy;
-    wy.open("ranking.txt");
+    ofstream of;
+    of.open("leaderboard.txt");
     // Note: Player name input would be handled by renderer in full implementation
     // For now, using placeholder
     string player_name = "Player";
-    for(int i=0; i<iloscpozycji; i++)
+    for(int i=0; i<positions; i++)
     {
-        wy<<tab[i]<<"\n";
+        of<<tab[i]<<"\n";
     }
 
-    wy<<player_name<<"-"<<game.pman.points;
-    wy.close();
+    of<<player_name<<"-"<<game.pman.points;
+    of.close();
 }

@@ -12,9 +12,6 @@ void init_pman(SPman &pman)
 }
 
 void pman_move(SPman &pman, SMap &map, Renderer &renderer){
-
-    //tutaj opisuje ruchy pacmana
-
     if(map.map[map.xp][map.yp]=='A')
     {
         pman.lives--;
@@ -154,7 +151,4 @@ void pman_move(SPman &pman, SMap &map, Renderer &renderer){
 }
 
 void pman_boost(){
-
-    //tutaj opisuje pacmana po zjedzeniu wzmacniacza
-
 }

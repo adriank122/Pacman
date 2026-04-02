@@ -15,7 +15,7 @@ public:
     void showGameCounter(const SGame &game) override;
     void showGameOver(const std::string &reason) override;
     void showInstructions() override;
-    void showRanking() override;
+    void showLeaderboard() override;
     void clear() override;
     
     char getChar() override;
@@ -23,7 +23,7 @@ public:
     void sleep(int milliseconds) override;
     
 private:
-    void showRankingList();
+    void showLeaderboardList();
 };
 
 #endif // CLI_RENDERER_H

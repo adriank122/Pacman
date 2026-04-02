@@ -14,7 +14,7 @@ struct SGame{
     struct SMap map;
     struct SGhost ghost1, ghost2, ghost3, ghost4;
 
-    int stoper;
+    int timer;
     int delay;
     int food;
 };
@@ -25,9 +25,9 @@ void game_count(SGame &game, Renderer &renderer);
 void game_new(SGame &game, int level, Renderer &renderer);
 void game_instruction(SGame &game, Renderer &renderer);
 void game_init(SGame &game);
-void show_ranking(Renderer &renderer);
-void save_ranking(SGame game, Renderer &renderer);
-void game_ranking(SGame game, Renderer &renderer);
+void show_leaderboard(Renderer &renderer);
+void save_leaderboard(SGame game, Renderer &renderer);
+void game_leaderboard(SGame game, Renderer &renderer);
 
 
 #endif // GAME_H
