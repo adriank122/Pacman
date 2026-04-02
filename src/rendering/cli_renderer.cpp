@@ -1,12 +1,15 @@
-#include "cli_renderer.h"
-#include "platform_utils.h"
-#include "game.h"
-#include "map.h"
+#include "rendering/cli_renderer.h"
+#include "utils/platform_utils.h"
+#include "core/game.h"
+#include "core/map.h"
 #include <iostream>
 #include <fstream>
 #include <iomanip>
 
 using namespace std;
+
+namespace pacman {
+namespace rendering {
 
 CLIRenderer::CLIRenderer() {
 }
@@ -15,19 +18,19 @@ CLIRenderer::~CLIRenderer() {
 }
 
 void CLIRenderer::clear() {
-    clear_screen();
+    utils::clear_screen();
 }
 
 char CLIRenderer::getChar() {
-    return get_char();
+    return utils::get_char();
 }
 
 bool CLIRenderer::keyAvailable() {
-    return key_available();
+    return utils::key_available();
 }
 
 void CLIRenderer::sleep(int milliseconds) {
-    sleep_ms(milliseconds);
+    utils::sleep_ms(milliseconds);
 }
 
 void CLIRenderer::showMenu() {
@@ -40,13 +43,13 @@ void CLIRenderer::showMenu() {
     cout<<"4 -->\tQuit\n\n";
 }
 
-void CLIRenderer::showGameState(const SGame &game) {
+void CLIRenderer::showGameState(const core::SGame &game) {
     clear();
     showMap(game.map);
     showGameCounter(game);
 }
 
-void CLIRenderer::showMap(const SMap &map) {
+void CLIRenderer::showMap(const core::SMap &map) {
     for(int i=0; i<17; i++) {
         for(int j=0; j<20; j++) {
             cout << setw(2) << map.map[i][j];
@@ -55,7 +58,7 @@ void CLIRenderer::showMap(const SMap &map) {
     }
 }
 
-void CLIRenderer::showGameCounter(const SGame &game) {
+void CLIRenderer::showGameCounter(const core::SGame &game) {
     cout<<"Time remaining: "<<game.timer/1000<<"\n\n";
     cout<<"Points: "<<game.pman.points<<"\n\n";
     
@@ -112,3 +115,6 @@ void CLIRenderer::showLeaderboardList() {
     }
     f.close();
 }
+
+} // namespace rendering
+} // namespace pacman

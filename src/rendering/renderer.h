@@ -1,11 +1,15 @@
-#ifndef RENDERER_H
-#define RENDERER_H
+#ifndef PACMAN_RENDERING_RENDERER_H
+#define PACMAN_RENDERING_RENDERER_H
 
 #include <string>
 
-// Forward declarations to avoid circular dependencies
+namespace pacman {
+namespace core {
 struct SGame;
 struct SMap;
+}
+
+namespace rendering {
 
 class Renderer {
 public:
@@ -13,9 +17,9 @@ public:
     
     // Rendering functions
     virtual void showMenu() = 0;
-    virtual void showGameState(const SGame &game) = 0;
-    virtual void showMap(const SMap &map) = 0;
-    virtual void showGameCounter(const SGame &game) = 0;
+    virtual void showGameState(const core::SGame &game) = 0;
+    virtual void showMap(const core::SMap &map) = 0;
+    virtual void showGameCounter(const core::SGame &game) = 0;
     virtual void showGameOver(const std::string &reason) = 0;
     virtual void showInstructions() = 0;
     virtual void showLeaderboard() = 0;
@@ -27,4 +31,7 @@ public:
     virtual void sleep(int milliseconds) = 0;
 };
 
-#endif // RENDERER_H
+} // namespace rendering
+} // namespace pacman
+
+#endif // PACMAN_RENDERING_RENDERER_H

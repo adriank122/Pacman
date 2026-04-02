@@ -1,8 +1,11 @@
-#include "map.h"
+#include "core/map.h"
 #include <iostream>
 #include <iomanip>
 
 using namespace std;
+
+namespace pacman {
+namespace core {
 
 void init_map(SMap &map)
 {
@@ -279,3 +282,6 @@ void map_show(SMap map){
     }
     cout<<"\n";
 }
+
+} // namespace core
+} // namespace pacman

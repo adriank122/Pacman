@@ -1,9 +1,11 @@
-#include "pman.h"
-#include "renderer.h"
-#include "platform_utils.h"
+#include "core/pman.h"
+#include "rendering/renderer.h"
 #include <iostream>
 
 using namespace std;
+
+namespace pacman {
+namespace core {
 
 void init_pman(SPman &pman)
 {
@@ -11,7 +13,7 @@ void init_pman(SPman &pman)
     pman.points = 0;
 }
 
-void pman_move(SPman &pman, SMap &map, Renderer &renderer){
+void pman_move(SPman &pman, SMap &map, rendering::Renderer &renderer){
     if(map.map[map.xp][map.yp]=='A')
     {
         pman.lives--;
@@ -152,3 +154,6 @@ void pman_move(SPman &pman, SMap &map, Renderer &renderer){
 
 void pman_boost(){
 }
+
+} // namespace core
+} // namespace pacman

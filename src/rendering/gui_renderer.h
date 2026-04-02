@@ -1,13 +1,12 @@
-#ifndef GUI_RENDERER_H
-#define GUI_RENDERER_H
+#ifndef PACMAN_RENDERING_GUI_RENDERER_H
+#define PACMAN_RENDERING_GUI_RENDERER_H
 
 #include "renderer.h"
 #include <SFML/Graphics.hpp>
 #include <queue>
 
-// Forward declarations
-struct SGame;
-struct SMap;
+namespace pacman {
+namespace rendering {
 
 class GUIRenderer : public Renderer {
 public:
@@ -15,9 +14,9 @@ public:
     ~GUIRenderer();
     
     void showMenu() override;
-    void showGameState(const SGame &game) override;
-    void showMap(const SMap &map) override;
-    void showGameCounter(const SGame &game) override;
+    void showGameState(const core::SGame &game) override;
+    void showMap(const core::SMap &map) override;
+    void showGameCounter(const core::SGame &game) override;
     void showGameOver(const std::string &reason) override;
     void showInstructions() override;
     void showLeaderboard() override;
@@ -29,18 +28,17 @@ public:
     
 private:
     sf::RenderWindow* window;
-    sf::Font fonts;                      // Font for text rendering
+    sf::Font fonts;
     std::queue<char> inputQueue;
-    std::string currentScreen;           // track which screen we're on
+    std::string currentScreen;
     
     static const int TILE_SIZE = 16;
     static const int MAP_WIDTH = 20;
     static const int MAP_HEIGHT = 17;
-    static const int WINDOW_WIDTH = 320;   // 20 tiles * 16 pixels
-    static const int WINDOW_HEIGHT = 272;  // 17 tiles * 16 pixels
-    static const int UI_HEIGHT = 80;       // Space for UI text
+    static const int WINDOW_WIDTH = 320;
+    static const int WINDOW_HEIGHT = 272;
+    static const int UI_HEIGHT = 80;
     
-    // Rendering helpers
     void renderTile(int row, int col, char tileChar, sf::RenderWindow& win);
     void drawText(const std::string& text, float x, float y, unsigned int fontSize, 
                   const sf::Color& color, sf::RenderWindow& win);
@@ -48,11 +46,13 @@ private:
                           const sf::Color& color, sf::RenderWindow& win);
     void handleEvents();
     void drawMenu(sf::RenderWindow& win);
-    void drawGameUI(const SGame& game, sf::RenderWindow& win);
+    void drawGameUI(const core::SGame& game, sf::RenderWindow& win);
     void drawInstructions(sf::RenderWindow& win);
     void drawLeaderboard(sf::RenderWindow& win);
     void drawGameOver(const std::string& reason, sf::RenderWindow& win);
 };
 
-#endif // GUI_RENDERER_H
+} // namespace rendering
+} // namespace pacman
 
+#endif // PACMAN_RENDERING_GUI_RENDERER_H

@@ -1,4 +1,4 @@
-#include "platform_utils.h"
+#include "utils/platform_utils.h"
 #include <iostream>
 #include <thread>
 #include <termios.h>
@@ -6,6 +6,9 @@
 #include <sys/select.h>
 
 using namespace std;
+
+namespace pacman {
+namespace utils {
 
 void clear_screen() {
     std::system("clear");
@@ -59,3 +62,6 @@ char get_char() {
     }
     return 0;
 }
+
+} // namespace utils
+} // namespace pacman

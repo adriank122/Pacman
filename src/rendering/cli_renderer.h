@@ -1,8 +1,11 @@
-#ifndef CLI_RENDERER_H
-#define CLI_RENDERER_H
+#ifndef PACMAN_RENDERING_CLI_RENDERER_H
+#define PACMAN_RENDERING_CLI_RENDERER_H
 
 #include "renderer.h"
 #include <fstream>
+
+namespace pacman {
+namespace rendering {
 
 class CLIRenderer : public Renderer {
 public:
@@ -10,9 +13,9 @@ public:
     ~CLIRenderer();
     
     void showMenu() override;
-    void showGameState(const SGame &game) override;
-    void showMap(const SMap &map) override;
-    void showGameCounter(const SGame &game) override;
+    void showGameState(const core::SGame &game) override;
+    void showMap(const core::SMap &map) override;
+    void showGameCounter(const core::SGame &game) override;
     void showGameOver(const std::string &reason) override;
     void showInstructions() override;
     void showLeaderboard() override;
@@ -26,4 +29,7 @@ private:
     void showLeaderboardList();
 };
 
-#endif // CLI_RENDERER_H
+} // namespace rendering
+} // namespace pacman
+
+#endif // PACMAN_RENDERING_CLI_RENDERER_H

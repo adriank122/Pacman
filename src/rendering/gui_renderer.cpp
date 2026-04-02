@@ -1,7 +1,7 @@
-#include "gui_renderer.h"
-#include "game.h"
-#include "map.h"
-#include "platform_utils.h"
+#include "rendering/gui_renderer.h"
+#include "core/game.h"
+#include "core/map.h"
+#include "utils/platform_utils.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -9,16 +9,16 @@
 
 using namespace std;
 
+namespace pacman {
+namespace rendering {
+
 GUIRenderer::GUIRenderer() : currentScreen("menu"), window(nullptr) {
-    // Create window with space for UI below the map
     int totalHeight = WINDOW_HEIGHT + UI_HEIGHT;
     window = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, totalHeight), "PACMAN");
     window->setFramerateLimit(60);
     
-    // Load font
     if (!fonts.loadFromFile("resources/fonts/Roboto-Regular.ttf")) {
         cerr << "Warning: Could not load font from resources/fonts/Roboto-Regular.ttf" << endl;
-        cerr << "Text rendering will not work properly!" << endl;
     }
     
     if (!window) {
@@ -80,7 +80,7 @@ bool GUIRenderer::keyAvailable() {
 }
 
 void GUIRenderer::sleep(int milliseconds) {
-    sleep_ms(milliseconds);
+    utils::sleep_ms(milliseconds);
     handleEvents();
 }
 
@@ -94,36 +94,35 @@ void GUIRenderer::renderTile(int row, int col, char tileChar, sf::RenderWindow& 
     sf::CircleShape shape;
     
     switch (tileChar) {
-        case 'x':  // Wall
+        case 'x':
             tile.setFillColor(sf::Color::Blue);
             win.draw(tile);
             break;
-        case '.':  // Pellet
+        case '.':
             shape.setRadius(2);
             shape.setFillColor(sf::Color::Yellow);
             shape.setPosition(x + TILE_SIZE/2 - 2, y + TILE_SIZE/2 - 2);
             win.draw(shape);
             break;
-        case 'e':  // Power pellet (energizer)
+        case 'e':
             shape.setRadius(4);
             shape.setFillColor(sf::Color::Magenta);
             shape.setPosition(x + TILE_SIZE/2 - 4, y + TILE_SIZE/2 - 4);
             win.draw(shape);
             break;
-        case 'O':  // Pacman
+        case 'O':
             shape.setRadius(7);
             shape.setFillColor(sf::Color::Yellow);
             shape.setPosition(x + 1, y + 1);
             win.draw(shape);
             break;
-        case 'A':  // Ghost
+        case 'A':
             shape.setRadius(7);
             shape.setFillColor(sf::Color::Red);
             shape.setPosition(x + 1, y + 1);
             win.draw(shape);
             break;
-        case ' ':  // Empty space
-            // Draw nothing
+        case ' ':
             break;
         default:
             break;
@@ -148,36 +147,26 @@ void GUIRenderer::drawCenteredText(const string& text, float y, unsigned int fon
 }
 
 void GUIRenderer::drawMenu(sf::RenderWindow& win) {
-    // Draw title
     drawCenteredText("PACMAN", 10, 24, sf::Color::Yellow, win);
-    
-    // Draw author
     drawCenteredText("by Adrian Kaliciecki", 40, 12, sf::Color::White, win);
-    
-    // Draw menu options
     drawCenteredText("1) New Game", 90, 16, sf::Color::Green, win);
     drawCenteredText("2) Instructions", 120, 16, sf::Color::Green, win);
     drawCenteredText("3) Ranking", 150, 16, sf::Color::Green, win);
     drawCenteredText("4) Quit", 180, 16, sf::Color::Green, win);
-    
-    // Draw footer
     drawCenteredText("Select option:", 220, 12, sf::Color::Cyan, win);
 }
 
-void GUIRenderer::drawGameUI(const SGame& game, sf::RenderWindow& win) {
-    // Draw game statistics at the bottom of the window
+void GUIRenderer::drawGameUI(const core::SGame& game, sf::RenderWindow& win) {
     sf::RectangleShape uiBg(sf::Vector2f(WINDOW_WIDTH, UI_HEIGHT));
     uiBg.setFillColor(sf::Color(30, 30, 30));
     uiBg.setPosition(0, WINDOW_HEIGHT);
     win.draw(uiBg);
     
-    // Draw separator line
     sf::RectangleShape separator(sf::Vector2f(WINDOW_WIDTH, 2));
     separator.setFillColor(sf::Color::White);
     separator.setPosition(0, WINDOW_HEIGHT);
     win.draw(separator);
     
-    // Draw status text
     stringstream ss;
     ss << "Time: " << (game.timer / 1000) << "s";
     drawText(ss.str(), 10, WINDOW_HEIGHT + 5, 12, sf::Color::Green, win);
@@ -192,7 +181,6 @@ void GUIRenderer::drawGameUI(const SGame& game, sf::RenderWindow& win) {
     ss << "Lives: " << game.pman.lives;
     drawText(ss.str(), 10, WINDOW_HEIGHT + 45, 12, sf::Color::Yellow, win);
     
-    // Draw food counter
     int food_count = 0;
     for(int i=0; i<17; i++) {
         for(int j=0; j<20; j++) {
@@ -209,18 +197,15 @@ void GUIRenderer::drawGameUI(const SGame& game, sf::RenderWindow& win) {
 
 void GUIRenderer::drawInstructions(sf::RenderWindow& win) {
     drawCenteredText("INSTRUCTIONS", 10, 20, sf::Color::Yellow, win);
-    
     drawText("Movement Keys:", 20, 50, 14, sf::Color::White, win);
     drawText("W - Move Up", 30, 70, 12, sf::Color::Green, win);
     drawText("A - Move Left", 30, 85, 12, sf::Color::Green, win);
     drawText("S - Move Down", 30, 100, 12, sf::Color::Green, win);
     drawText("D - Move Right", 30, 115, 12, sf::Color::Green, win);
-    
     drawText("Objective:", 20, 145, 14, sf::Color::White, win);
     drawText("Collect pellets (dots) to advance levels", 30, 165, 12, sf::Color::Cyan, win);
     drawText("Avoid ghosts (red) - You have 3 lives", 30, 180, 12, sf::Color::Cyan, win);
     drawText("Special pellets give 5x points", 30, 195, 12, sf::Color::Cyan, win);
-    
     drawCenteredText("Press 1 to return to menu", 230, 12, sf::Color::Yellow, win);
 }
 
@@ -244,8 +229,8 @@ void GUIRenderer::drawLeaderboard(sf::RenderWindow& win) {
         
         sf::Color rankColor = sf::Color::White;
         if (rank == 1) rankColor = sf::Color::Yellow;
-        else if (rank == 2) rankColor = sf::Color(192, 192, 192);  // Silver
-        else if (rank == 3) rankColor = sf::Color(184, 134, 11);   // Gold-ish
+        else if (rank == 2) rankColor = sf::Color(192, 192, 192);
+        else if (rank == 3) rankColor = sf::Color(184, 134, 11);
         
         drawText(rankLine.str(), 30, yPos, 14, rankColor, win);
         yPos += 20;
@@ -257,13 +242,11 @@ void GUIRenderer::drawLeaderboard(sf::RenderWindow& win) {
 }
 
 void GUIRenderer::drawGameOver(const string& reason, sf::RenderWindow& win) {
-    // Draw semi-transparent overlay
     sf::RectangleShape overlay(sf::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT));
     overlay.setFillColor(sf::Color(0, 0, 0, 150));
     overlay.setPosition(0, 0);
     win.draw(overlay);
     
-    // Draw message box background
     sf::RectangleShape msgBox(sf::Vector2f(WINDOW_WIDTH - 40, 120));
     if (reason == "lives") {
         msgBox.setFillColor(sf::Color(128, 0, 0));
@@ -289,25 +272,22 @@ void GUIRenderer::drawGameOver(const string& reason, sf::RenderWindow& win) {
 void GUIRenderer::showMenu() {
     if (!window) return;
     currentScreen = "menu";
-    
     window->clear(sf::Color::Black);
     drawMenu(*window);
     window->display();
 }
 
-void GUIRenderer::showGameState(const SGame &game) {
+void GUIRenderer::showGameState(const core::SGame &game) {
     if (!window) return;
     currentScreen = "game";
-    
     window->clear(sf::Color::Black);
     showMap(game.map);
     drawGameUI(game, *window);
     window->display();
 }
 
-void GUIRenderer::showMap(const SMap &map) {
+void GUIRenderer::showMap(const core::SMap &map) {
     if (!window) return;
-    
     for (int i = 0; i < 17; i++) {
         for (int j = 0; j < 20; j++) {
             renderTile(i, j, map.map[i][j], *window);
@@ -315,14 +295,11 @@ void GUIRenderer::showMap(const SMap &map) {
     }
 }
 
-void GUIRenderer::showGameCounter(const SGame &game) {
-    // Handled by showGameState
-    // Kept for interface compatibility
+void GUIRenderer::showGameCounter(const core::SGame &game) {
 }
 
 void GUIRenderer::showGameOver(const string &reason) {
     if (!window) return;
-    
     window->clear(sf::Color::Black);
     drawGameOver(reason, *window);
     window->display();
@@ -331,7 +308,6 @@ void GUIRenderer::showGameOver(const string &reason) {
 void GUIRenderer::showInstructions() {
     if (!window) return;
     currentScreen = "instructions";
-    
     window->clear(sf::Color::Black);
     drawInstructions(*window);
     window->display();
@@ -340,8 +316,10 @@ void GUIRenderer::showInstructions() {
 void GUIRenderer::showLeaderboard() {
     if (!window) return;
     currentScreen = "ranking";
-    
     window->clear(sf::Color::Black);
     drawLeaderboard(*window);
     window->display();
 }
+
+} // namespace rendering
+} // namespace pacman

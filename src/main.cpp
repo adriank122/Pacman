@@ -1,31 +1,32 @@
 #include <iostream>
 #include <string>
-#include "game.h"
-#include "renderer.h"
+#include "core/game.h"
+#include "rendering/renderer.h"
 
 #ifdef USE_GUI
-#include "gui_renderer.h"
+#include "rendering/gui_renderer.h"
 #else
-#include "cli_renderer.h"
+#include "rendering/cli_renderer.h"
 #endif
 
 using namespace std;
+using namespace pacman;
 
 int main()
 {
-    struct SGame game;
-    Renderer* renderer = nullptr;
+    core::SGame game;
+    rendering::Renderer* renderer = nullptr;
     
     #ifdef USE_GUI
-        renderer = new GUIRenderer();
+        renderer = new rendering::GUIRenderer();
         cout << "Starting PACMAN in GUI mode...\n";
     #else
-        renderer = new CLIRenderer();
+        renderer = new rendering::CLIRenderer();
         cout << "Starting PACMAN in CLI mode...\n";
     #endif
     
     if (renderer) {
-        game_menu(game, *renderer);
+        core::game_menu(game, *renderer);
         delete renderer;
     }
     

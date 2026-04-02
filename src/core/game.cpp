@@ -1,14 +1,15 @@
-#include "game.h"
-#include "renderer.h"
-#include "cli_renderer.h"
-#include "platform_utils.h"
+#include "core/game.h"
+#include "rendering/renderer.h"
 #include <iostream>
 #include <stdlib.h>
 #include <fstream>
 
 using namespace std;
 
-void game_menu(SGame &game, Renderer &renderer){
+namespace pacman {
+namespace core {
+
+void game_menu(SGame &game, rendering::Renderer &renderer){
     renderer.showMenu();
 
     while (!renderer.keyAvailable()) { renderer.sleep(50); }
@@ -35,7 +36,7 @@ void game_menu(SGame &game, Renderer &renderer){
 
 }
 
-void game_new(SGame &game, int level, Renderer &renderer){
+void game_new(SGame &game, int level, rendering::Renderer &renderer){
     renderer.clear();
 
     if(level==1)
@@ -112,7 +113,7 @@ void game_new(SGame &game, int level, Renderer &renderer){
 }
 
 
-void game_count(SGame &game, Renderer &renderer){
+void game_count(SGame &game, rendering::Renderer &renderer){
     game.timer-=game.delay;
     game.food=0;
 
@@ -132,12 +133,12 @@ void game_count(SGame &game, Renderer &renderer){
     renderer.showGameCounter(game);
 }
 
-int game_quit(Renderer &renderer){
+int game_quit(rendering::Renderer &renderer){
     renderer.clear();
     return 1;
 }
 
-void game_instruction(SGame &game, Renderer &renderer){
+void game_instruction(SGame &game, rendering::Renderer &renderer){
 
     renderer.showInstructions();
 
@@ -162,7 +163,7 @@ void game_init(SGame &game)
     init_ghost(game.ghost4, 1, 18);
 }
 
-void game_leaderboard(SGame game, Renderer &renderer)
+void game_leaderboard(SGame game, rendering::Renderer &renderer)
 {
     renderer.showLeaderboard();
     while (!renderer.keyAvailable()) { renderer.sleep(50); }
@@ -173,12 +174,12 @@ void game_leaderboard(SGame game, Renderer &renderer)
         game_leaderboard(game, renderer);
 }
 
-void show_leaderboard(Renderer &renderer)
+void show_leaderboard(rendering::Renderer &renderer)
 {
-    // Note: This is called from cli_renderer.cpp now, but keep for compatibility
+    // Note: This is called from rendering components
 }
 
-void save_leaderboard(SGame game, Renderer &renderer)
+void save_leaderboard(SGame game, rendering::Renderer &renderer)
 {
     ifstream f;
     int positions=0;
@@ -202,8 +203,6 @@ void save_leaderboard(SGame game, Renderer &renderer)
 
     ofstream of;
     of.open("leaderboard.txt");
-    // Note: Player name input would be handled by renderer in full implementation
-    // For now, using placeholder
     string player_name = "Player";
     for(int i=0; i<positions; i++)
     {
@@ -213,3 +212,6 @@ void save_leaderboard(SGame game, Renderer &renderer)
     of<<player_name<<"-"<<game.pman.points;
     of.close();
 }
+
+} // namespace core
+} // namespace pacman

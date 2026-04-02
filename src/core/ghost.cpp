@@ -1,9 +1,12 @@
-#include "ghost.h"
+#include "core/ghost.h"
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
 
 using namespace std;
+
+namespace pacman {
+namespace core {
 
 void init_ghost(SGhost &ghost, int x, int y)
 {
@@ -1037,3 +1040,6 @@ void ghost_move(SGhost &ghost, SMap &map){
 
 void ghost_boost(){
 }
+
+} // namespace core
+} // namespace pacman
