@@ -3,7 +3,6 @@
 
 #include "renderer.h"
 #include <SFML/Graphics.hpp>
-#include <queue>
 
 namespace pacman {
 namespace rendering {
@@ -29,7 +28,7 @@ public:
 private:
   sf::RenderWindow *window;
   sf::Font fonts;
-  std::queue<char> inputQueue;
+  char lastKeyPressed;
   std::string currentScreen;
 
   static const int TILE_SIZE = 16;

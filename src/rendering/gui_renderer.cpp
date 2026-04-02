@@ -12,7 +12,8 @@ using namespace std;
 namespace pacman {
 namespace rendering {
 
-GUIRenderer::GUIRenderer() : window(nullptr), currentScreen("menu") {
+GUIRenderer::GUIRenderer()
+    : window(nullptr), lastKeyPressed(0), currentScreen("menu") {
   int totalHeight = WINDOW_HEIGHT + UI_HEIGHT;
   window =
       new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, totalHeight), "PACMAN");
@@ -47,37 +48,37 @@ void GUIRenderer::handleEvents() {
     } else if (event.type == sf::Event::KeyPressed) {
       switch (event.key.code) {
       case sf::Keyboard::W:
-        inputQueue.push('w');
+        lastKeyPressed = 'w';
         break;
       case sf::Keyboard::A:
-        inputQueue.push('a');
+        lastKeyPressed = 'a';
         break;
       case sf::Keyboard::S:
-        inputQueue.push('s');
+        lastKeyPressed = 's';
         break;
       case sf::Keyboard::D:
-        inputQueue.push('d');
+        lastKeyPressed = 'd';
         break;
       case sf::Keyboard::Num1:
-        inputQueue.push('1');
+        lastKeyPressed = '1';
         break;
       case sf::Keyboard::Num2:
-        inputQueue.push('2');
+        lastKeyPressed = '2';
         break;
       case sf::Keyboard::Num3:
-        inputQueue.push('3');
+        lastKeyPressed = '3';
         break;
       case sf::Keyboard::Num4:
-        inputQueue.push('4');
+        lastKeyPressed = '4';
         break;
       case sf::Keyboard::O:
-        inputQueue.push('o');
+        lastKeyPressed = 'o';
         break;
       case sf::Keyboard::M:
-        inputQueue.push('m');
+        lastKeyPressed = 'm';
         break;
       case sf::Keyboard::Return:
-        inputQueue.push(13);
+        lastKeyPressed = 13;
         break;
       default:
         break;
@@ -93,17 +94,14 @@ void GUIRenderer::clear() {
 }
 
 char GUIRenderer::getChar() {
-  if (!inputQueue.empty()) {
-    char c = inputQueue.front();
-    inputQueue.pop();
-    return c;
-  }
-  return 0;
+  char key = lastKeyPressed;
+  lastKeyPressed = 0;
+  return key;
 }
 
 bool GUIRenderer::keyAvailable() {
   handleEvents();
-  return !inputQueue.empty() && window->isOpen();
+  return lastKeyPressed != 0 && window->isOpen();
 }
 
 void GUIRenderer::sleep(int milliseconds) {
