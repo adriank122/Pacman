@@ -120,7 +120,8 @@ void game_count(SGame &game, rendering::Renderer &renderer) {
 
   for (int i = 0; i < 17; i++)
     for (int j = 0; j < 20; j++)
-      if (game.map.map[i][j] == '.' || game.map.map[i][j] == 'e')
+      if (game.map.map[i][j] == core::PELLET ||
+          game.map.map[i][j] == core::POWER_UP)
         game.food++;
 
   if ((game.ghost1.xg == game.map.xp && game.ghost1.yg == game.map.yp) ||
@@ -128,7 +129,7 @@ void game_count(SGame &game, rendering::Renderer &renderer) {
     game.pman.lives--;
     game.map.xp = 13;
     game.map.yp = 9;
-    game.map.map[game.map.xp][game.map.yp] = 'O';
+    game.map.map[game.map.xp][game.map.yp] = core::PACMAN_PLAYER;
   }
 
   renderer.showGameCounter(game);

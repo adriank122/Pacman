@@ -13,9 +13,9 @@ void init_pman(SPman &pman) {
 }
 
 void pman_move(SPman &pman, SMap &map, rendering::Renderer &renderer) {
-  if (map.map[map.xp][map.yp] == 'A') {
+  if (map.map[map.xp][map.yp] == GHOST) {
     pman.lives--;
-    map.map[map.xp][map.yp] = 'A';
+    map.map[map.xp][map.yp] = GHOST;
     map.xp = 13;
     map.yp = 9;
   }
@@ -32,67 +32,67 @@ void pman_move(SPman &pman, SMap &map, rendering::Renderer &renderer) {
     case 'a':
 
       if (xp == 8 && yp == 0) {
-        map.map[xp][yp] = ' ';
-        if (map.map[8][19] == '.')
+        map.map[xp][yp] = EMPTY;
+        if (map.map[8][19] == PELLET)
           points++;
         yp = 19;
         break;
       }
 
-      if (map.map[xp][yp - 1] != 'x') {
-        if (map.map[xp][yp - 1] == '.') {
+      if (map.map[xp][yp - 1] != WALL) {
+        if (map.map[xp][yp - 1] == PELLET) {
           points++;
         }
-        if (map.map[xp][yp - 1] == 'e') {
+        if (map.map[xp][yp - 1] == POWER_UP) {
           points += 5;
         }
-        if (map.map[xp][yp - 1] == 'A') {
+        if (map.map[xp][yp - 1] == GHOST) {
           pman.lives--;
-          map.map[xp][yp] = ' ';
+          map.map[xp][yp] = EMPTY;
           xp = 13;
           yp = 9;
         }
-        map.map[xp][yp] = ' ';
+        map.map[xp][yp] = EMPTY;
         yp--;
         break;
       } else
         break;
 
     case 'w':
-      if (map.map[xp - 1][yp] != 'x') {
-        if (map.map[xp - 1][yp] == '.') {
+      if (map.map[xp - 1][yp] != WALL) {
+        if (map.map[xp - 1][yp] == PELLET) {
           points++;
         }
-        if (map.map[xp - 1][yp] == 'e') {
+        if (map.map[xp - 1][yp] == POWER_UP) {
           points += 5;
         }
-        if (map.map[xp - 1][yp] == 'A') {
+        if (map.map[xp - 1][yp] == GHOST) {
           pman.lives--;
-          map.map[xp][yp] = ' ';
+          map.map[xp][yp] = EMPTY;
           xp = 13;
           yp = 9;
         }
-        map.map[xp][yp] = ' ';
+        map.map[xp][yp] = EMPTY;
         xp--;
         break;
       } else
         break;
 
     case 's':
-      if (map.map[xp + 1][yp] != 'x') {
-        if (map.map[xp + 1][yp] == '.') {
+      if (map.map[xp + 1][yp] != WALL) {
+        if (map.map[xp + 1][yp] == PELLET) {
           points++;
         }
-        if (map.map[xp + 1][yp] == 'e') {
+        if (map.map[xp + 1][yp] == POWER_UP) {
           points += 5;
         }
-        if (map.map[xp + 1][yp] == 'A') {
+        if (map.map[xp + 1][yp] == GHOST) {
           pman.lives--;
-          map.map[xp][yp] = ' ';
+          map.map[xp][yp] = EMPTY;
           xp = 13;
           yp = 9;
         }
-        map.map[xp][yp] = ' ';
+        map.map[xp][yp] = EMPTY;
         xp++;
         break;
       } else
@@ -100,26 +100,26 @@ void pman_move(SPman &pman, SMap &map, rendering::Renderer &renderer) {
 
     case 'd':
       if (xp == 8 && yp == 19) {
-        map.map[xp][yp] = ' ';
-        if (map.map[8][0] == '.')
+        map.map[xp][yp] = EMPTY;
+        if (map.map[8][0] == PELLET)
           points++;
         yp = 0;
         break;
       }
-      if (map.map[xp][yp + 1] != 'x') {
-        if (map.map[xp][yp + 1] == '.') {
+      if (map.map[xp][yp + 1] != WALL) {
+        if (map.map[xp][yp + 1] == PELLET) {
           points++;
         }
-        if (map.map[xp][yp + 1] == 'e') {
+        if (map.map[xp][yp + 1] == POWER_UP) {
           points += 5;
         }
-        if (map.map[xp][yp + 1] == 'A') {
+        if (map.map[xp][yp + 1] == GHOST) {
           pman.lives--;
-          map.map[xp][yp] = ' ';
+          map.map[xp][yp] = EMPTY;
           xp = 13;
           yp = 9;
         }
-        map.map[xp][yp] = ' ';
+        map.map[xp][yp] = EMPTY;
         yp++;
         break;
       } else
@@ -128,14 +128,14 @@ void pman_move(SPman &pman, SMap &map, rendering::Renderer &renderer) {
       break;
     }
 
-    if (map.map[map.xp][map.yp] == 'A') {
+    if (map.map[map.xp][map.yp] == GHOST) {
       pman.lives--;
-      map.map[xp][yp] = 'A';
+      map.map[xp][yp] = GHOST;
       xp = 13;
       yp = 9;
     }
 
-    map.map[xp][yp] = 'O';
+    map.map[xp][yp] = PACMAN_PLAYER;
     map.xp = xp;
     map.yp = yp;
     pman.points = points;

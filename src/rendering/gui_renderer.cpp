@@ -103,7 +103,7 @@ void GUIRenderer::sleep(int milliseconds) {
   handleEvents();
 }
 
-void GUIRenderer::renderTile(int row, int col, char tileChar,
+void GUIRenderer::renderTile(int row, int col, core::MapObjectType tileType,
                              sf::RenderWindow &win) {
   int x = col * TILE_SIZE;
   int y = row * TILE_SIZE;
@@ -113,36 +113,36 @@ void GUIRenderer::renderTile(int row, int col, char tileChar,
 
   sf::CircleShape shape;
 
-  switch (tileChar) {
-  case 'x':
+  switch (tileType) {
+  case core::WALL:
     tile.setFillColor(sf::Color::Blue);
     win.draw(tile);
     break;
-  case '.':
+  case core::PELLET:
     shape.setRadius(2);
     shape.setFillColor(sf::Color::Yellow);
     shape.setPosition(x + TILE_SIZE / 2 - 2, y + TILE_SIZE / 2 - 2);
     win.draw(shape);
     break;
-  case 'e':
+  case core::POWER_UP:
     shape.setRadius(4);
     shape.setFillColor(sf::Color::Magenta);
     shape.setPosition(x + TILE_SIZE / 2 - 4, y + TILE_SIZE / 2 - 4);
     win.draw(shape);
     break;
-  case 'O':
+  case core::PACMAN_PLAYER:
     shape.setRadius(7);
     shape.setFillColor(sf::Color::Yellow);
     shape.setPosition(x + 1, y + 1);
     win.draw(shape);
     break;
-  case 'A':
+  case core::GHOST:
     shape.setRadius(7);
     shape.setFillColor(sf::Color::Red);
     shape.setPosition(x + 1, y + 1);
     win.draw(shape);
     break;
-  case ' ':
+  case core::EMPTY:
     break;
   default:
     break;
@@ -207,7 +207,8 @@ void GUIRenderer::drawGameUI(const core::SGame &game, sf::RenderWindow &win) {
   int food_count = 0;
   for (int i = 0; i < 17; i++) {
     for (int j = 0; j < 20; j++) {
-      if (game.map.map[i][j] == '.' || game.map.map[i][j] == 'e')
+      if (game.map.map[i][j] == core::PELLET ||
+          game.map.map[i][j] == core::POWER_UP)
         food_count++;
     }
   }
