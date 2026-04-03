@@ -3,6 +3,7 @@
 
 #include "renderer.h"
 #include <SFML/Graphics.hpp>
+#include <memory>
 
 namespace pacman {
 namespace rendering {
@@ -26,7 +27,7 @@ public:
   void sleep(int milliseconds) override;
 
 private:
-  sf::RenderWindow *window;
+  std::unique_ptr<sf::RenderWindow> window;
   sf::Font fonts;
   char lastKeyPressed;
   std::string currentScreen;
