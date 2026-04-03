@@ -1,6 +1,7 @@
 #include "core/game.h"
 #include "rendering/renderer.h"
 #include <iostream>
+#include <memory>
 #include <string>
 
 #ifdef USE_GUI
@@ -15,19 +16,18 @@ using namespace pacman;
 int main() {
   core::SGame game;
   game.state = core::MENU;
-  rendering::Renderer *renderer = nullptr;
+  std::unique_ptr<rendering::Renderer> renderer;
 
 #ifdef USE_GUI
-  renderer = new rendering::GUIRenderer();
+  renderer = std::make_unique<rendering::GUIRenderer>();
   cout << "Starting PACMAN in GUI mode...\n";
 #else
-  renderer = new rendering::CLIRenderer();
+  renderer = std::make_unique<rendering::CLIRenderer>();
   cout << "Starting PACMAN in CLI mode...\n";
 #endif
 
   if (renderer) {
     core::game_menu(game, *renderer);
-    delete renderer;
   }
 
   return 0;

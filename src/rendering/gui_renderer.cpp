@@ -12,11 +12,10 @@ using namespace std;
 namespace pacman {
 namespace rendering {
 
-GUIRenderer::GUIRenderer()
-    : window(nullptr), lastKeyPressed(0), currentScreen("menu") {
+GUIRenderer::GUIRenderer() : lastKeyPressed(0), currentScreen("menu") {
   int totalHeight = WINDOW_HEIGHT + UI_HEIGHT;
-  window =
-      new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, totalHeight), "PACMAN");
+  window = std::make_unique<sf::RenderWindow>(
+      sf::VideoMode(WINDOW_WIDTH, totalHeight), "PACMAN");
   window->setFramerateLimit(60);
 
   if (!fonts.loadFromFile("resources/fonts/Roboto-Regular.ttf")) {
@@ -24,16 +23,11 @@ GUIRenderer::GUIRenderer()
             "resources/fonts/Roboto-Regular.ttf"
          << endl;
   }
-
-  if (!window) {
-    cerr << "Failed to create SFML window!" << endl;
-  }
 }
 
 GUIRenderer::~GUIRenderer() {
   if (window) {
     window->close();
-    delete window;
   }
 }
 
