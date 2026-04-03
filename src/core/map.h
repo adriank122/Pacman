@@ -4,8 +4,10 @@
 namespace pacman {
 namespace core {
 
+enum MapObjectType { EMPTY, WALL, PELLET, POWER_UP, PACMAN_PLAYER, GHOST };
+
 struct SMap {
-  char map[17][20];
+  MapObjectType map[17][20];
   int xp, yp, xg1, yg1, xg2, yg2;
 };
 

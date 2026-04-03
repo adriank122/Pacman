@@ -1,6 +1,7 @@
 #ifndef PACMAN_RENDERING_GUI_RENDERER_H
 #define PACMAN_RENDERING_GUI_RENDERER_H
 
+#include "core/map.h"
 #include "renderer.h"
 #include <SFML/Graphics.hpp>
 #include <memory>
@@ -39,7 +40,8 @@ private:
   static const int WINDOW_HEIGHT = 272;
   static const int UI_HEIGHT = 80;
 
-  void renderTile(int row, int col, char tileChar, sf::RenderWindow &win);
+  void renderTile(int row, int col, core::MapObjectType tileType,
+                  sf::RenderWindow &win);
   void drawText(const std::string &text, float x, float y,
                 unsigned int fontSize, const sf::Color &color,
                 sf::RenderWindow &win);

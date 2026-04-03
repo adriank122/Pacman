@@ -42,10 +42,28 @@ void CLIRenderer::showGameState(const core::SGame &game) {
 void CLIRenderer::showMap(const core::SMap &map) {
   for (int i = 0; i < 17; i++) {
     for (int j = 0; j < 20; j++) {
-      cout << setw(2) << map.map[i][j];
+      cout << setw(2) << mapObjectTypeToChar(map.map[i][j]);
     }
     cout << "\n";
   }
+}
+
+char CLIRenderer::mapObjectTypeToChar(core::MapObjectType type) {
+  switch (type) {
+  case core::EMPTY:
+    return ' ';
+  case core::WALL:
+    return 'x';
+  case core::PELLET:
+    return '.';
+  case core::POWER_UP:
+    return 'e';
+  case core::PACMAN_PLAYER:
+    return 'O';
+  case core::GHOST:
+    return 'A';
+  }
+  return ' ';
 }
 
 void CLIRenderer::showGameCounter(const core::SGame &game) {
@@ -55,7 +73,8 @@ void CLIRenderer::showGameCounter(const core::SGame &game) {
   int food_count = 0;
   for (int i = 0; i < 17; i++) {
     for (int j = 0; j < 20; j++) {
-      if (game.map.map[i][j] == '.' || game.map.map[i][j] == 'e')
+      if (game.map.map[i][j] == core::PELLET ||
+          game.map.map[i][j] == core::POWER_UP)
         food_count++;
     }
   }
