@@ -14,6 +14,8 @@ class Renderer;
 
 namespace core {
 
+enum GameState { MENU, PLAYING, INSTRUCTIONS, LEADERBOARD, GAME_OVER, QUIT };
+
 struct SGame {
   SPman pman;
   SMap map;
@@ -21,10 +23,11 @@ struct SGame {
   int timer;
   int delay;
   int food;
+  GameState state;
 };
 
 void game_menu(SGame &game, rendering::Renderer &renderer);
-int game_quit(rendering::Renderer &renderer);
+int game_quit(SGame &game, rendering::Renderer &renderer);
 void game_count(SGame &game, rendering::Renderer &renderer);
 void game_new(SGame &game, int level, rendering::Renderer &renderer);
 void game_instruction(SGame &game, rendering::Renderer &renderer);

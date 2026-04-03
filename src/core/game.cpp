@@ -11,6 +11,7 @@ namespace pacman {
 namespace core {
 
 void game_menu(SGame &game, rendering::Renderer &renderer) {
+  game.state = MENU;
   renderer.showMenu();
 
   while (!renderer.keyAvailable()) {
@@ -30,7 +31,7 @@ void game_menu(SGame &game, rendering::Renderer &renderer) {
     game_leaderboard(game, renderer);
     break;
   case '4':
-    game_quit(renderer);
+    game_quit(game, renderer);
     break;
   default:
     game_menu(game, renderer);
@@ -48,6 +49,7 @@ void game_new(SGame &game, int level, rendering::Renderer &renderer) {
     map_create2(game.map);
   }
   game_count(game, renderer);
+  game.state = PLAYING;
 
   while (game.pman.lives > 0 && game.timer > 0 && game.food > 0) {
     ghost_move(game.ghost1, game.map);
@@ -61,6 +63,7 @@ void game_new(SGame &game, int level, rendering::Renderer &renderer) {
   }
 
   renderer.clear();
+  game.state = GAME_OVER;
 
   if (game.pman.lives <= 0) {
     renderer.showGameOver("lives");
@@ -131,12 +134,14 @@ void game_count(SGame &game, rendering::Renderer &renderer) {
   renderer.showGameCounter(game);
 }
 
-int game_quit(rendering::Renderer &renderer) {
+int game_quit(SGame &game, rendering::Renderer &renderer) {
+  game.state = QUIT;
   renderer.clear();
   return 1;
 }
 
 void game_instruction(SGame &game, rendering::Renderer &renderer) {
+  game.state = INSTRUCTIONS;
 
   renderer.showInstructions();
 
@@ -162,6 +167,7 @@ void game_init(SGame &game) {
 }
 
 void game_leaderboard(SGame game, rendering::Renderer &renderer) {
+  game.state = LEADERBOARD;
   renderer.showLeaderboard();
   while (!renderer.keyAvailable()) {
     renderer.sleep(50);

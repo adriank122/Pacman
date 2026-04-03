@@ -14,6 +14,7 @@ using namespace pacman;
 
 int main() {
   core::SGame game;
+  game.state = core::MENU;
   rendering::Renderer *renderer = nullptr;
 
 #ifdef USE_GUI
