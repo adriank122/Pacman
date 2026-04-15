@@ -104,7 +104,9 @@ void CLIRenderer::showInstructions() {
   cout << "\nW --> move up\n";
   cout << "A --> move left\n";
   cout << "S --> move down\n";
-  cout << "D --> move right\n\n";
+  cout << "D --> move right\n";
+  cout << "SPACE --> pause the game\n";
+  cout << "ESC --> quit the game\n\n";
   cout << "Collect all the dots to complete the level!\nDon't let the ghosts "
           "catch you.\n";
   cout << "You have three lives\n\n\n\n";
@@ -117,6 +119,11 @@ void CLIRenderer::showLeaderboard() {
   showLeaderboardList();
   cout << "\n\n\n";
   cout << "1 -->Back to main menu";
+}
+
+void CLIRenderer::showPauseOverlay() {
+  cout << "\n--- PAUSED ---\n";
+  cout << "Press Space to continue, Esc to return to the main menu\n";
 }
 
 void CLIRenderer::showLeaderboardList() {
