@@ -26,6 +26,7 @@ public:
   char getChar() override;
   bool keyAvailable() override;
   void sleep(int milliseconds) override;
+  bool isOpen() const override;
 
 private:
   std::unique_ptr<sf::RenderWindow> window;

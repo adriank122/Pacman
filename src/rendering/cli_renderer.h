@@ -25,6 +25,7 @@ public:
   char getChar() override;
   bool keyAvailable() override;
   void sleep(int milliseconds) override;
+  bool isOpen() const override;
 
 private:
   void showLeaderboardList();

@@ -23,6 +23,8 @@ bool CLIRenderer::keyAvailable() { return utils::key_available(); }
 
 void CLIRenderer::sleep(int milliseconds) { utils::sleep_ms(milliseconds); }
 
+bool CLIRenderer::isOpen() const { return true; }
+
 void CLIRenderer::showMenu() {
   clear();
   cout << "\t\tPACMAN\n\n\n";

@@ -35,7 +35,7 @@ int main() {
   auto state = core::createInitialState(context);
   state->onEnter();
 
-  while (!context.quit) {
+  while (!context.quit && context.renderer->isOpen()) {
     char input = '\0';
     if (context.renderer->keyAvailable()) {
       input = context.renderer->getChar();
@@ -44,6 +44,10 @@ int main() {
     state->handleInput(input);
     state->update();
     state->render();
+
+    if (!context.renderer->isOpen()) {
+      break;
+    }
 
     auto nextState = state->takeNextState();
     if (nextState) {
