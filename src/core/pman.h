@@ -16,7 +16,7 @@ struct SPman {
   int lives, points;
 };
 
-void pman_move(SPman &pman, SMap &map, rendering::Renderer &renderer);
+void pman_move(SPman &pman, SMap &map, char input = '\0');
 void pman_boost();
 void init_pman(SPman &pman);
 

@@ -10,111 +10,7 @@ using namespace std;
 namespace pacman {
 namespace core {
 
-void game_menu(SGame &game, rendering::Renderer &renderer) {
-  game.state = MENU;
-  renderer.showMenu();
-
-  while (!renderer.keyAvailable()) {
-    renderer.sleep(50);
-  }
-  char c = renderer.getChar();
-
-  switch (c) {
-  case '1':
-    game_init(game);
-    game_new(game, 1, renderer);
-    break;
-  case '2':
-    game_instruction(game, renderer);
-    break;
-  case '3':
-    game_leaderboard(game, renderer);
-    break;
-  case '4':
-    game_quit(game, renderer);
-    break;
-  default:
-    game_menu(game, renderer);
-    break;
-  }
-}
-
-void game_new(SGame &game, int level, rendering::Renderer &renderer) {
-  renderer.clear();
-
-  if (level == 1) {
-    map_create1(game.map);
-  }
-  if (level == 2) {
-    map_create2(game.map);
-  }
-  game_count(game, renderer);
-  game.state = PLAYING;
-
-  while (game.pman.lives > 0 && game.timer > 0 && game.food > 0) {
-    ghost_move(game.ghost1, game.map);
-    ghost_move(game.ghost2, game.map);
-    ghost_move(game.ghost3, game.map);
-    ghost_move(game.ghost4, game.map);
-    pman_move(game.pman, game.map, renderer);
-    game_count(game, renderer);
-    renderer.showGameState(game);
-    renderer.sleep(game.delay);
-  }
-
-  renderer.clear();
-  game.state = GAME_OVER;
-
-  if (game.pman.lives <= 0) {
-    renderer.showGameOver("lives");
-    save_leaderboard(game);
-    cout << "\n\n\nPress 'm', to go back to main menu.";
-    while (!renderer.keyAvailable()) {
-      renderer.sleep(50);
-    }
-    char c = renderer.getChar();
-    while (c != 'm') {
-      while (!renderer.keyAvailable()) {
-        renderer.sleep(50);
-      }
-      c = renderer.getChar();
-    }
-    game_menu(game, renderer);
-  }
-
-  if (game.timer <= 0) {
-    renderer.showGameOver("time");
-    while (!renderer.keyAvailable()) {
-      renderer.sleep(50);
-    }
-    char c = renderer.getChar();
-    if (c) {
-      game_menu(game, renderer);
-    }
-  }
-  if (game.food <= 0) {
-    renderer.showGameOver("won");
-    while (!renderer.keyAvailable()) {
-      renderer.sleep(50);
-    }
-    char c = renderer.getChar();
-    while (c != 'm' && c != 'o') {
-      while (!renderer.keyAvailable()) {
-        renderer.sleep(50);
-      }
-      c = renderer.getChar();
-    }
-    if (c == 'm') {
-      game_menu(game, renderer);
-    }
-    if (c == 'o') {
-      game_init(game);
-      game_new(game, 2, renderer);
-    }
-  }
-}
-
-void game_count(SGame &game, rendering::Renderer &renderer) {
+void game_count(SGame &game) {
   game.timer -= game.delay;
   game.food = 0;
 
@@ -131,29 +27,6 @@ void game_count(SGame &game, rendering::Renderer &renderer) {
     game.map.yp = 9;
     game.map.map[game.map.xp][game.map.yp] = core::PACMAN_PLAYER;
   }
-
-  renderer.showGameCounter(game);
-}
-
-int game_quit(SGame &game, rendering::Renderer &renderer) {
-  game.state = QUIT;
-  renderer.clear();
-  return 1;
-}
-
-void game_instruction(SGame &game, rendering::Renderer &renderer) {
-  game.state = INSTRUCTIONS;
-
-  renderer.showInstructions();
-
-  while (!renderer.keyAvailable()) {
-    renderer.sleep(50);
-  }
-  char c = renderer.getChar();
-  if (c == '1')
-    game_menu(game, renderer);
-  else
-    game_instruction(game, renderer);
 }
 
 void game_init(SGame &game) {
@@ -165,19 +38,6 @@ void game_init(SGame &game) {
   init_ghost(game.ghost2, 15, 18);
   init_ghost(game.ghost3, 1, 1);
   init_ghost(game.ghost4, 1, 18);
-}
-
-void game_leaderboard(SGame game, rendering::Renderer &renderer) {
-  game.state = LEADERBOARD;
-  renderer.showLeaderboard();
-  while (!renderer.keyAvailable()) {
-    renderer.sleep(50);
-  }
-  char c = renderer.getChar();
-  if (c == '1')
-    game_menu(game, renderer);
-  else
-    game_leaderboard(game, renderer);
 }
 
 void save_leaderboard(SGame game) {

@@ -26,14 +26,9 @@ struct SGame {
   GameState state;
 };
 
-void game_menu(SGame &game, rendering::Renderer &renderer);
-int game_quit(SGame &game, rendering::Renderer &renderer);
-void game_count(SGame &game, rendering::Renderer &renderer);
-void game_new(SGame &game, int level, rendering::Renderer &renderer);
-void game_instruction(SGame &game, rendering::Renderer &renderer);
+void game_count(SGame &game);
 void game_init(SGame &game);
 void save_leaderboard(SGame game);
-void game_leaderboard(SGame game, rendering::Renderer &renderer);
 
 } // namespace core
 } // namespace pacman

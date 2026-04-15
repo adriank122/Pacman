@@ -14,6 +14,7 @@ option(BUILD_GUI "Build the GUI version of Pacman" ON)
 # Core library sources
 set(CORE_SOURCES
     src/core/game.cpp
+    src/core/game_state.cpp
     src/core/ghost.cpp
     src/core/pman.cpp
     src/core/map.cpp
