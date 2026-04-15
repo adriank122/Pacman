@@ -72,6 +72,12 @@ void GUIRenderer::handleEvents() {
       case sf::Keyboard::M:
         lastKeyPressed = 'm';
         break;
+      case sf::Keyboard::Space:
+        lastKeyPressed = ' ';
+        break;
+      case sf::Keyboard::Escape:
+        lastKeyPressed = 27;
+        break;
       case sf::Keyboard::Return:
         lastKeyPressed = 13;
         break;
@@ -229,13 +235,15 @@ void GUIRenderer::drawInstructions(sf::RenderWindow &win) {
   drawText("A - Move Left", 30, 85, 12, sf::Color::Green, win);
   drawText("S - Move Down", 30, 100, 12, sf::Color::Green, win);
   drawText("D - Move Right", 30, 115, 12, sf::Color::Green, win);
-  drawText("Objective:", 20, 145, 14, sf::Color::White, win);
-  drawText("Collect pellets (dots) to advance levels", 30, 165, 12,
+  drawText("SPACE - Pause Game", 30, 130, 12, sf::Color::Green, win);
+  drawText("ESC - Quit Game", 30, 145, 12, sf::Color::Green, win);
+  drawText("Objective:", 20, 175, 14, sf::Color::White, win);
+  drawText("Collect pellets (dots) to advance levels", 30, 195, 12,
            sf::Color::Cyan, win);
-  drawText("Avoid ghosts (red) - You have 3 lives", 30, 180, 12,
+  drawText("Avoid ghosts (red) - You have 3 lives", 30, 210, 12,
            sf::Color::Cyan, win);
-  drawText("Special pellets give 5x points", 30, 195, 12, sf::Color::Cyan, win);
-  drawCenteredText("Press 1 to return to menu", 230, 12, sf::Color::Yellow,
+  drawText("Special pellets give 5x points", 30, 225, 12, sf::Color::Cyan, win);
+  drawCenteredText("Press 1 to return to menu", 260, 12, sf::Color::Yellow,
                    win);
 }
 
@@ -342,6 +350,32 @@ void GUIRenderer::showGameOver(const string &reason) {
     return;
   window->clear(sf::Color::Black);
   drawGameOver(reason, *window);
+  window->display();
+}
+
+void GUIRenderer::showPauseOverlay() {
+  if (!window)
+    return;
+
+  sf::RectangleShape overlay(
+      sf::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT + UI_HEIGHT));
+  overlay.setFillColor(sf::Color(0, 0, 0, 160));
+  overlay.setPosition(0, 0);
+  window->draw(overlay);
+
+  sf::RectangleShape box(sf::Vector2f(WINDOW_WIDTH - 60, 120));
+  box.setFillColor(sf::Color(20, 20, 20, 220));
+  box.setOutlineColor(sf::Color::White);
+  box.setOutlineThickness(2);
+  box.setPosition(30, (WINDOW_HEIGHT + UI_HEIGHT - 120) / 2);
+  window->draw(box);
+
+  float centerY = (WINDOW_HEIGHT + UI_HEIGHT) / 2.0f;
+  drawCenteredText("PAUSED", centerY - 30, 24, sf::Color::Yellow, *window);
+  drawCenteredText("Press Space to continue", centerY, 16, sf::Color::White,
+                   *window);
+  drawCenteredText("Press Esc to return to menu", centerY + 24, 16,
+                   sf::Color::White, *window);
   window->display();
 }
 

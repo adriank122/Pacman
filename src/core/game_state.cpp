@@ -19,7 +19,7 @@ class GameOverState;
 class GameplayState : public IGameState {
 public:
   GameplayState(GameContext &ctx, int lvl)
-      : IGameState(ctx), level(lvl), lastInput('\0') {}
+      : IGameState(ctx), level(lvl), lastInput('\0'), paused(false) {}
 
   void onEnter() override {
     context.game.state = PLAYING;
@@ -36,12 +36,32 @@ public:
   }
 
   void handleInput(char input) override {
-    if (input != '\0') {
-      lastInput = input;
+    if (input == '\0') {
+      return;
     }
+
+    if (input == 27) {
+      requestTransition(createMainMenuState(context));
+      return;
+    }
+
+    if (input == ' ') {
+      paused = !paused;
+      return;
+    }
+
+    if (paused) {
+      return;
+    }
+
+    lastInput = input;
   }
 
   void update() override {
+    if (paused) {
+      return;
+    }
+
     ghost_move(context.game.ghost1, context.game.map);
     ghost_move(context.game.ghost2, context.game.map);
     ghost_move(context.game.ghost3, context.game.map);
@@ -74,12 +94,15 @@ public:
   void render() override {
     context.renderer->clear();
     context.renderer->showGameState(context.game);
-    context.renderer->showGameCounter(context.game);
+    if (paused) {
+      context.renderer->showPauseOverlay();
+    }
   }
 
 private:
   int level;
   char lastInput;
+  bool paused;
 };
 
 // Game over state

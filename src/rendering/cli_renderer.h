@@ -20,6 +20,7 @@ public:
   void showGameOver(const std::string &reason) override;
   void showInstructions() override;
   void showLeaderboard() override;
+  void showPauseOverlay() override;
   void clear() override;
 
   char getChar() override;

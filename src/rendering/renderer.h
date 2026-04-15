@@ -23,6 +23,7 @@ public:
   virtual void showGameOver(const std::string &reason) = 0;
   virtual void showInstructions() = 0;
   virtual void showLeaderboard() = 0;
+  virtual void showPauseOverlay() = 0;
   virtual void clear() = 0;
 
   // Input functions
