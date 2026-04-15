@@ -26,6 +26,7 @@ GUIRenderer::GUIRenderer() : lastKeyPressed(0), currentScreen("menu") {
 }
 
 GUIRenderer::~GUIRenderer() {
+  cout << "Closing GUI Renderer..." << endl;
   if (window) {
     window->close();
   }
@@ -97,6 +98,8 @@ bool GUIRenderer::keyAvailable() {
   handleEvents();
   return lastKeyPressed != 0 && window->isOpen();
 }
+
+bool GUIRenderer::isOpen() const { return window ? window->isOpen() : false; }
 
 void GUIRenderer::sleep(int milliseconds) {
   utils::sleep_ms(milliseconds);

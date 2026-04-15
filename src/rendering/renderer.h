@@ -29,6 +29,7 @@ public:
   virtual char getChar() = 0;
   virtual bool keyAvailable() = 0;
   virtual void sleep(int milliseconds) = 0;
+  virtual bool isOpen() const = 0;
 };
 
 } // namespace rendering
