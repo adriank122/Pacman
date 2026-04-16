@@ -140,16 +140,8 @@ void GUIRenderer::renderTile(int row, int col, core::MapObjectType tileType,
     win.draw(shape);
     break;
   case core::PACMAN_PLAYER:
-    shape.setRadius(7);
-    shape.setFillColor(sf::Color::Yellow);
-    shape.setPosition(x + 1, y + 1);
-    win.draw(shape);
-    break;
   case core::GHOST:
-    shape.setRadius(7);
-    shape.setFillColor(sf::Color::Red);
-    shape.setPosition(x + 1, y + 1);
-    win.draw(shape);
+    // Entities are drawn separately with interpolation in GUI mode.
     break;
   case core::EMPTY:
     break;
@@ -323,12 +315,41 @@ void GUIRenderer::showMenu() {
   window->display();
 }
 
-void GUIRenderer::showGameState(const core::SGame &game) {
+void GUIRenderer::showGameState(const core::SGame &game, double interpolation) {
   if (!window)
     return;
   currentScreen = "game";
   window->clear(sf::Color::Black);
   showMap(game.map);
+
+  auto lerp = [](double a, double b, double t) {
+    return static_cast<float>(a + (b - a) * t);
+  };
+
+  float playerX =
+      lerp(game.pman.prev_yp, game.map.yp, interpolation) * TILE_SIZE;
+  float playerY =
+      lerp(game.pman.prev_xp, game.map.xp, interpolation) * TILE_SIZE;
+
+  sf::CircleShape playerShape(7.f);
+  playerShape.setFillColor(sf::Color::Yellow);
+  playerShape.setPosition(playerX + 1.f, playerY + 1.f);
+  window->draw(playerShape);
+
+  auto drawGhost = [&](const core::SGhost &ghost) {
+    float ghostY = lerp(ghost.prev_yg, ghost.yg, interpolation) * TILE_SIZE;
+    float ghostX = lerp(ghost.prev_xg, ghost.xg, interpolation) * TILE_SIZE;
+    sf::CircleShape ghostShape(7.f);
+    ghostShape.setFillColor(sf::Color::Red);
+    ghostShape.setPosition(ghostY + 1.f, ghostX + 1.f);
+    window->draw(ghostShape);
+  };
+
+  drawGhost(game.ghost1);
+  drawGhost(game.ghost2);
+  drawGhost(game.ghost3);
+  drawGhost(game.ghost4);
+
   drawGameUI(game, *window);
   window->display();
 }

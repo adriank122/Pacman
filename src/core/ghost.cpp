@@ -14,10 +14,14 @@ void init_ghost(SGhost &ghost, int x, int y) {
   ghost.if_boost = 0;
   ghost.xg = x;
   ghost.yg = y;
+  ghost.prev_xg = x;
+  ghost.prev_yg = y;
   ghost.lp = 1;
 }
 
 void ghost_move(SGhost &ghost, SMap &map) {
+  ghost.prev_xg = ghost.xg;
+  ghost.prev_yg = ghost.yg;
   int x = ghost.xg, y = ghost.yg;
 
   int possible = 0;

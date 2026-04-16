@@ -15,7 +15,7 @@ public:
   ~GUIRenderer();
 
   void showMenu() override;
-  void showGameState(const core::SGame &game) override;
+  void showGameState(const core::SGame &game, double interpolation) override;
   void showMap(const core::SMap &map) override;
   void showGameCounter(const core::SGame &game) override;
   void showGameOver(const std::string &reason) override;

@@ -10,7 +10,7 @@ struct SGhost {
   int ifcookie;
   char last_move;
   int if_boost;
-  int xg, yg, lp;
+  int xg, yg, prev_xg, prev_yg, lp;
 };
 
 void init_ghost(SGhost &ghost, int x, int y);

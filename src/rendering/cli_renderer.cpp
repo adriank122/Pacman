@@ -35,7 +35,8 @@ void CLIRenderer::showMenu() {
   cout << "4 -->\tQuit\n\n";
 }
 
-void CLIRenderer::showGameState(const core::SGame &game) {
+void CLIRenderer::showGameState(const core::SGame &game,
+                                double /* interpolation */) {
   clear();
   showMap(game.map);
   showGameCounter(game);
