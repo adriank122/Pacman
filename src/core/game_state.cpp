@@ -68,7 +68,6 @@ public:
     ghost_move(context.game.ghost4, context.game.map);
 
     pman_move(context.game.pman, context.game.map, lastInput);
-    lastInput = '\0';
 
     game_count(context.game);
 
@@ -93,7 +92,7 @@ public:
 
   void render() override {
     context.renderer->clear();
-    context.renderer->showGameState(context.game);
+    context.renderer->showGameState(context.game, context.interpolation);
     if (paused) {
       context.renderer->showPauseOverlay();
     }

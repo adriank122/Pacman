@@ -9,9 +9,14 @@ namespace core {
 void init_pman(SPman &pman) {
   pman.lives = 3;
   pman.points = 0;
+  pman.prev_xp = 13;
+  pman.prev_yp = 9;
 }
 
 void pman_move(SPman &pman, SMap &map, char input) {
+  pman.prev_xp = map.xp;
+  pman.prev_yp = map.yp;
+
   if (map.map[map.xp][map.yp] == GHOST) {
     pman.lives--;
     map.map[map.xp][map.yp] = GHOST;

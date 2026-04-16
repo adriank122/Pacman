@@ -15,6 +15,7 @@ option(BUILD_GUI "Build the GUI version of Pacman" ON)
 set(CORE_SOURCES
     src/core/game.cpp
     src/core/game_state.cpp
+    src/core/game_timer.cpp
     src/core/ghost.cpp
     src/core/pman.cpp
     src/core/map.cpp

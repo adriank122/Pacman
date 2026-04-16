@@ -1,5 +1,6 @@
 #include "core/game.h"
 #include "core/game_state.h"
+#include "core/game_timer.h"
 #include "rendering/renderer.h"
 #include <iostream>
 #include <memory>
@@ -35,27 +36,55 @@ int main() {
   auto state = core::createInitialState(context);
   state->onEnter();
 
+  core::GameTimer timer(context.game.delay);
+
   while (!context.quit && context.renderer->isOpen()) {
+    int elapsed = timer.advance();
+    context.game.timer -= elapsed;
+    if (context.game.timer < 0) {
+      context.game.timer = 0;
+    }
+
     char input = '\0';
     if (context.renderer->keyAvailable()) {
       input = context.renderer->getChar();
     }
 
     state->handleInput(input);
-    state->update();
+
+#ifndef USE_GUI
+    bool didUpdate = false;
+#endif
+    while (timer.hasTick() && !context.quit && context.renderer->isOpen()) {
+      state->update();
+#ifndef USE_GUI
+      didUpdate = true;
+#endif
+      timer.consumeTick();
+
+      auto nextState = state->takeNextState();
+      if (nextState) {
+        state = std::move(nextState);
+        state->onEnter();
+        break;
+      }
+    }
+
+    context.interpolation = timer.interpolation();
+
+#ifdef USE_GUI
     state->render();
+#else
+    if (didUpdate) {
+      state->render();
+    }
+#endif
 
     if (!context.renderer->isOpen()) {
       break;
     }
 
-    auto nextState = state->takeNextState();
-    if (nextState) {
-      state = std::move(nextState);
-      state->onEnter();
-    }
-
-    context.renderer->sleep(context.game.delay);
+    context.renderer->sleep(1);
   }
 
   return 0;

@@ -11,7 +11,6 @@ namespace pacman {
 namespace core {
 
 void game_count(SGame &game) {
-  game.timer -= game.delay;
   game.food = 0;
 
   for (int i = 0; i < 17; i++)

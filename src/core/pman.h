@@ -14,6 +14,7 @@ namespace core {
 
 struct SPman {
   int lives, points;
+  int prev_xp, prev_yp;
 };
 
 void pman_move(SPman &pman, SMap &map, char input = '\0');

@@ -23,6 +23,7 @@ public:
   std::unique_ptr<rendering::Renderer> renderer;
   bool quit;
   int level;
+  double interpolation = 0.0;
 };
 
 class IGameState {
