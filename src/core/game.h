@@ -17,9 +17,9 @@ namespace core {
 enum GameState { MENU, PLAYING, INSTRUCTIONS, LEADERBOARD, GAME_OVER, QUIT };
 
 struct SGame {
-  SPman pman;
+  Pacman pman;
   SMap map;
-  SGhost ghost1, ghost2, ghost3, ghost4;
+  Ghost ghost1, ghost2, ghost3, ghost4;
   int timer;
   int delay;
   int food;

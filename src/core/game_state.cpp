@@ -62,12 +62,15 @@ public:
       return;
     }
 
-    ghost_move(context.game.ghost1, context.game.map);
-    ghost_move(context.game.ghost2, context.game.map);
-    ghost_move(context.game.ghost3, context.game.map);
-    ghost_move(context.game.ghost4, context.game.map);
+    context.game.ghost1.move(context.game.map);
+    context.game.ghost2.move(context.game.map);
+    context.game.ghost3.move(context.game.map);
+    context.game.ghost4.move(context.game.map);
 
-    pman_move(context.game.pman, context.game.map, lastInput);
+    if (lastInput != '\0') {
+      context.game.pman.setDirection(lastInput);
+    }
+    context.game.pman.move(context.game.map);
 
     game_count(context.game);
 

@@ -6,134 +6,145 @@ using namespace std;
 namespace pacman {
 namespace core {
 
-void init_pman(SPman &pman) {
-  pman.lives = 3;
-  pman.points = 0;
-  pman.prev_xp = 13;
-  pman.prev_yp = 9;
+Pacman::Pacman()
+    : lives(3), points(0), xp_(13), yp_(9), prev_xp_(13), prev_yp_(9),
+      direction_('\0') {}
+
+int Pacman::x() const { return xp_; }
+int Pacman::y() const { return yp_; }
+int Pacman::prev_x() const { return prev_xp_; }
+int Pacman::prev_y() const { return prev_yp_; }
+char Pacman::direction() const { return direction_; }
+
+void Pacman::setPosition(int x, int y) {
+  xp_ = x;
+  yp_ = y;
 }
 
-void pman_move(SPman &pman, SMap &map, char input) {
-  pman.prev_xp = map.xp;
-  pman.prev_yp = map.yp;
+void Pacman::setDirection(char direction) { direction_ = direction; }
 
-  if (map.map[map.xp][map.yp] == GHOST) {
-    pman.lives--;
-    map.map[map.xp][map.yp] = GHOST;
+void Pacman::savePreviousPosition() {
+  prev_xp_ = xp_;
+  prev_yp_ = yp_;
+}
+
+void Pacman::move(SMap &map) {
+  savePreviousPosition();
+
+  if (map.map[xp_][yp_] == GHOST) {
+    lives--;
+    map.map[xp_][yp_] = GHOST;
     map.xp = 13;
     map.yp = 9;
+    xp_ = map.xp;
+    yp_ = map.yp;
   }
 
-  if (input == '\0') {
+  if (direction_ == '\0') {
     return;
   }
 
-  int points = pman.points;
-  int xp = map.xp, yp = map.yp;
+  int currentPoints = points;
+  int xp = xp_;
+  int yp = yp_;
 
-  switch (input) {
-
+  switch (direction_) {
   case 'a':
-
     if (xp == 8 && yp == 0) {
       map.map[xp][yp] = EMPTY;
       if (map.map[8][19] == PELLET)
-        points++;
+        currentPoints++;
       yp = 19;
       break;
     }
-
     if (map.map[xp][yp - 1] != WALL) {
       if (map.map[xp][yp - 1] == PELLET) {
-        points++;
+        currentPoints++;
       }
       if (map.map[xp][yp - 1] == POWER_UP) {
-        points += 5;
+        currentPoints += 5;
       }
       if (map.map[xp][yp - 1] == GHOST) {
-        pman.lives--;
+        lives--;
         map.map[xp][yp] = EMPTY;
         xp = 13;
         yp = 9;
       }
       map.map[xp][yp] = EMPTY;
       yp--;
-      break;
-    } else
-      break;
+    }
+    break;
 
   case 'w':
     if (map.map[xp - 1][yp] != WALL) {
       if (map.map[xp - 1][yp] == PELLET) {
-        points++;
+        currentPoints++;
       }
       if (map.map[xp - 1][yp] == POWER_UP) {
-        points += 5;
+        currentPoints += 5;
       }
       if (map.map[xp - 1][yp] == GHOST) {
-        pman.lives--;
+        lives--;
         map.map[xp][yp] = EMPTY;
         xp = 13;
         yp = 9;
       }
       map.map[xp][yp] = EMPTY;
       xp--;
-      break;
-    } else
-      break;
+    }
+    break;
 
   case 's':
     if (map.map[xp + 1][yp] != WALL) {
       if (map.map[xp + 1][yp] == PELLET) {
-        points++;
+        currentPoints++;
       }
       if (map.map[xp + 1][yp] == POWER_UP) {
-        points += 5;
+        currentPoints += 5;
       }
       if (map.map[xp + 1][yp] == GHOST) {
-        pman.lives--;
+        lives--;
         map.map[xp][yp] = EMPTY;
         xp = 13;
         yp = 9;
       }
       map.map[xp][yp] = EMPTY;
       xp++;
-      break;
-    } else
-      break;
+    }
+    break;
 
   case 'd':
     if (xp == 8 && yp == 19) {
       map.map[xp][yp] = EMPTY;
       if (map.map[8][0] == PELLET)
-        points++;
+        currentPoints++;
       yp = 0;
       break;
     }
     if (map.map[xp][yp + 1] != WALL) {
       if (map.map[xp][yp + 1] == PELLET) {
-        points++;
+        currentPoints++;
       }
       if (map.map[xp][yp + 1] == POWER_UP) {
-        points += 5;
+        currentPoints += 5;
       }
       if (map.map[xp][yp + 1] == GHOST) {
-        pman.lives--;
+        lives--;
         map.map[xp][yp] = EMPTY;
         xp = 13;
         yp = 9;
       }
       map.map[xp][yp] = EMPTY;
       yp++;
-      break;
-    } else
-      break;
+    }
+    break;
+
   default:
     break;
   }
 
-  if (map.map[map.xp][map.yp] == GHOST) {
-    pman.lives--;
+  if (map.map[xp][yp] == GHOST) {
+    lives--;
     map.map[xp][yp] = GHOST;
     xp = 13;
     yp = 9;
@@ -142,10 +153,10 @@ void pman_move(SPman &pman, SMap &map, char input) {
   map.map[xp][yp] = PACMAN_PLAYER;
   map.xp = xp;
   map.yp = yp;
-  pman.points = points;
+  xp_ = xp;
+  yp_ = yp;
+  points = currentPoints;
 }
-
-void pman_boost() {}
 
 } // namespace core
 } // namespace pacman
