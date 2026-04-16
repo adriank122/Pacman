@@ -283,27 +283,29 @@ void GUIRenderer::drawGameOver(const string &reason, sf::RenderWindow &win) {
   win.draw(overlay);
 
   sf::RectangleShape msgBox(sf::Vector2f(WINDOW_WIDTH - 40, 120));
+  msgBox.setPosition(20, 40);
+
   if (reason == "lives") {
     msgBox.setFillColor(sf::Color(128, 0, 0));
+    win.draw(msgBox);
     drawCenteredText("GAME OVER", 60, 24, sf::Color::White, win);
     drawCenteredText("You ran out of lives!", 100, 16, sf::Color::Yellow, win);
     drawCenteredText("Press 'm' for menu", 140, 12, sf::Color::White, win);
   } else if (reason == "time") {
     msgBox.setFillColor(sf::Color(128, 60, 0));
+    win.draw(msgBox);
     drawCenteredText("TIME'S UP!", 60, 24, sf::Color::White, win);
     drawCenteredText("You ran out of time!", 100, 16, sf::Color::Yellow, win);
     drawCenteredText("Press 'm' for menu", 140, 12, sf::Color::White, win);
   } else if (reason == "won") {
     msgBox.setFillColor(sf::Color(0, 128, 0));
+    win.draw(msgBox);
     drawCenteredText("LEVEL COMPLETE!", 50, 24, sf::Color::White, win);
     drawCenteredText("You ate all the pellets!", 90, 16, sf::Color::Yellow,
                      win);
     drawCenteredText("Press 'o' for next level or 'm' for menu", 130, 12,
                      sf::Color::White, win);
   }
-
-  msgBox.setPosition(20, 40);
-  win.draw(msgBox);
 }
 
 void GUIRenderer::showMenu() {
