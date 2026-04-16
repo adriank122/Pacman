@@ -1,6 +1,8 @@
 # Pacman Game
 
-A classic Pacman game implemented in C++. Move around the map, avoid ghosts and gather all pellets to win. Supports both terminal and GUI gameplay.
+A classic Pacman game implemented in C++. Move around the map, avoid ghosts and gather all pellets to win.
+
+The motiviation for this project was to practice C++ skills on game project.
 
 ## Features
 
@@ -9,11 +11,15 @@ A classic Pacman game implemented in C++. Move around the map, avoid ghosts and 
 - **Multiple Levels**: Two complete game levels with different map layouts
 - **Scoring System**: Track scores with a ranking system
 - **Technology Stack**: C++, Linux, CMake, SFML
+- **Finite State Machine**: FSM to control game state flow
 
 ## TODOs
 
+- Unit tests
+- Variable timestep driven update
 - Ghost movement logic improvement
-- Multiple difficulty level
+- Multiple difficulty
+- DEMO section with gameplay gif
 
 ## Building
 
@@ -31,8 +37,7 @@ sudo apt-get install libsfml-dev
 ### 2. Build the project
 
 ```bash
-cd /path/to/Pacman
-mkdir -p build
+mkdir build
 cd build
 cmake ..
 make
