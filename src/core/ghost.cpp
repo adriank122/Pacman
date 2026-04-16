@@ -8,21 +8,33 @@ using namespace std;
 namespace pacman {
 namespace core {
 
-void init_ghost(SGhost &ghost, int x, int y) {
-  ghost.last_move = 'L';
-  ghost.ifcookie = 1;
-  ghost.if_boost = 0;
-  ghost.xg = x;
-  ghost.yg = y;
-  ghost.prev_xg = x;
-  ghost.prev_yg = y;
-  ghost.lp = 1;
+Ghost::Ghost()
+    : ifcookie(1), last_move('L'), if_boost(0), xg(0), yg(0), prev_xg(0),
+      prev_yg(0), lp(1) {}
+
+int Ghost::x() const { return xg; }
+int Ghost::y() const { return yg; }
+int Ghost::prev_x() const { return prev_xg; }
+int Ghost::prev_y() const { return prev_yg; }
+char Ghost::direction() const { return last_move; }
+
+void Ghost::setPosition(int x, int y) {
+  xg = x;
+  yg = y;
+  prev_xg = x;
+  prev_yg = y;
 }
 
-void ghost_move(SGhost &ghost, SMap &map) {
-  ghost.prev_xg = ghost.xg;
-  ghost.prev_yg = ghost.yg;
-  int x = ghost.xg, y = ghost.yg;
+void Ghost::setDirection(char direction) { last_move = direction; }
+
+void Ghost::savePreviousPosition() {
+  prev_xg = xg;
+  prev_yg = yg;
+}
+
+void Ghost::move(SMap &map) {
+  savePreviousPosition();
+  int x = xg, y = yg;
 
   int possible = 0;
   int up = 0, down = 0, left = 0, right = 0;
@@ -44,806 +56,407 @@ void ghost_move(SGhost &ghost, SMap &map) {
     right = 1;
   }
 
-  if (possible == 1 || possible == 2) {
-    if (ghost.last_move == 'L') {
+  if (possible > 0) {
+    if (last_move == 'L') {
       if (left) {
-        if (ghost.ifcookie != 0) {
+        if (ifcookie != 0) {
           map.map[x][y] = PELLET;
           y--;
         }
-        if (ghost.if_boost != 0) {
+        if (if_boost != 0) {
           map.map[x][y] = POWER_UP;
           y--;
         }
-        if (ghost.ifcookie == 0 && ghost.if_boost == 0) {
+        if (ifcookie == 0 && if_boost == 0) {
           map.map[x][y] = EMPTY;
           y--;
         }
         if (map.map[x][y] == PELLET)
-          ghost.ifcookie = 1;
+          ifcookie = 1;
         else
-          ghost.ifcookie = 0;
+          ifcookie = 0;
         if (map.map[x][y] == POWER_UP)
-          ghost.if_boost = 1;
+          if_boost = 1;
         else
-          ghost.if_boost = 0;
+          if_boost = 0;
       } else if (down) {
-        if (ghost.ifcookie != 0) {
+        if (ifcookie != 0) {
           map.map[x][y] = PELLET;
           x++;
-          ghost.last_move = 'R';
+          last_move = 'R';
         }
-        if (ghost.if_boost != 0) {
+        if (if_boost != 0) {
           map.map[x][y] = POWER_UP;
           x++;
-          ghost.last_move = 'R';
+          last_move = 'R';
         }
-        if (ghost.ifcookie == 0 && ghost.if_boost == 0) {
+        if (ifcookie == 0 && if_boost == 0) {
           map.map[x][y] = EMPTY;
           x++;
-          ghost.last_move = 'R';
+          last_move = 'R';
         }
         if (map.map[x][y] == PELLET)
-          ghost.ifcookie = 1;
+          ifcookie = 1;
         else
-          ghost.ifcookie = 0;
+          ifcookie = 0;
         if (map.map[x][y] == POWER_UP)
-          ghost.if_boost = 1;
+          if_boost = 1;
         else
-          ghost.if_boost = 0;
+          if_boost = 0;
       } else if (up) {
-        if (ghost.ifcookie != 0) {
+        if (ifcookie != 0) {
           map.map[x][y] = PELLET;
           x--;
-          ghost.last_move = 'U';
+          last_move = 'U';
         }
-        if (ghost.if_boost != 0) {
+        if (if_boost != 0) {
           map.map[x][y] = POWER_UP;
           x--;
-          ghost.last_move = 'U';
+          last_move = 'U';
         }
-        if (ghost.ifcookie == 0 && ghost.if_boost == 0) {
+        if (ifcookie == 0 && if_boost == 0) {
           map.map[x][y] = EMPTY;
           x--;
-          ghost.last_move = 'U';
+          last_move = 'U';
         }
         if (map.map[x][y] == PELLET)
-          ghost.ifcookie = 1;
+          ifcookie = 1;
         else
-          ghost.ifcookie = 0;
+          ifcookie = 0;
         if (map.map[x][y] == POWER_UP)
-          ghost.if_boost = 1;
+          if_boost = 1;
         else
-          ghost.if_boost = 0;
+          if_boost = 0;
       } else if (right) {
-        if (ghost.ifcookie != 0) {
+        if (ifcookie != 0) {
           map.map[x][y] = PELLET;
           y++;
-          ghost.last_move = 'D';
+          last_move = 'D';
         }
-        if (ghost.if_boost != 0) {
+        if (if_boost != 0) {
           map.map[x][y] = POWER_UP;
           y++;
-          ghost.last_move = 'D';
+          last_move = 'D';
         }
-        if (ghost.ifcookie == 0 && ghost.if_boost == 0) {
+        if (ifcookie == 0 && if_boost == 0) {
           map.map[x][y] = EMPTY;
           y++;
-          ghost.last_move = 'D';
+          last_move = 'D';
         }
         if (map.map[x][y] == PELLET)
-          ghost.ifcookie = 1;
+          ifcookie = 1;
         else
-          ghost.ifcookie = 0;
+          ifcookie = 0;
         if (map.map[x][y] == POWER_UP)
-          ghost.if_boost = 1;
+          if_boost = 1;
         else
-          ghost.if_boost = 0;
+          if_boost = 0;
       }
-    } else if (ghost.last_move == 'R') {
+    } else if (last_move == 'R') {
       if (right) {
-        if (ghost.ifcookie != 0) {
+        if (ifcookie != 0) {
           map.map[x][y] = PELLET;
           y++;
         }
-        if (ghost.if_boost != 0) {
+        if (if_boost != 0) {
           map.map[x][y] = POWER_UP;
           y++;
         }
-        if (ghost.ifcookie == 0 && ghost.if_boost == 0) {
+        if (ifcookie == 0 && if_boost == 0) {
           map.map[x][y] = EMPTY;
           y++;
         }
         if (map.map[x][y] == PELLET)
-          ghost.ifcookie = 1;
+          ifcookie = 1;
         else
-          ghost.ifcookie = 0;
+          ifcookie = 0;
         if (map.map[x][y] == POWER_UP)
-          ghost.if_boost = 1;
+          if_boost = 1;
         else
-          ghost.if_boost = 0;
+          if_boost = 0;
       } else if (down) {
-        if (ghost.ifcookie != 0) {
+        if (ifcookie != 0) {
           map.map[x][y] = PELLET;
           x++;
-          ghost.last_move = 'R';
+          last_move = 'R';
         }
-        if (ghost.if_boost != 0) {
+        if (if_boost != 0) {
           map.map[x][y] = POWER_UP;
           x++;
-          ghost.last_move = 'R';
+          last_move = 'R';
         }
-        if (ghost.ifcookie == 0 && ghost.if_boost == 0) {
+        if (ifcookie == 0 && if_boost == 0) {
           map.map[x][y] = EMPTY;
           x++;
-          ghost.last_move = 'R';
+          last_move = 'R';
         }
         if (map.map[x][y] == PELLET)
-          ghost.ifcookie = 1;
+          ifcookie = 1;
         else
-          ghost.ifcookie = 0;
+          ifcookie = 0;
         if (map.map[x][y] == POWER_UP)
-          ghost.if_boost = 1;
+          if_boost = 1;
         else
-          ghost.if_boost = 0;
+          if_boost = 0;
       } else if (up) {
-        if (ghost.ifcookie != 0) {
+        if (ifcookie != 0) {
           map.map[x][y] = PELLET;
           x--;
-          ghost.last_move = 'U';
+          last_move = 'U';
         }
-        if (ghost.if_boost != 0) {
+        if (if_boost != 0) {
           map.map[x][y] = POWER_UP;
           x--;
-          ghost.last_move = 'U';
+          last_move = 'U';
         }
-        if (ghost.ifcookie == 0 && ghost.if_boost == 0) {
+        if (ifcookie == 0 && if_boost == 0) {
           map.map[x][y] = EMPTY;
           x--;
-          ghost.last_move = 'U';
+          last_move = 'U';
         }
         if (map.map[x][y] == PELLET)
-          ghost.ifcookie = 1;
+          ifcookie = 1;
         else
-          ghost.ifcookie = 0;
+          ifcookie = 0;
         if (map.map[x][y] == POWER_UP)
-          ghost.if_boost = 1;
+          if_boost = 1;
         else
-          ghost.if_boost = 0;
+          if_boost = 0;
       } else if (left) {
-        if (ghost.ifcookie != 0) {
+        if (ifcookie != 0) {
           map.map[x][y] = PELLET;
           y--;
-          ghost.last_move = 'D';
+          last_move = 'D';
         }
-        if (ghost.if_boost != 0) {
+        if (if_boost != 0) {
           map.map[x][y] = POWER_UP;
           y--;
-          ghost.last_move = 'D';
+          last_move = 'D';
         }
-        if (ghost.ifcookie == 0 && ghost.if_boost == 0) {
+        if (ifcookie == 0 && if_boost == 0) {
           map.map[x][y] = EMPTY;
           y--;
-          ghost.last_move = 'D';
+          last_move = 'D';
         }
         if (map.map[x][y] == PELLET)
-          ghost.ifcookie = 1;
+          ifcookie = 1;
         else
-          ghost.ifcookie = 0;
+          ifcookie = 0;
         if (map.map[x][y] == POWER_UP)
-          ghost.if_boost = 1;
+          if_boost = 1;
         else
-          ghost.if_boost = 0;
+          if_boost = 0;
       }
-    } else if (ghost.last_move == 'U') {
+    } else if (last_move == 'U') {
       if (up) {
-        if (ghost.ifcookie != 0) {
+        if (ifcookie != 0) {
           map.map[x][y] = PELLET;
           x--;
         }
-        if (ghost.if_boost != 0) {
+        if (if_boost != 0) {
           map.map[x][y] = POWER_UP;
           x--;
         }
-        if (ghost.ifcookie == 0 && ghost.if_boost == 0) {
+        if (ifcookie == 0 && if_boost == 0) {
           map.map[x][y] = EMPTY;
           x--;
         }
         if (map.map[x][y] == PELLET)
-          ghost.ifcookie = 1;
+          ifcookie = 1;
         else
-          ghost.ifcookie = 0;
+          ifcookie = 0;
         if (map.map[x][y] == POWER_UP)
-          ghost.if_boost = 1;
+          if_boost = 1;
         else
-          ghost.if_boost = 0;
+          if_boost = 0;
       } else if (right) {
-        if (ghost.ifcookie != 0) {
+        if (ifcookie != 0) {
           map.map[x][y] = PELLET;
           y++;
-          ghost.last_move = 'R';
+          last_move = 'R';
         }
-        if (ghost.if_boost != 0) {
+        if (if_boost != 0) {
           map.map[x][y] = POWER_UP;
           y++;
-          ghost.last_move = 'R';
+          last_move = 'R';
         }
-        if (ghost.ifcookie == 0 && ghost.if_boost == 0) {
+        if (ifcookie == 0 && if_boost == 0) {
           map.map[x][y] = EMPTY;
           y++;
-          ghost.last_move = 'R';
+          last_move = 'R';
         }
         if (map.map[x][y] == PELLET)
-          ghost.ifcookie = 1;
+          ifcookie = 1;
         else
-          ghost.ifcookie = 0;
+          ifcookie = 0;
         if (map.map[x][y] == POWER_UP)
-          ghost.if_boost = 1;
+          if_boost = 1;
         else
-          ghost.if_boost = 0;
+          if_boost = 0;
       } else if (left) {
-        if (ghost.ifcookie != 0) {
+        if (ifcookie != 0) {
           map.map[x][y] = PELLET;
           y--;
-          ghost.last_move = 'L';
+          last_move = 'L';
         }
-        if (ghost.if_boost != 0) {
+        if (if_boost != 0) {
           map.map[x][y] = POWER_UP;
           y--;
-          ghost.last_move = 'L';
+          last_move = 'L';
         }
-        if (ghost.ifcookie == 0 && ghost.if_boost == 0) {
+        if (ifcookie == 0 && if_boost == 0) {
           map.map[x][y] = EMPTY;
           y--;
-          ghost.last_move = 'L';
+          last_move = 'L';
         }
         if (map.map[x][y] == PELLET)
-          ghost.ifcookie = 1;
+          ifcookie = 1;
         else
-          ghost.ifcookie = 0;
+          ifcookie = 0;
         if (map.map[x][y] == POWER_UP)
-          ghost.if_boost = 1;
+          if_boost = 1;
         else
-          ghost.if_boost = 0;
+          if_boost = 0;
       } else if (down) {
-        if (ghost.ifcookie != 0) {
+        if (ifcookie != 0) {
           map.map[x][y] = PELLET;
           x++;
-          ghost.last_move = 'D';
+          last_move = 'D';
         }
-        if (ghost.if_boost != 0) {
+        if (if_boost != 0) {
           map.map[x][y] = POWER_UP;
           x++;
-          ghost.last_move = 'D';
+          last_move = 'D';
         }
-        if (ghost.ifcookie == 0 && ghost.if_boost == 0) {
+        if (ifcookie == 0 && if_boost == 0) {
           map.map[x][y] = EMPTY;
           x++;
-          ghost.last_move = 'D';
+          last_move = 'D';
         }
         if (map.map[x][y] == PELLET)
-          ghost.ifcookie = 1;
+          ifcookie = 1;
         else
-          ghost.ifcookie = 0;
+          ifcookie = 0;
         if (map.map[x][y] == POWER_UP)
-          ghost.if_boost = 1;
+          if_boost = 1;
         else
-          ghost.if_boost = 0;
+          if_boost = 0;
       }
-    } else if (ghost.last_move == 'D') {
+    } else if (last_move == 'D') {
       if (down) {
-        if (ghost.ifcookie != 0) {
+        if (ifcookie != 0) {
           map.map[x][y] = PELLET;
           x++;
         }
-        if (ghost.if_boost != 0) {
+        if (if_boost != 0) {
           map.map[x][y] = POWER_UP;
           x++;
         }
-        if (ghost.ifcookie == 0 && ghost.if_boost == 0) {
+        if (ifcookie == 0 && if_boost == 0) {
           map.map[x][y] = EMPTY;
           x++;
         }
         if (map.map[x][y] == PELLET)
-          ghost.ifcookie = 1;
+          ifcookie = 1;
         else
-          ghost.ifcookie = 0;
+          ifcookie = 0;
         if (map.map[x][y] == POWER_UP)
-          ghost.if_boost = 1;
+          if_boost = 1;
         else
-          ghost.if_boost = 0;
-      } else if (right) {
-        if (ghost.ifcookie != 0) {
-          map.map[x][y] = PELLET;
-          y++;
-          ghost.last_move = 'R';
-        }
-        if (ghost.if_boost != 0) {
-          map.map[x][y] = POWER_UP;
-          y++;
-          ghost.last_move = 'R';
-        }
-        if (ghost.ifcookie == 0 && ghost.if_boost == 0) {
-          map.map[x][y] = EMPTY;
-          y++;
-          ghost.last_move = 'R';
-        }
-        if (map.map[x][y] == PELLET)
-          ghost.ifcookie = 1;
-        else
-          ghost.ifcookie = 0;
-        if (map.map[x][y] == POWER_UP)
-          ghost.if_boost = 1;
-        else
-          ghost.if_boost = 0;
-      } else if (up) {
-        if (ghost.ifcookie != 0) {
-          map.map[x][y] = PELLET;
-          x--;
-          ghost.last_move = 'U';
-        }
-        if (ghost.if_boost != 0) {
-          map.map[x][y] = POWER_UP;
-          x--;
-          ghost.last_move = 'U';
-        }
-        if (ghost.ifcookie == 0 && ghost.if_boost == 0) {
-          map.map[x][y] = EMPTY;
-          x--;
-          ghost.last_move = 'U';
-        }
-        if (map.map[x][y] == PELLET)
-          ghost.ifcookie = 1;
-        else
-          ghost.ifcookie = 0;
-        if (map.map[x][y] == POWER_UP)
-          ghost.if_boost = 1;
-        else
-          ghost.if_boost = 0;
+          if_boost = 0;
       } else if (left) {
-        if (ghost.ifcookie != 0) {
+        if (ifcookie != 0) {
           map.map[x][y] = PELLET;
           y--;
-          ghost.last_move = 'L';
+          last_move = 'L';
         }
-        if (ghost.if_boost != 0) {
+        if (if_boost != 0) {
           map.map[x][y] = POWER_UP;
           y--;
-          ghost.last_move = 'L';
+          last_move = 'L';
         }
-        if (ghost.ifcookie == 0 && ghost.if_boost == 0) {
+        if (ifcookie == 0 && if_boost == 0) {
           map.map[x][y] = EMPTY;
           y--;
-          ghost.last_move = 'L';
+          last_move = 'L';
         }
         if (map.map[x][y] == PELLET)
-          ghost.ifcookie = 1;
+          ifcookie = 1;
         else
-          ghost.ifcookie = 0;
+          ifcookie = 0;
         if (map.map[x][y] == POWER_UP)
-          ghost.if_boost = 1;
+          if_boost = 1;
         else
-          ghost.if_boost = 0;
-      }
-    }
-  }
-  if (possible > 2) {
-    srand(time(0));
-    int los = 1 + rand() % 4;
-
-    if (los == 1) {
-      if (up) {
-        if (ghost.ifcookie != 0) {
-          map.map[x][y] = PELLET;
-          ghost.last_move = 'U';
-        }
-        if (ghost.if_boost != 0) {
-          map.map[x][y] = POWER_UP;
-          ghost.last_move = 'U';
-        }
-        if (ghost.ifcookie == 0 && ghost.if_boost == 0) {
-          map.map[x][y] = EMPTY;
-          ghost.last_move = 'U';
-        }
-        if (map.map[x - 1][y] == PELLET)
-          ghost.ifcookie = 1;
-        else
-          ghost.ifcookie = 0;
-        if (map.map[x - 1][y] == POWER_UP)
-          ghost.if_boost = 1;
-        else
-          ghost.if_boost = 0;
-        x--;
-      } else if (down) {
-        if (ghost.ifcookie != 0) {
-          map.map[x][y] = PELLET;
-          ghost.last_move = 'D';
-        }
-        if (ghost.if_boost != 0) {
-          map.map[x][y] = POWER_UP;
-
-          ghost.last_move = 'D';
-        }
-        if (ghost.ifcookie == 0 && ghost.if_boost == 0) {
-          map.map[x][y] = EMPTY;
-          ghost.last_move = 'D';
-        }
-        if (map.map[x + 1][y] == PELLET)
-          ghost.ifcookie = 1;
-        else
-          ghost.ifcookie = 0;
-        if (map.map[x + 1][y] == POWER_UP)
-          ghost.if_boost = 1;
-        else
-          ghost.if_boost = 0;
-      } else if (left) {
-        if (ghost.ifcookie != 0) {
-          map.map[x][y] = PELLET;
-          y--;
-          ghost.last_move = 'L';
-        }
-        if (ghost.if_boost != 0) {
-          map.map[x][y] = POWER_UP;
-          y--;
-          ghost.last_move = 'L';
-        }
-        if (ghost.ifcookie == 0 && ghost.if_boost == 0) {
-          map.map[x][y] = EMPTY;
-          y--;
-          ghost.last_move = 'L';
-        }
-        if (map.map[x][y] == PELLET)
-          ghost.ifcookie = 1;
-        else
-          ghost.ifcookie = 0;
-        if (map.map[x][y] == POWER_UP)
-          ghost.if_boost = 1;
-        else
-          ghost.if_boost = 0;
+          if_boost = 0;
       } else if (right) {
-        if (ghost.ifcookie != 0) {
+        if (ifcookie != 0) {
           map.map[x][y] = PELLET;
           y++;
-          ghost.last_move = 'R';
+          last_move = 'R';
         }
-        if (ghost.if_boost != 0) {
+        if (if_boost != 0) {
           map.map[x][y] = POWER_UP;
           y++;
-          ghost.last_move = 'R';
+          last_move = 'R';
         }
-        if (ghost.ifcookie == 0 && ghost.if_boost == 0) {
+        if (ifcookie == 0 && if_boost == 0) {
           map.map[x][y] = EMPTY;
           y++;
-          ghost.last_move = 'R';
+          last_move = 'R';
         }
         if (map.map[x][y] == PELLET)
-          ghost.ifcookie = 1;
+          ifcookie = 1;
         else
-          ghost.ifcookie = 0;
+          ifcookie = 0;
         if (map.map[x][y] == POWER_UP)
-          ghost.if_boost = 1;
+          if_boost = 1;
         else
-          ghost.if_boost = 0;
-      }
-    }
-    if (los == 2) {
-      if (down) {
-        if (ghost.ifcookie != 0) {
-          map.map[x][y] = PELLET;
-          x++;
-          ghost.last_move = 'D';
-        }
-        if (ghost.if_boost != 0) {
-          map.map[x][y] = POWER_UP;
-          x++;
-          ghost.last_move = 'D';
-        }
-        if (ghost.ifcookie == 0 && ghost.if_boost == 0) {
-          map.map[x][y] = EMPTY;
-          x++;
-          ghost.last_move = 'D';
-        }
-        if (map.map[x][y] == PELLET)
-          ghost.ifcookie = 1;
-        else
-          ghost.ifcookie = 0;
-        if (map.map[x][y] == POWER_UP)
-          ghost.if_boost = 1;
-        else
-          ghost.if_boost = 0;
-      } else if (left) {
-        if (ghost.ifcookie != 0) {
-          map.map[x][y] = PELLET;
-          y--;
-          ghost.last_move = 'L';
-        }
-        if (ghost.if_boost != 0) {
-          map.map[x][y] = POWER_UP;
-          y--;
-          ghost.last_move = 'L';
-        }
-        if (ghost.ifcookie == 0 && ghost.if_boost == 0) {
-          map.map[x][y] = EMPTY;
-          y--;
-          ghost.last_move = 'L';
-        }
-        if (map.map[x][y] == PELLET)
-          ghost.ifcookie = 1;
-        else
-          ghost.ifcookie = 0;
-        if (map.map[x][y] == POWER_UP)
-          ghost.if_boost = 1;
-        else
-          ghost.if_boost = 0;
-      } else if (right) {
-        if (ghost.ifcookie != 0) {
-          map.map[x][y] = PELLET;
-          y++;
-          ghost.last_move = 'R';
-        }
-        if (ghost.if_boost != 0) {
-          map.map[x][y] = POWER_UP;
-          y++;
-          ghost.last_move = 'R';
-        }
-        if (ghost.ifcookie == 0 && ghost.if_boost == 0) {
-          map.map[x][y] = EMPTY;
-          y++;
-          ghost.last_move = 'R';
-        }
-        if (map.map[x][y] == PELLET)
-          ghost.ifcookie = 1;
-        else
-          ghost.ifcookie = 0;
-        if (map.map[x][y] == POWER_UP)
-          ghost.if_boost = 1;
-        else
-          ghost.if_boost = 0;
+          if_boost = 0;
       } else if (up) {
-        if (ghost.ifcookie != 0) {
+        if (ifcookie != 0) {
           map.map[x][y] = PELLET;
           x--;
-          ghost.last_move = 'U';
+          last_move = 'U';
         }
-        if (ghost.if_boost != 0) {
+        if (if_boost != 0) {
           map.map[x][y] = POWER_UP;
           x--;
-          ghost.last_move = 'U';
+          last_move = 'U';
         }
-        if (ghost.ifcookie == 0 && ghost.if_boost == 0) {
+        if (ifcookie == 0 && if_boost == 0) {
           map.map[x][y] = EMPTY;
           x--;
-          ghost.last_move = 'U';
+          last_move = 'U';
         }
         if (map.map[x][y] == PELLET)
-          ghost.ifcookie = 1;
+          ifcookie = 1;
         else
-          ghost.ifcookie = 0;
+          ifcookie = 0;
         if (map.map[x][y] == POWER_UP)
-          ghost.if_boost = 1;
+          if_boost = 1;
         else
-          ghost.if_boost = 0;
-      }
-    }
-    if (los == 3) {
-      if (left) {
-        if (ghost.ifcookie != 0) {
-          map.map[x][y] = PELLET;
-          y--;
-          ghost.last_move = 'L';
-        }
-        if (ghost.if_boost != 0) {
-          map.map[x][y] = POWER_UP;
-          y--;
-          ghost.last_move = 'L';
-        }
-        if (ghost.ifcookie == 0 && ghost.if_boost == 0) {
-          map.map[x][y] = EMPTY;
-          y--;
-          ghost.last_move = 'L';
-        }
-        if (map.map[x][y] == PELLET)
-          ghost.ifcookie = 1;
-        else
-          ghost.ifcookie = 0;
-        if (map.map[x][y] == POWER_UP)
-          ghost.if_boost = 1;
-        else
-          ghost.if_boost = 0;
-      } else if (right) {
-        if (ghost.ifcookie != 0) {
-          map.map[x][y] = PELLET;
-          y++;
-          ghost.last_move = 'R';
-        }
-        if (ghost.if_boost != 0) {
-          map.map[x][y] = POWER_UP;
-          y++;
-          ghost.last_move = 'R';
-        }
-        if (ghost.ifcookie == 0 && ghost.if_boost == 0) {
-          map.map[x][y] = EMPTY;
-          y++;
-          ghost.last_move = 'R';
-        }
-        if (map.map[x][y] == PELLET)
-          ghost.ifcookie = 1;
-        else
-          ghost.ifcookie = 0;
-        if (map.map[x][y] == POWER_UP)
-          ghost.if_boost = 1;
-        else
-          ghost.if_boost = 0;
-      } else if (up) {
-        if (ghost.ifcookie != 0) {
-          map.map[x][y] = PELLET;
-          x--;
-          ghost.last_move = 'U';
-        }
-        if (ghost.if_boost != 0) {
-          map.map[x][y] = POWER_UP;
-          x--;
-          ghost.last_move = 'U';
-        }
-        if (ghost.ifcookie == 0 && ghost.if_boost == 0) {
-          map.map[x][y] = EMPTY;
-          x--;
-          ghost.last_move = 'U';
-        }
-        if (map.map[x][y] == PELLET)
-          ghost.ifcookie = 1;
-        else
-          ghost.ifcookie = 0;
-        if (map.map[x][y] == POWER_UP)
-          ghost.if_boost = 1;
-        else
-          ghost.if_boost = 0;
-      } else if (down) {
-        if (ghost.ifcookie != 0) {
-          map.map[x][y] = PELLET;
-          x++;
-          ghost.last_move = 'D';
-        }
-        if (ghost.if_boost != 0) {
-          map.map[x][y] = POWER_UP;
-          x++;
-          ghost.last_move = 'D';
-        }
-        if (ghost.ifcookie == 0 && ghost.if_boost == 0) {
-          map.map[x][y] = EMPTY;
-          x++;
-          ghost.last_move = 'D';
-        }
-        if (map.map[x][y] == PELLET)
-          ghost.ifcookie = 1;
-        else
-          ghost.ifcookie = 0;
-        if (map.map[x][y] == POWER_UP)
-          ghost.if_boost = 1;
-        else
-          ghost.if_boost = 0;
-      }
-    }
-    if (los == 4) {
-      if (right) {
-        if (ghost.ifcookie != 0) {
-          map.map[x][y] = PELLET;
-          y++;
-          ghost.last_move = 'R';
-        }
-        if (ghost.if_boost != 0) {
-          map.map[x][y] = POWER_UP;
-          y++;
-          ghost.last_move = 'R';
-        }
-        if (ghost.ifcookie == 0 && ghost.if_boost == 0) {
-          map.map[x][y] = EMPTY;
-          y++;
-          ghost.last_move = 'R';
-        }
-        if (map.map[x][y] == PELLET)
-          ghost.ifcookie = 1;
-        else
-          ghost.ifcookie = 0;
-        if (map.map[x][y] == POWER_UP)
-          ghost.if_boost = 1;
-        else
-          ghost.if_boost = 0;
-      } else if (up) {
-        if (ghost.ifcookie != 0) {
-          map.map[x][y] = PELLET;
-          x--;
-          ghost.last_move = 'U';
-        }
-        if (ghost.if_boost != 0) {
-          map.map[x][y] = POWER_UP;
-          x--;
-          ghost.last_move = 'U';
-        }
-        if (ghost.ifcookie == 0 && ghost.if_boost == 0) {
-          map.map[x][y] = EMPTY;
-          x--;
-          ghost.last_move = 'U';
-        }
-        if (map.map[x][y] == PELLET)
-          ghost.ifcookie = 1;
-        else
-          ghost.ifcookie = 0;
-        if (map.map[x][y] == POWER_UP)
-          ghost.if_boost = 1;
-        else
-          ghost.if_boost = 0;
-      } else if (down) {
-        if (ghost.ifcookie != 0) {
-          map.map[x][y] = PELLET;
-          x++;
-          ghost.last_move = 'D';
-        }
-        if (ghost.if_boost != 0) {
-          map.map[x][y] = POWER_UP;
-          x++;
-          ghost.last_move = 'D';
-        }
-        if (ghost.ifcookie == 0 && ghost.if_boost == 0) {
-          map.map[x][y] = EMPTY;
-          x++;
-          ghost.last_move = 'D';
-        }
-        if (map.map[x][y] == PELLET)
-          ghost.ifcookie = 1;
-        else
-          ghost.ifcookie = 0;
-        if (map.map[x][y] == POWER_UP)
-          ghost.if_boost = 1;
-        else
-          ghost.if_boost = 0;
-      } else if (left) {
-        if (ghost.ifcookie != 0) {
-          map.map[x][y] = PELLET;
-          y--;
-          ghost.last_move = 'L';
-        }
-        if (ghost.if_boost != 0) {
-          map.map[x][y] = POWER_UP;
-          y--;
-          ghost.last_move = 'L';
-        }
-        if (ghost.ifcookie == 0 && ghost.if_boost == 0) {
-          map.map[x][y] = EMPTY;
-          y--;
-          ghost.last_move = 'L';
-        }
-        if (map.map[x][y] == PELLET)
-          ghost.ifcookie = 1;
-        else
-          ghost.ifcookie = 0;
-        if (map.map[x][y] == POWER_UP)
-          ghost.if_boost = 1;
-        else
-          ghost.if_boost = 0;
+          if_boost = 0;
       }
     }
   }
 
-  ghost.xg = x;
-  ghost.yg = y;
+  xg = x;
+  yg = y;
 
-  map.map[ghost.xg][ghost.yg] = GHOST;
+  map.map[xg][yg] = GHOST;
 
   if (1) {
-    if (ghost.lp % 2 != 0) {
-      map.xg1 = ghost.xg;
-      map.yg1 = ghost.yg;
+    if (lp % 2 != 0) {
+      map.xg1 = xg;
+      map.yg1 = yg;
     }
-    if (ghost.lp % 2 == 0) {
-      map.xg2 = ghost.xg;
-      map.yg2 = ghost.yg;
+    if (lp % 2 == 0) {
+      map.xg2 = xg;
+      map.yg2 = yg;
     }
-    ghost.lp++;
+    lp++;
   }
 }
-
-void ghost_boost() {}
 
 } // namespace core
 } // namespace pacman

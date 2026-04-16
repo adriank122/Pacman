@@ -1,21 +1,30 @@
 #ifndef PACMAN_CORE_GHOST_H
 #define PACMAN_CORE_GHOST_H
 
-#include "map.h"
+#include "core/entity.h"
 
 namespace pacman {
 namespace core {
 
-struct SGhost {
+class Ghost : public Entity {
+public:
+  Ghost();
+
+  int x() const override;
+  int y() const override;
+  int prev_x() const override;
+  int prev_y() const override;
+  char direction() const override;
+  void setPosition(int x, int y) override;
+  void setDirection(char direction) override;
+  void savePreviousPosition() override;
+  void move(SMap &map) override;
+
   int ifcookie;
   char last_move;
   int if_boost;
   int xg, yg, prev_xg, prev_yg, lp;
 };
-
-void init_ghost(SGhost &ghost, int x, int y);
-void ghost_move(SGhost &ghost, SMap &map);
-void ghost_boost();
 
 } // namespace core
 } // namespace pacman

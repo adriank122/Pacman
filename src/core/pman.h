@@ -1,25 +1,35 @@
 #ifndef PACMAN_CORE_PMAN_H
 #define PACMAN_CORE_PMAN_H
 
-#include "map.h"
+#include "core/entity.h"
 
 namespace pacman {
-
-// Forward declaration of Renderer at correct namespace level
-namespace rendering {
-class Renderer;
-}
-
 namespace core {
 
-struct SPman {
-  int lives, points;
-  int prev_xp, prev_yp;
-};
+class Pacman : public Entity {
+public:
+  Pacman();
 
-void pman_move(SPman &pman, SMap &map, char input = '\0');
-void pman_boost();
-void init_pman(SPman &pman);
+  int x() const override;
+  int y() const override;
+  int prev_x() const override;
+  int prev_y() const override;
+  char direction() const override;
+  void setPosition(int x, int y) override;
+  void setDirection(char direction) override;
+  void savePreviousPosition() override;
+  void move(SMap &map) override;
+
+  int lives;
+  int points;
+
+private:
+  int xp_;
+  int yp_;
+  int prev_xp_;
+  int prev_yp_;
+  char direction_;
+};
 
 } // namespace core
 } // namespace pacman

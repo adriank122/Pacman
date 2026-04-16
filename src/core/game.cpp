@@ -19,9 +19,10 @@ void game_count(SGame &game) {
           game.map.map[i][j] == core::POWER_UP)
         game.food++;
 
-  if ((game.ghost1.xg == game.map.xp && game.ghost1.yg == game.map.yp) ||
-      (game.ghost2.xg == game.map.xp && game.ghost2.yg == game.map.yp)) {
+  if ((game.ghost1.x() == game.pman.x() && game.ghost1.y() == game.pman.y()) ||
+      (game.ghost2.x() == game.pman.x() && game.ghost2.y() == game.pman.y())) {
     game.pman.lives--;
+    game.pman.setPosition(13, 9);
     game.map.xp = 13;
     game.map.yp = 9;
     game.map.map[game.map.xp][game.map.yp] = core::PACMAN_PLAYER;
@@ -30,13 +31,17 @@ void game_count(SGame &game) {
 
 void game_init(SGame &game) {
   init_map(game.map);
-  init_pman(game.pman);
+  game.pman = Pacman();
   game.timer = 200000;
   game.delay = 300;
-  init_ghost(game.ghost1, 15, 1);
-  init_ghost(game.ghost2, 15, 18);
-  init_ghost(game.ghost3, 1, 1);
-  init_ghost(game.ghost4, 1, 18);
+  game.ghost1 = Ghost();
+  game.ghost1.setPosition(15, 1);
+  game.ghost2 = Ghost();
+  game.ghost2.setPosition(15, 18);
+  game.ghost3 = Ghost();
+  game.ghost3.setPosition(1, 1);
+  game.ghost4 = Ghost();
+  game.ghost4.setPosition(1, 18);
 }
 
 void save_leaderboard(SGame game) {

@@ -327,21 +327,21 @@ void GUIRenderer::showGameState(const core::SGame &game, double interpolation) {
   };
 
   float playerX =
-      lerp(game.pman.prev_yp, game.map.yp, interpolation) * TILE_SIZE;
+      lerp(game.pman.prev_y(), game.pman.y(), interpolation) * TILE_SIZE;
   float playerY =
-      lerp(game.pman.prev_xp, game.map.xp, interpolation) * TILE_SIZE;
+      lerp(game.pman.prev_x(), game.pman.x(), interpolation) * TILE_SIZE;
 
   sf::CircleShape playerShape(7.f);
   playerShape.setFillColor(sf::Color::Yellow);
   playerShape.setPosition(playerX + 1.f, playerY + 1.f);
   window->draw(playerShape);
 
-  auto drawGhost = [&](const core::SGhost &ghost) {
-    float ghostY = lerp(ghost.prev_yg, ghost.yg, interpolation) * TILE_SIZE;
-    float ghostX = lerp(ghost.prev_xg, ghost.xg, interpolation) * TILE_SIZE;
+  auto drawGhost = [&](const core::Ghost &ghost) {
+    float ghostX = lerp(ghost.prev_y(), ghost.y(), interpolation) * TILE_SIZE;
+    float ghostY = lerp(ghost.prev_x(), ghost.x(), interpolation) * TILE_SIZE;
     sf::CircleShape ghostShape(7.f);
     ghostShape.setFillColor(sf::Color::Red);
-    ghostShape.setPosition(ghostY + 1.f, ghostX + 1.f);
+    ghostShape.setPosition(ghostX + 1.f, ghostY + 1.f);
     window->draw(ghostShape);
   };
 
