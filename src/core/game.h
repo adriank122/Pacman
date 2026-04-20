@@ -27,7 +27,7 @@ struct SGame {
 };
 
 void game_count(SGame &game);
-void game_init(SGame &game);
+void game_init(SGame &game, const GameConfig &config);
 void save_leaderboard(SGame game);
 
 } // namespace core

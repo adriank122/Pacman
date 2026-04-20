@@ -1,4 +1,5 @@
 #include "core/game.h"
+#include "core/config.h"
 #include "rendering/renderer.h"
 #include <fstream>
 #include <iostream>
@@ -13,8 +14,8 @@ namespace core {
 void game_count(SGame &game) {
   game.food = 0;
 
-  for (int i = 0; i < 17; i++)
-    for (int j = 0; j < 20; j++)
+  for (int i = 0; i < game.map.height; i++)
+    for (int j = 0; j < game.map.width; j++)
       if (game.map.map[i][j] == core::PELLET ||
           game.map.map[i][j] == core::POWER_UP)
         game.food++;
@@ -22,26 +23,29 @@ void game_count(SGame &game) {
   if ((game.ghost1.x() == game.pman.x() && game.ghost1.y() == game.pman.y()) ||
       (game.ghost2.x() == game.pman.x() && game.ghost2.y() == game.pman.y())) {
     game.pman.lives--;
-    game.pman.setPosition(13, 9);
-    game.map.xp = 13;
-    game.map.yp = 9;
+    game.pman.setPosition(game.map.start_xp, game.map.start_yp);
+    game.map.xp = game.map.start_xp;
+    game.map.yp = game.map.start_yp;
     game.map.map[game.map.xp][game.map.yp] = core::PACMAN_PLAYER;
   }
 }
 
-void game_init(SGame &game) {
-  init_map(game.map);
+void game_init(SGame &game, const GameConfig &config) {
+  init_map(game.map, config);
   game.pman = Pacman();
-  game.timer = 200000;
-  game.delay = 300;
+  game.pman.setPosition(config.pacmanStartX, config.pacmanStartY);
+  game.pman.savePreviousPosition();
+  game.timer = config.startingTimerMs;
+  game.delay = config.gameTickDelayMs;
+  game.pman.lives = config.startingLives;
   game.ghost1 = Ghost();
-  game.ghost1.setPosition(15, 1);
+  game.ghost1.setPosition(config.ghost1StartX, config.ghost1StartY);
   game.ghost2 = Ghost();
-  game.ghost2.setPosition(15, 18);
+  game.ghost2.setPosition(config.ghost2StartX, config.ghost2StartY);
   game.ghost3 = Ghost();
-  game.ghost3.setPosition(1, 1);
+  game.ghost3.setPosition(config.ghost3StartX, config.ghost3StartY);
   game.ghost4 = Ghost();
-  game.ghost4.setPosition(1, 18);
+  game.ghost4.setPosition(config.ghost4StartX, config.ghost4StartY);
 }
 
 void save_leaderboard(SGame game) {
