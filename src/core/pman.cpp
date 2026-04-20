@@ -8,20 +8,20 @@ namespace core {
 
 Pacman::Pacman()
     : lives(0), points(0), xp_(0), yp_(0), prev_xp_(0), prev_yp_(0),
-      direction_('\0') {}
+      direction_(Direction::NONE) {}
 
 int Pacman::x() const { return xp_; }
 int Pacman::y() const { return yp_; }
 int Pacman::prev_x() const { return prev_xp_; }
 int Pacman::prev_y() const { return prev_yp_; }
-char Pacman::direction() const { return direction_; }
+Direction Pacman::direction() const { return direction_; }
 
 void Pacman::setPosition(int x, int y) {
   xp_ = x;
   yp_ = y;
 }
 
-void Pacman::setDirection(char direction) { direction_ = direction; }
+void Pacman::setDirection(Direction direction) { direction_ = direction; }
 
 void Pacman::savePreviousPosition() {
   prev_xp_ = xp_;
@@ -40,7 +40,7 @@ void Pacman::move(SMap &map) {
     yp_ = map.yp;
   }
 
-  if (direction_ == '\0') {
+  if (direction_ == Direction::NONE) {
     return;
   }
 
@@ -49,7 +49,7 @@ void Pacman::move(SMap &map) {
   int yp = yp_;
 
   switch (direction_) {
-  case 'a':
+  case Direction::LEFT:
     if (xp == 8 && yp == 0) {
       map.map[xp][yp] = EMPTY;
       if (map.map[8][19] == PELLET)
@@ -75,7 +75,7 @@ void Pacman::move(SMap &map) {
     }
     break;
 
-  case 'w':
+  case Direction::UP:
     if (map.map[xp - 1][yp] != WALL) {
       if (map.map[xp - 1][yp] == PELLET) {
         currentPoints++;
@@ -94,7 +94,7 @@ void Pacman::move(SMap &map) {
     }
     break;
 
-  case 's':
+  case Direction::DOWN:
     if (map.map[xp + 1][yp] != WALL) {
       if (map.map[xp + 1][yp] == PELLET) {
         currentPoints++;
@@ -113,7 +113,7 @@ void Pacman::move(SMap &map) {
     }
     break;
 
-  case 'd':
+  case Direction::RIGHT:
     if (xp == 8 && yp == 19) {
       map.map[xp][yp] = EMPTY;
       if (map.map[8][0] == PELLET)

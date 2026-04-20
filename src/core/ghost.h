@@ -14,14 +14,14 @@ public:
   int y() const override;
   int prev_x() const override;
   int prev_y() const override;
-  char direction() const override;
+  Direction direction() const override;
   void setPosition(int x, int y) override;
-  void setDirection(char direction) override;
+  void setDirection(Direction direction) override;
   void savePreviousPosition() override;
   void move(SMap &map) override;
 
   int ifcookie;
-  char last_move;
+  Direction last_move;
   int if_boost;
   int xg, yg, prev_xg, prev_yg, lp;
 };

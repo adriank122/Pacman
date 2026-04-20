@@ -9,14 +9,14 @@ namespace pacman {
 namespace core {
 
 Ghost::Ghost()
-    : ifcookie(1), last_move('L'), if_boost(0), xg(0), yg(0), prev_xg(0),
-      prev_yg(0), lp(1) {}
+    : ifcookie(1), last_move(Direction::LEFT), if_boost(0), xg(0), yg(0),
+      prev_xg(0), prev_yg(0), lp(1) {}
 
 int Ghost::x() const { return xg; }
 int Ghost::y() const { return yg; }
 int Ghost::prev_x() const { return prev_xg; }
 int Ghost::prev_y() const { return prev_yg; }
-char Ghost::direction() const { return last_move; }
+Direction Ghost::direction() const { return last_move; }
 
 void Ghost::setPosition(int x, int y) {
   xg = x;
@@ -25,7 +25,7 @@ void Ghost::setPosition(int x, int y) {
   prev_yg = y;
 }
 
-void Ghost::setDirection(char direction) { last_move = direction; }
+void Ghost::setDirection(Direction direction) { last_move = direction; }
 
 void Ghost::savePreviousPosition() {
   prev_xg = xg;
@@ -57,7 +57,7 @@ void Ghost::move(SMap &map) {
   }
 
   if (possible > 0) {
-    if (last_move == 'L') {
+    if (last_move == Direction::LEFT) {
       if (left) {
         if (ifcookie != 0) {
           map.map[x][y] = PELLET;
@@ -83,17 +83,17 @@ void Ghost::move(SMap &map) {
         if (ifcookie != 0) {
           map.map[x][y] = PELLET;
           x++;
-          last_move = 'R';
+          last_move = Direction::RIGHT;
         }
         if (if_boost != 0) {
           map.map[x][y] = POWER_UP;
           x++;
-          last_move = 'R';
+          last_move = Direction::RIGHT;
         }
         if (ifcookie == 0 && if_boost == 0) {
           map.map[x][y] = EMPTY;
           x++;
-          last_move = 'R';
+          last_move = Direction::RIGHT;
         }
         if (map.map[x][y] == PELLET)
           ifcookie = 1;
@@ -107,17 +107,17 @@ void Ghost::move(SMap &map) {
         if (ifcookie != 0) {
           map.map[x][y] = PELLET;
           x--;
-          last_move = 'U';
+          last_move = Direction::UP;
         }
         if (if_boost != 0) {
           map.map[x][y] = POWER_UP;
           x--;
-          last_move = 'U';
+          last_move = Direction::UP;
         }
         if (ifcookie == 0 && if_boost == 0) {
           map.map[x][y] = EMPTY;
           x--;
-          last_move = 'U';
+          last_move = Direction::UP;
         }
         if (map.map[x][y] == PELLET)
           ifcookie = 1;
@@ -131,17 +131,17 @@ void Ghost::move(SMap &map) {
         if (ifcookie != 0) {
           map.map[x][y] = PELLET;
           y++;
-          last_move = 'D';
+          last_move = Direction::DOWN;
         }
         if (if_boost != 0) {
           map.map[x][y] = POWER_UP;
           y++;
-          last_move = 'D';
+          last_move = Direction::DOWN;
         }
         if (ifcookie == 0 && if_boost == 0) {
           map.map[x][y] = EMPTY;
           y++;
-          last_move = 'D';
+          last_move = Direction::DOWN;
         }
         if (map.map[x][y] == PELLET)
           ifcookie = 1;
@@ -152,7 +152,7 @@ void Ghost::move(SMap &map) {
         else
           if_boost = 0;
       }
-    } else if (last_move == 'R') {
+    } else if (last_move == Direction::RIGHT) {
       if (right) {
         if (ifcookie != 0) {
           map.map[x][y] = PELLET;
@@ -178,17 +178,17 @@ void Ghost::move(SMap &map) {
         if (ifcookie != 0) {
           map.map[x][y] = PELLET;
           x++;
-          last_move = 'R';
+          last_move = Direction::RIGHT;
         }
         if (if_boost != 0) {
           map.map[x][y] = POWER_UP;
           x++;
-          last_move = 'R';
+          last_move = Direction::RIGHT;
         }
         if (ifcookie == 0 && if_boost == 0) {
           map.map[x][y] = EMPTY;
           x++;
-          last_move = 'R';
+          last_move = Direction::RIGHT;
         }
         if (map.map[x][y] == PELLET)
           ifcookie = 1;
@@ -202,17 +202,17 @@ void Ghost::move(SMap &map) {
         if (ifcookie != 0) {
           map.map[x][y] = PELLET;
           x--;
-          last_move = 'U';
+          last_move = Direction::UP;
         }
         if (if_boost != 0) {
           map.map[x][y] = POWER_UP;
           x--;
-          last_move = 'U';
+          last_move = Direction::UP;
         }
         if (ifcookie == 0 && if_boost == 0) {
           map.map[x][y] = EMPTY;
           x--;
-          last_move = 'U';
+          last_move = Direction::UP;
         }
         if (map.map[x][y] == PELLET)
           ifcookie = 1;
@@ -226,17 +226,17 @@ void Ghost::move(SMap &map) {
         if (ifcookie != 0) {
           map.map[x][y] = PELLET;
           y--;
-          last_move = 'D';
+          last_move = Direction::DOWN;
         }
         if (if_boost != 0) {
           map.map[x][y] = POWER_UP;
           y--;
-          last_move = 'D';
+          last_move = Direction::DOWN;
         }
         if (ifcookie == 0 && if_boost == 0) {
           map.map[x][y] = EMPTY;
           y--;
-          last_move = 'D';
+          last_move = Direction::DOWN;
         }
         if (map.map[x][y] == PELLET)
           ifcookie = 1;
@@ -247,7 +247,7 @@ void Ghost::move(SMap &map) {
         else
           if_boost = 0;
       }
-    } else if (last_move == 'U') {
+    } else if (last_move == Direction::UP) {
       if (up) {
         if (ifcookie != 0) {
           map.map[x][y] = PELLET;
@@ -273,17 +273,17 @@ void Ghost::move(SMap &map) {
         if (ifcookie != 0) {
           map.map[x][y] = PELLET;
           y++;
-          last_move = 'R';
+          last_move = Direction::RIGHT;
         }
         if (if_boost != 0) {
           map.map[x][y] = POWER_UP;
           y++;
-          last_move = 'R';
+          last_move = Direction::RIGHT;
         }
         if (ifcookie == 0 && if_boost == 0) {
           map.map[x][y] = EMPTY;
           y++;
-          last_move = 'R';
+          last_move = Direction::RIGHT;
         }
         if (map.map[x][y] == PELLET)
           ifcookie = 1;
@@ -297,17 +297,17 @@ void Ghost::move(SMap &map) {
         if (ifcookie != 0) {
           map.map[x][y] = PELLET;
           y--;
-          last_move = 'L';
+          last_move = Direction::LEFT;
         }
         if (if_boost != 0) {
           map.map[x][y] = POWER_UP;
           y--;
-          last_move = 'L';
+          last_move = Direction::LEFT;
         }
         if (ifcookie == 0 && if_boost == 0) {
           map.map[x][y] = EMPTY;
           y--;
-          last_move = 'L';
+          last_move = Direction::LEFT;
         }
         if (map.map[x][y] == PELLET)
           ifcookie = 1;
@@ -321,17 +321,17 @@ void Ghost::move(SMap &map) {
         if (ifcookie != 0) {
           map.map[x][y] = PELLET;
           x++;
-          last_move = 'D';
+          last_move = Direction::DOWN;
         }
         if (if_boost != 0) {
           map.map[x][y] = POWER_UP;
           x++;
-          last_move = 'D';
+          last_move = Direction::DOWN;
         }
         if (ifcookie == 0 && if_boost == 0) {
           map.map[x][y] = EMPTY;
           x++;
-          last_move = 'D';
+          last_move = Direction::DOWN;
         }
         if (map.map[x][y] == PELLET)
           ifcookie = 1;
@@ -342,7 +342,7 @@ void Ghost::move(SMap &map) {
         else
           if_boost = 0;
       }
-    } else if (last_move == 'D') {
+    } else if (last_move == Direction::DOWN) {
       if (down) {
         if (ifcookie != 0) {
           map.map[x][y] = PELLET;
@@ -368,17 +368,17 @@ void Ghost::move(SMap &map) {
         if (ifcookie != 0) {
           map.map[x][y] = PELLET;
           y--;
-          last_move = 'L';
+          last_move = Direction::LEFT;
         }
         if (if_boost != 0) {
           map.map[x][y] = POWER_UP;
           y--;
-          last_move = 'L';
+          last_move = Direction::LEFT;
         }
         if (ifcookie == 0 && if_boost == 0) {
           map.map[x][y] = EMPTY;
           y--;
-          last_move = 'L';
+          last_move = Direction::LEFT;
         }
         if (map.map[x][y] == PELLET)
           ifcookie = 1;
@@ -392,17 +392,17 @@ void Ghost::move(SMap &map) {
         if (ifcookie != 0) {
           map.map[x][y] = PELLET;
           y++;
-          last_move = 'R';
+          last_move = Direction::RIGHT;
         }
         if (if_boost != 0) {
           map.map[x][y] = POWER_UP;
           y++;
-          last_move = 'R';
+          last_move = Direction::RIGHT;
         }
         if (ifcookie == 0 && if_boost == 0) {
           map.map[x][y] = EMPTY;
           y++;
-          last_move = 'R';
+          last_move = Direction::RIGHT;
         }
         if (map.map[x][y] == PELLET)
           ifcookie = 1;
@@ -416,17 +416,17 @@ void Ghost::move(SMap &map) {
         if (ifcookie != 0) {
           map.map[x][y] = PELLET;
           x--;
-          last_move = 'U';
+          last_move = Direction::UP;
         }
         if (if_boost != 0) {
           map.map[x][y] = POWER_UP;
           x--;
-          last_move = 'U';
+          last_move = Direction::UP;
         }
         if (ifcookie == 0 && if_boost == 0) {
           map.map[x][y] = EMPTY;
           x--;
-          last_move = 'U';
+          last_move = Direction::UP;
         }
         if (map.map[x][y] == PELLET)
           ifcookie = 1;
