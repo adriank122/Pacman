@@ -22,6 +22,8 @@ public:
 
   int lives;
   int points;
+  int spawnX;
+  int spawnY;
 
 private:
   int xp_;

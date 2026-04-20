@@ -23,7 +23,7 @@ public:
   int ifcookie;
   Direction last_move;
   int if_boost;
-  int xg, yg, prev_xg, prev_yg, lp;
+  int xg, yg, prev_xg, prev_yg;
 };
 
 } // namespace core

@@ -10,7 +10,7 @@ namespace core {
 
 Ghost::Ghost()
     : ifcookie(1), last_move(Direction::LEFT), if_boost(0), xg(0), yg(0),
-      prev_xg(0), prev_yg(0), lp(1) {}
+      prev_xg(0), prev_yg(0) {}
 
 int Ghost::x() const { return xg; }
 int Ghost::y() const { return yg; }
@@ -444,18 +444,6 @@ void Ghost::move(SMap &map) {
   yg = y;
 
   map.map[xg][yg] = GHOST;
-
-  if (1) {
-    if (lp % 2 != 0) {
-      map.xg1 = xg;
-      map.yg1 = yg;
-    }
-    if (lp % 2 == 0) {
-      map.xg2 = xg;
-      map.yg2 = yg;
-    }
-    lp++;
-  }
 }
 
 } // namespace core

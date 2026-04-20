@@ -12,15 +12,9 @@ void init_map(SMap &map, const GameConfig &config) {
   map.width = config.mapWidth;
   map.height = config.mapHeight;
   map.powerUpScore = config.powerUpScore;
-  map.start_xp = config.pacmanStartX;
-  map.start_yp = config.pacmanStartY;
-  map.xp = map.start_xp;
-  map.yp = map.start_yp;
 }
 
 void map_create1(SMap &map) {
-  int xp = map.xp, yp = map.yp;
-
   for (int i = 0; i < map.height; i++) {
     for (int j = 0; j < map.width; j++) {
       map.map[i][j] = WALL;
@@ -85,12 +79,9 @@ void map_create1(SMap &map) {
   map.map[14][12] = WALL;
   map.map[14][14] = WALL;
 
-  map.map[xp][yp] = PACMAN_PLAYER;
 }
 
 void map_create2(SMap &map) {
-  int xp = map.xp, yp = map.yp;
-
   for (int i = 0; i < map.height; i++) {
     for (int j = 0; j < map.width; j++) {
       map.map[i][j] = WALL;
@@ -175,8 +166,6 @@ void map_create2(SMap &map) {
   map.map[13][9] = PELLET;
   map.map[13][10] = PELLET;
   map.map[13][11] = PELLET;
-
-  map.map[xp][yp] = PACMAN_PLAYER;
 }
 
 void map_create3(SMap &map) {
@@ -263,7 +252,6 @@ void map_create3(SMap &map) {
   map.map[1][18] = POWER_UP;
   map.map[15][18] = POWER_UP;
 
-  map.map[map.xp][map.yp] = PACMAN_PLAYER;
 }
 
 void map_show(SMap map) {

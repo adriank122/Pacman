@@ -33,6 +33,8 @@ public:
     } else {
       map_create2(context.game.map);
     }
+    context.game.map.map[context.game.pman.x()][context.game.pman.y()] =
+        PACMAN_PLAYER;
 
     game_count(context.game);
   }

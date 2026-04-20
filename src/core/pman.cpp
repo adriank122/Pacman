@@ -7,8 +7,8 @@ namespace pacman {
 namespace core {
 
 Pacman::Pacman()
-    : lives(0), points(0), xp_(0), yp_(0), prev_xp_(0), prev_yp_(0),
-      direction_(Direction::NONE) {}
+    : lives(0), points(0), spawnX(0), spawnY(0), xp_(0), yp_(0), prev_xp_(0),
+      prev_yp_(0), direction_(Direction::NONE) {}
 
 int Pacman::x() const { return xp_; }
 int Pacman::y() const { return yp_; }
@@ -34,10 +34,8 @@ void Pacman::move(SMap &map) {
   if (map.map[xp_][yp_] == GHOST) {
     lives--;
     map.map[xp_][yp_] = GHOST;
-    map.xp = map.start_xp;
-    map.yp = map.start_yp;
-    xp_ = map.xp;
-    yp_ = map.yp;
+    xp_ = spawnX;
+    yp_ = spawnY;
   }
 
   if (direction_ == Direction::NONE) {
@@ -67,8 +65,8 @@ void Pacman::move(SMap &map) {
       if (map.map[xp][yp - 1] == GHOST) {
         lives--;
         map.map[xp][yp] = EMPTY;
-        xp = map.start_xp;
-        yp = map.start_yp;
+        xp = spawnX;
+        yp = spawnY;
       }
       map.map[xp][yp] = EMPTY;
       yp--;
@@ -86,8 +84,8 @@ void Pacman::move(SMap &map) {
       if (map.map[xp - 1][yp] == GHOST) {
         lives--;
         map.map[xp][yp] = EMPTY;
-        xp = map.start_xp;
-        yp = map.start_yp;
+        xp = spawnX;
+        yp = spawnY;
       }
       map.map[xp][yp] = EMPTY;
       xp--;
@@ -105,8 +103,8 @@ void Pacman::move(SMap &map) {
       if (map.map[xp + 1][yp] == GHOST) {
         lives--;
         map.map[xp][yp] = EMPTY;
-        xp = map.start_xp;
-        yp = map.start_yp;
+        xp = spawnX;
+        yp = spawnY;
       }
       map.map[xp][yp] = EMPTY;
       xp++;
@@ -131,8 +129,8 @@ void Pacman::move(SMap &map) {
       if (map.map[xp][yp + 1] == GHOST) {
         lives--;
         map.map[xp][yp] = EMPTY;
-        xp = map.start_xp;
-        yp = map.start_yp;
+        xp = spawnX;
+        yp = spawnY;
       }
       map.map[xp][yp] = EMPTY;
       yp++;
@@ -146,13 +144,11 @@ void Pacman::move(SMap &map) {
   if (map.map[xp][yp] == GHOST) {
     lives--;
     map.map[xp][yp] = GHOST;
-    xp = map.start_xp;
-    yp = map.start_yp;
+    xp = spawnX;
+    yp = spawnY;
   }
 
   map.map[xp][yp] = PACMAN_PLAYER;
-  map.xp = xp;
-  map.yp = yp;
   xp_ = xp;
   yp_ = yp;
   points = currentPoints;
