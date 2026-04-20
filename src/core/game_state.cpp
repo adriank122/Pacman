@@ -1,4 +1,5 @@
 #include "core/game_state.h"
+#include "core/entity.h"
 #include "core/game.h"
 #include "core/ghost.h"
 #include "core/map.h"
@@ -19,7 +20,8 @@ class GameOverState;
 class GameplayState : public IGameState {
 public:
   GameplayState(GameContext &ctx, int lvl)
-      : IGameState(ctx), level(lvl), lastInput('\0'), paused(false) {}
+      : IGameState(ctx), level(lvl), lastDirection(Direction::NONE),
+        paused(false) {}
 
   void onEnter() override {
     context.game.state = PLAYING;
@@ -54,7 +56,22 @@ public:
       return;
     }
 
-    lastInput = input;
+    switch (input) {
+    case 'w':
+      lastDirection = Direction::UP;
+      break;
+    case 'a':
+      lastDirection = Direction::LEFT;
+      break;
+    case 's':
+      lastDirection = Direction::DOWN;
+      break;
+    case 'd':
+      lastDirection = Direction::RIGHT;
+      break;
+    default:
+      break;
+    }
   }
 
   void update() override {
@@ -67,8 +84,8 @@ public:
     context.game.ghost3.move(context.game.map);
     context.game.ghost4.move(context.game.map);
 
-    if (lastInput != '\0') {
-      context.game.pman.setDirection(lastInput);
+    if (lastDirection != Direction::NONE) {
+      context.game.pman.setDirection(lastDirection);
     }
     context.game.pman.move(context.game.map);
 
@@ -103,7 +120,7 @@ public:
 
 private:
   int level;
-  char lastInput;
+  Direction lastDirection;
   bool paused;
 };
 

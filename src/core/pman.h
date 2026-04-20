@@ -14,9 +14,9 @@ public:
   int y() const override;
   int prev_x() const override;
   int prev_y() const override;
-  char direction() const override;
+  Direction direction() const override;
   void setPosition(int x, int y) override;
-  void setDirection(char direction) override;
+  void setDirection(Direction direction) override;
   void savePreviousPosition() override;
   void move(SMap &map) override;
 
@@ -28,7 +28,7 @@ private:
   int yp_;
   int prev_xp_;
   int prev_yp_;
-  char direction_;
+  Direction direction_;
 };
 
 } // namespace core
