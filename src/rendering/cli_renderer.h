@@ -27,6 +27,7 @@ public:
   bool keyAvailable() override;
   void sleep(int milliseconds) override;
   bool isOpen() const override;
+  std::string promptPlayerName() override;
 
 private:
   void showLeaderboardList();

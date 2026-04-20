@@ -61,5 +61,21 @@ char get_char() {
   return 0;
 }
 
+std::string read_line() {
+  struct termios current;
+  tcgetattr(STDIN_FILENO, &current);
+
+  struct termios canonical = current;
+  canonical.c_lflag |= (ECHO | ICANON);
+  canonical.c_cc[VMIN] = 1;
+  tcsetattr(STDIN_FILENO, TCSAFLUSH, &canonical);
+
+  std::string line;
+  std::getline(std::cin, line);
+
+  tcsetattr(STDIN_FILENO, TCSAFLUSH, &current);
+  return line;
+}
+
 } // namespace utils
 } // namespace pacman
