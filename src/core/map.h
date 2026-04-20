@@ -16,7 +16,6 @@ struct SMap {
   int width;
   int height;
   int powerUpScore;
-  int xp, yp, start_xp, start_yp, xg1, yg1, xg2, yg2;
 };
 
 void init_map(SMap &map, const GameConfig &config);

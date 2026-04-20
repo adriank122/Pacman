@@ -23,16 +23,16 @@ void game_count(SGame &game) {
   if ((game.ghost1.x() == game.pman.x() && game.ghost1.y() == game.pman.y()) ||
       (game.ghost2.x() == game.pman.x() && game.ghost2.y() == game.pman.y())) {
     game.pman.lives--;
-    game.pman.setPosition(game.map.start_xp, game.map.start_yp);
-    game.map.xp = game.map.start_xp;
-    game.map.yp = game.map.start_yp;
-    game.map.map[game.map.xp][game.map.yp] = core::PACMAN_PLAYER;
+    game.pman.setPosition(game.pman.spawnX, game.pman.spawnY);
+    game.map.map[game.pman.spawnX][game.pman.spawnY] = core::PACMAN_PLAYER;
   }
 }
 
 void game_init(SGame &game, const GameConfig &config) {
   init_map(game.map, config);
   game.pman = Pacman();
+  game.pman.spawnX = config.pacmanStartX;
+  game.pman.spawnY = config.pacmanStartY;
   game.pman.setPosition(config.pacmanStartX, config.pacmanStartY);
   game.pman.savePreviousPosition();
   game.timer = config.startingTimerMs;
