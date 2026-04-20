@@ -1,9 +1,9 @@
 #include "core/game.h"
 #include "core/config.h"
 #include "rendering/renderer.h"
+#include <algorithm>
 #include <fstream>
 #include <iostream>
-#include <stdlib.h>
 #include <vector>
 
 using namespace std;
@@ -48,24 +48,34 @@ void game_init(SGame &game, const GameConfig &config) {
   game.ghost4.setPosition(config.ghost4StartX, config.ghost4StartY);
 }
 
-void save_leaderboard(SGame game) {
-  vector<string> leaderboard;
-  string line;
+void save_leaderboard(const SGame &game, const std::string &playerName) {
+  vector<pair<string, int>> entries;
 
-  // Read existing leaderboard
   ifstream f("leaderboard.txt");
+  string line;
   while (getline(f, line)) {
-    leaderboard.push_back(line);
+    auto tab = line.find('\t');
+    if (tab != string::npos) {
+      try {
+        entries.push_back({line.substr(0, tab), stoi(line.substr(tab + 1))});
+      } catch (...) {
+      }
+    }
   }
   f.close();
 
-  // Write leaderboard with new entry
+  entries.push_back(
+      {playerName.empty() ? "Anonymous" : playerName, game.pman.points});
+
+  sort(entries.begin(), entries.end(),
+       [](const auto &a, const auto &b) { return a.second > b.second; });
+
+  if (entries.size() > 10)
+    entries.resize(10);
+
   ofstream of("leaderboard.txt");
-  for (const auto &entry : leaderboard) {
-    of << entry << "\n";
-  }
-  of << "Player-" << game.pman.points << "\n";
-  of.close();
+  for (const auto &[name, score] : entries)
+    of << name << '\t' << score << '\n';
 }
 
 } // namespace core

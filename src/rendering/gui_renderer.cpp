@@ -108,6 +108,70 @@ bool GUIRenderer::keyAvailable() {
 
 bool GUIRenderer::isOpen() const { return window ? window->isOpen() : false; }
 
+std::string GUIRenderer::promptPlayerName() {
+  if (!window)
+    return "Anonymous";
+
+  std::string name;
+
+  while (window->isOpen()) {
+    sf::Event event;
+    while (window->pollEvent(event)) {
+      if (event.type == sf::Event::Closed) {
+        window->close();
+        return name.empty() ? "Anonymous" : name;
+      }
+      if (event.type == sf::Event::TextEntered) {
+        sf::Uint32 c = event.text.unicode;
+        if (c == 13 || c == 10) {
+          return name.empty() ? "Anonymous" : name;
+        } else if (c == 8) {
+          if (!name.empty())
+            name.pop_back();
+        } else if (c >= 32 && c < 128 && name.size() < 20) {
+          name += static_cast<char>(c);
+        }
+      }
+    }
+
+    window->clear(sf::Color::Black);
+    drawNamePrompt(name, *window);
+    window->display();
+  }
+
+  return name.empty() ? "Anonymous" : name;
+}
+
+void GUIRenderer::drawNamePrompt(const std::string &name,
+                                 sf::RenderWindow &win) {
+  sf::RectangleShape overlay(
+      sf::Vector2f(config.windowWidth, config.windowHeight + config.uiHeight));
+  overlay.setFillColor(sf::Color(0, 0, 0, 210));
+  overlay.setPosition(0, 0);
+  win.draw(overlay);
+
+  float boxY = (config.windowHeight - 110) / 2.0f;
+  sf::RectangleShape box(sf::Vector2f(config.windowWidth - 40, 110));
+  box.setFillColor(sf::Color(20, 20, 70));
+  box.setOutlineColor(sf::Color::White);
+  box.setOutlineThickness(2);
+  box.setPosition(20, boxY);
+  win.draw(box);
+
+  drawCenteredText("Enter your name:", boxY + 12, 16, sf::Color::Yellow, win);
+
+  sf::RectangleShape inputField(sf::Vector2f(config.windowWidth - 80, 28));
+  inputField.setFillColor(sf::Color(50, 50, 110));
+  inputField.setOutlineColor(sf::Color::Cyan);
+  inputField.setOutlineThickness(1);
+  inputField.setPosition(40, boxY + 42);
+  win.draw(inputField);
+
+  drawText(name + "_", 50, boxY + 46, 14, sf::Color::White, win);
+  drawCenteredText("Press Enter to confirm", boxY + 82, 12, sf::Color::White,
+                   win);
+}
+
 void GUIRenderer::sleep(int milliseconds) {
   utils::sleep_ms(milliseconds);
   handleEvents();
@@ -243,22 +307,30 @@ void GUIRenderer::drawInstructions(sf::RenderWindow &win) {
 void GUIRenderer::drawLeaderboard(sf::RenderWindow &win) {
   drawCenteredText("HIGH SCORES", 10, 20, sf::Color::Yellow, win);
 
+  drawText("Name", 30, 40, 12, sf::Color(180, 180, 180), win);
+  drawText("Score", config.windowWidth - 80, 40, 12, sf::Color(180, 180, 180),
+           win);
+
   ifstream rankFile("leaderboard.txt");
   if (!rankFile.is_open()) {
-    drawCenteredText("No ranking file found", 150, 16, sf::Color::Red, win);
+    drawCenteredText("No scores yet", 150, 16, sf::Color::Red, win);
     drawCenteredText("Press 1 to return to menu", 230, 12, sf::Color::Yellow,
                      win);
     return;
   }
 
   string line;
-  int yPos = 50;
+  int yPos = 60;
   int rank = 1;
 
   while (getline(rankFile, line) && rank <= 10 &&
          yPos < config.windowHeight - 20) {
-    stringstream rankLine;
-    rankLine << rank << ". " << line;
+    auto tab = line.find('\t');
+    if (tab == string::npos)
+      continue;
+
+    string name = line.substr(0, tab);
+    string score = line.substr(tab + 1);
 
     sf::Color rankColor = sf::Color::White;
     if (rank == 1)
@@ -268,7 +340,11 @@ void GUIRenderer::drawLeaderboard(sf::RenderWindow &win) {
     else if (rank == 3)
       rankColor = sf::Color(184, 134, 11);
 
-    drawText(rankLine.str(), 30, yPos, 14, rankColor, win);
+    stringstream rankStr;
+    rankStr << rank << ". " << name;
+    drawText(rankStr.str(), 30, yPos, 13, rankColor, win);
+    drawText(score, config.windowWidth - 80, yPos, 13, rankColor, win);
+
     yPos += 20;
     rank++;
   }

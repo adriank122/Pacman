@@ -4,6 +4,7 @@
 #include "ghost.h"
 #include "map.h"
 #include "pman.h"
+#include <string>
 
 namespace pacman {
 
@@ -28,7 +29,7 @@ struct SGame {
 
 void game_count(SGame &game);
 void game_init(SGame &game, const GameConfig &config);
-void save_leaderboard(SGame game);
+void save_leaderboard(const SGame &game, const std::string &playerName);
 
 } // namespace core
 } // namespace pacman

@@ -29,6 +29,7 @@ public:
   bool keyAvailable() override;
   void sleep(int milliseconds) override;
   bool isOpen() const override;
+  std::string promptPlayerName() override;
 
 private:
   std::unique_ptr<sf::RenderWindow> window;
@@ -39,6 +40,7 @@ private:
 
   void renderTile(int row, int col, core::MapObjectType tileType,
                   sf::RenderWindow &win);
+  void drawNamePrompt(const std::string &name, sf::RenderWindow &win);
   void drawText(const std::string &text, float x, float y,
                 unsigned int fontSize, const sf::Color &color,
                 sf::RenderWindow &win);

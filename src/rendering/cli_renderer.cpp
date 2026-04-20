@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -88,17 +89,19 @@ void CLIRenderer::showGameCounter(const core::SGame &game) {
 void CLIRenderer::showGameOver(const std::string &reason) {
   clear();
   if (reason == "lives") {
-    cout << "Game Over!\n\n\nYou have run out of lives.\n\n\nEnter your name "
-            "and press Enter:\n\n";
+    cout << "Game Over!\n\n\nYou have run out of lives.\n\n\n";
   } else if (reason == "time") {
-    cout << "Game Over!\n\n\nYou have run out of time.\n\n\nPress Enter to "
-            "return to the menu\n\n";
+    cout << "Game Over!\n\n\nYou have run out of time.\n\n\n";
   } else if (reason == "won") {
-    cout << "You have eaten all the dots and completed the level!\n\n\nPress "
-            "'o' to proceed to the next level.\n\n";
+    cout << "You have eaten all the dots and completed the level!\n\n\n";
+    cout << "Press 'o' to proceed to the next level.\n\n";
     cout << "Press 'm' to return to the main menu.\n\n";
+    return;
   }
+  cout << "Enter your name and press Enter:\n\n";
 }
+
+std::string CLIRenderer::promptPlayerName() { return utils::read_line(); }
 
 void CLIRenderer::showInstructions() {
   clear();
@@ -128,13 +131,22 @@ void CLIRenderer::showPauseOverlay() {
 }
 
 void CLIRenderer::showLeaderboardList() {
-  cout << "\n\n\n";
-  string row;
-  ifstream f;
-  f.open("leaderboard.txt");
-  while (!f.eof()) {
-    getline(f, row);
-    cout << row << "\n\n";
+  cout << "\n\n";
+  cout << left << setw(6) << "Rank" << setw(22) << "Name"
+       << "Score\n";
+  cout << string(38, '-') << "\n\n";
+
+  ifstream f("leaderboard.txt");
+  string line;
+  int rank = 1;
+  while (getline(f, line) && rank <= 10) {
+    auto tab = line.find('\t');
+    if (tab == string::npos)
+      continue;
+    string name = line.substr(0, tab);
+    string score = line.substr(tab + 1);
+    cout << left << setw(6) << rank << setw(22) << name << score << "\n\n";
+    rank++;
   }
   f.close();
 }

@@ -118,9 +118,10 @@ public:
     context.renderer->clear();
     context.renderer->showGameOver(reason);
 
-    // Save scoreboard if lost by lives or time
     if (!won) {
-      save_leaderboard(context.game);
+      std::string name = context.renderer->promptPlayerName();
+      save_leaderboard(context.game, name);
+      requestTransition(createLeaderboardState(context));
     }
   }
 
