@@ -1,4 +1,5 @@
 #include "core/map.h"
+#include "core/config.h"
 #include <iomanip>
 #include <iostream>
 
@@ -7,21 +8,26 @@ using namespace std;
 namespace pacman {
 namespace core {
 
-void init_map(SMap &map) {
-  map.xp = 13;
-  map.yp = 9;
+void init_map(SMap &map, const GameConfig &config) {
+  map.width = config.mapWidth;
+  map.height = config.mapHeight;
+  map.powerUpScore = config.powerUpScore;
+  map.start_xp = config.pacmanStartX;
+  map.start_yp = config.pacmanStartY;
+  map.xp = map.start_xp;
+  map.yp = map.start_yp;
 }
 
 void map_create1(SMap &map) {
   int xp = map.xp, yp = map.yp;
 
-  for (int i = 0; i < 17; i++) {
-    for (int j = 0; j < 20; j++) {
+  for (int i = 0; i < map.height; i++) {
+    for (int j = 0; j < map.width; j++) {
       map.map[i][j] = WALL;
     }
   }
 
-  for (int i = 1; i < 19; i++) {
+  for (int i = 1; i < map.width - 1; i++) {
     map.map[1][i] = PELLET;
     map.map[3][i] = PELLET;
     map.map[6][i] = PELLET;
@@ -31,7 +37,7 @@ void map_create1(SMap &map) {
     map.map[15][i] = PELLET;
   }
 
-  for (int i = 1; i < 16; i++) {
+  for (int i = 1; i < map.height - 1; i++) {
     map.map[i][1] = PELLET;
     map.map[i][3] = PELLET;
     map.map[i][5] = PELLET;
@@ -85,13 +91,13 @@ void map_create1(SMap &map) {
 void map_create2(SMap &map) {
   int xp = map.xp, yp = map.yp;
 
-  for (int i = 0; i < 17; i++) {
-    for (int j = 0; j < 20; j++) {
+  for (int i = 0; i < map.height; i++) {
+    for (int j = 0; j < map.width; j++) {
       map.map[i][j] = WALL;
     }
   }
 
-  for (int j = 1; j < 19; j++) {
+  for (int j = 1; j < map.width - 1; j++) {
     map.map[1][j] = PELLET;
     map.map[4][j] = PELLET;
     map.map[6][j] = PELLET;
@@ -174,8 +180,8 @@ void map_create2(SMap &map) {
 }
 
 void map_create3(SMap &map) {
-  for (int i = 0; i < 17; i++)
-    for (int j = 0; j < 20; j++)
+  for (int i = 0; i < map.height; i++)
+    for (int j = 0; j < map.width; j++)
       map.map[i][j] = WALL;
 
   for (int j = 1; j < 19; j++) {
@@ -187,12 +193,12 @@ void map_create3(SMap &map) {
 
   for (int i = 1; i < 7; i++) {
     map.map[i][1] = PELLET;
-    map.map[i][18] = PELLET;
+    map.map[i][map.width - 2] = PELLET;
   }
 
-  for (int i = 10; i < 16; i++) {
+  for (int i = 10; i < map.height - 1; i++) {
     map.map[i][1] = PELLET;
-    map.map[i][18] = PELLET;
+    map.map[i][map.width - 2] = PELLET;
   }
 
   for (int j = 3; j < 17; j++) {
@@ -218,7 +224,7 @@ void map_create3(SMap &map) {
   for (int j = 0; j < 6; j++)
     map.map[8][j] = PELLET;
 
-  for (int j = 14; j < 20; j++)
+  for (int j = map.width - 6; j < map.width; j++)
     map.map[8][j] = PELLET;
 
   for (int j = 5; j < 8; j++) {
@@ -262,9 +268,9 @@ void map_create3(SMap &map) {
 
 void map_show(SMap map) {
   cout << "\n";
-  for (int i = 0; i < 17; i++) {
+  for (int i = 0; i < map.height; i++) {
     cout << "\n\t";
-    for (int j = 0; j < 20; j++)
+    for (int j = 0; j < map.width; j++)
       cout << setw(2) << map.map[i][j];
   }
   cout << "\n";

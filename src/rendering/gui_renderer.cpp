@@ -12,10 +12,11 @@ using namespace std;
 namespace pacman {
 namespace rendering {
 
-GUIRenderer::GUIRenderer() : lastKeyPressed(0), currentScreen("menu") {
-  int totalHeight = WINDOW_HEIGHT + UI_HEIGHT;
+GUIRenderer::GUIRenderer(const core::GameConfig &config)
+    : config(config), lastKeyPressed(0), currentScreen("menu") {
+  int totalHeight = config.windowHeight + config.uiHeight;
   window = std::make_unique<sf::RenderWindow>(
-      sf::VideoMode(WINDOW_WIDTH, totalHeight), "PACMAN");
+      sf::VideoMode(config.windowWidth, totalHeight), "PACMAN");
   window->setFramerateLimit(60);
 
   if (!fonts.loadFromFile("resources/fonts/Roboto-Regular.ttf")) {
@@ -114,10 +115,10 @@ void GUIRenderer::sleep(int milliseconds) {
 
 void GUIRenderer::renderTile(int row, int col, core::MapObjectType tileType,
                              sf::RenderWindow &win) {
-  int x = col * TILE_SIZE;
-  int y = row * TILE_SIZE;
+  int x = col * config.tileSize;
+  int y = row * config.tileSize;
 
-  sf::RectangleShape tile(sf::Vector2f(TILE_SIZE, TILE_SIZE));
+  sf::RectangleShape tile(sf::Vector2f(config.tileSize, config.tileSize));
   tile.setPosition(x, y);
 
   sf::CircleShape shape;
@@ -130,13 +131,13 @@ void GUIRenderer::renderTile(int row, int col, core::MapObjectType tileType,
   case core::PELLET:
     shape.setRadius(2);
     shape.setFillColor(sf::Color::Yellow);
-    shape.setPosition(x + TILE_SIZE / 2 - 2, y + TILE_SIZE / 2 - 2);
+    shape.setPosition(x + config.tileSize / 2 - 2, y + config.tileSize / 2 - 2);
     win.draw(shape);
     break;
   case core::POWER_UP:
     shape.setRadius(4);
     shape.setFillColor(sf::Color::Magenta);
-    shape.setPosition(x + TILE_SIZE / 2 - 4, y + TILE_SIZE / 2 - 4);
+    shape.setPosition(x + config.tileSize / 2 - 4, y + config.tileSize / 2 - 4);
     win.draw(shape);
     break;
   case core::PACMAN_PLAYER:
@@ -164,7 +165,7 @@ void GUIRenderer::drawCenteredText(const string &text, float y,
                                    const sf::Color &color,
                                    sf::RenderWindow &win) {
   sf::Text sfText(text, fonts, fontSize);
-  float xPos = (WINDOW_WIDTH - sfText.getLocalBounds().width) / 2.0f;
+  float xPos = (config.windowWidth - sfText.getLocalBounds().width) / 2.0f;
   sfText.setPosition(xPos, y);
   sfText.setFillColor(color);
   win.draw(sfText);
@@ -181,33 +182,33 @@ void GUIRenderer::drawMenu(sf::RenderWindow &win) {
 }
 
 void GUIRenderer::drawGameUI(const core::SGame &game, sf::RenderWindow &win) {
-  sf::RectangleShape uiBg(sf::Vector2f(WINDOW_WIDTH, UI_HEIGHT));
+  sf::RectangleShape uiBg(sf::Vector2f(config.windowWidth, config.uiHeight));
   uiBg.setFillColor(sf::Color(30, 30, 30));
-  uiBg.setPosition(0, WINDOW_HEIGHT);
+  uiBg.setPosition(0, config.windowHeight);
   win.draw(uiBg);
 
-  sf::RectangleShape separator(sf::Vector2f(WINDOW_WIDTH, 2));
+  sf::RectangleShape separator(sf::Vector2f(config.windowWidth, 2));
   separator.setFillColor(sf::Color::White);
-  separator.setPosition(0, WINDOW_HEIGHT);
+  separator.setPosition(0, config.windowHeight);
   win.draw(separator);
 
   stringstream ss;
   ss << "Time: " << (game.timer / 1000) << "s";
-  drawText(ss.str(), 10, WINDOW_HEIGHT + 5, 12, sf::Color::Green, win);
+  drawText(ss.str(), 10, config.windowHeight + 5, 12, sf::Color::Green, win);
 
   ss.str("");
   ss.clear();
   ss << "Points: " << game.pman.points;
-  drawText(ss.str(), 10, WINDOW_HEIGHT + 25, 12, sf::Color::Cyan, win);
+  drawText(ss.str(), 10, config.windowHeight + 25, 12, sf::Color::Cyan, win);
 
   ss.str("");
   ss.clear();
   ss << "Lives: " << game.pman.lives;
-  drawText(ss.str(), 10, WINDOW_HEIGHT + 45, 12, sf::Color::Yellow, win);
+  drawText(ss.str(), 10, config.windowHeight + 45, 12, sf::Color::Yellow, win);
 
   int food_count = 0;
-  for (int i = 0; i < 17; i++) {
-    for (int j = 0; j < 20; j++) {
+  for (int i = 0; i < config.mapHeight; i++) {
+    for (int j = 0; j < config.mapWidth; j++) {
       if (game.map.map[i][j] == core::PELLET ||
           game.map.map[i][j] == core::POWER_UP)
         food_count++;
@@ -217,7 +218,7 @@ void GUIRenderer::drawGameUI(const core::SGame &game, sf::RenderWindow &win) {
   ss.str("");
   ss.clear();
   ss << "Food: " << food_count;
-  drawText(ss.str(), 150, WINDOW_HEIGHT + 5, 12, sf::Color::Magenta, win);
+  drawText(ss.str(), 150, config.windowHeight + 5, 12, sf::Color::Magenta, win);
 }
 
 void GUIRenderer::drawInstructions(sf::RenderWindow &win) {
@@ -254,7 +255,8 @@ void GUIRenderer::drawLeaderboard(sf::RenderWindow &win) {
   int yPos = 50;
   int rank = 1;
 
-  while (getline(rankFile, line) && rank <= 10 && yPos < WINDOW_HEIGHT - 20) {
+  while (getline(rankFile, line) && rank <= 10 &&
+         yPos < config.windowHeight - 20) {
     stringstream rankLine;
     rankLine << rank << ". " << line;
 
@@ -277,12 +279,13 @@ void GUIRenderer::drawLeaderboard(sf::RenderWindow &win) {
 }
 
 void GUIRenderer::drawGameOver(const string &reason, sf::RenderWindow &win) {
-  sf::RectangleShape overlay(sf::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT));
+  sf::RectangleShape overlay(
+      sf::Vector2f(config.windowWidth, config.windowHeight));
   overlay.setFillColor(sf::Color(0, 0, 0, 150));
   overlay.setPosition(0, 0);
   win.draw(overlay);
 
-  sf::RectangleShape msgBox(sf::Vector2f(WINDOW_WIDTH - 40, 120));
+  sf::RectangleShape msgBox(sf::Vector2f(config.windowWidth - 40, 120));
   msgBox.setPosition(20, 40);
 
   if (reason == "lives") {
@@ -329,9 +332,9 @@ void GUIRenderer::showGameState(const core::SGame &game, double interpolation) {
   };
 
   float playerX =
-      lerp(game.pman.prev_y(), game.pman.y(), interpolation) * TILE_SIZE;
+      lerp(game.pman.prev_y(), game.pman.y(), interpolation) * config.tileSize;
   float playerY =
-      lerp(game.pman.prev_x(), game.pman.x(), interpolation) * TILE_SIZE;
+      lerp(game.pman.prev_x(), game.pman.x(), interpolation) * config.tileSize;
 
   sf::CircleShape playerShape(7.f);
   playerShape.setFillColor(sf::Color::Yellow);
@@ -339,8 +342,10 @@ void GUIRenderer::showGameState(const core::SGame &game, double interpolation) {
   window->draw(playerShape);
 
   auto drawGhost = [&](const core::Ghost &ghost) {
-    float ghostX = lerp(ghost.prev_y(), ghost.y(), interpolation) * TILE_SIZE;
-    float ghostY = lerp(ghost.prev_x(), ghost.x(), interpolation) * TILE_SIZE;
+    float ghostX =
+        lerp(ghost.prev_y(), ghost.y(), interpolation) * config.tileSize;
+    float ghostY =
+        lerp(ghost.prev_x(), ghost.x(), interpolation) * config.tileSize;
     sf::CircleShape ghostShape(7.f);
     ghostShape.setFillColor(sf::Color::Red);
     ghostShape.setPosition(ghostX + 1.f, ghostY + 1.f);
@@ -359,8 +364,8 @@ void GUIRenderer::showGameState(const core::SGame &game, double interpolation) {
 void GUIRenderer::showMap(const core::SMap &map) {
   if (!window)
     return;
-  for (int i = 0; i < 17; i++) {
-    for (int j = 0; j < 20; j++) {
+  for (int i = 0; i < config.mapHeight; i++) {
+    for (int j = 0; j < config.mapWidth; j++) {
       renderTile(i, j, map.map[i][j], *window);
     }
   }
@@ -381,19 +386,19 @@ void GUIRenderer::showPauseOverlay() {
     return;
 
   sf::RectangleShape overlay(
-      sf::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT + UI_HEIGHT));
+      sf::Vector2f(config.windowWidth, config.windowHeight + config.uiHeight));
   overlay.setFillColor(sf::Color(0, 0, 0, 160));
   overlay.setPosition(0, 0);
   window->draw(overlay);
 
-  sf::RectangleShape box(sf::Vector2f(WINDOW_WIDTH - 60, 120));
+  sf::RectangleShape box(sf::Vector2f(config.windowWidth - 60, 120));
   box.setFillColor(sf::Color(20, 20, 20, 220));
   box.setOutlineColor(sf::Color::White);
   box.setOutlineThickness(2);
-  box.setPosition(30, (WINDOW_HEIGHT + UI_HEIGHT - 120) / 2);
+  box.setPosition(30, (config.windowHeight + config.uiHeight - 120) / 2);
   window->draw(box);
 
-  float centerY = (WINDOW_HEIGHT + UI_HEIGHT) / 2.0f;
+  float centerY = (config.windowHeight + config.uiHeight) / 2.0f;
   drawCenteredText("PAUSED", centerY - 30, 24, sf::Color::Yellow, *window);
   drawCenteredText("Press Space to continue", centerY, 16, sf::Color::White,
                    *window);

@@ -1,3 +1,4 @@
+#include "core/config.h"
 #include "core/game.h"
 #include "core/game_state.h"
 #include "core/game_timer.h"
@@ -16,10 +17,11 @@ using namespace std;
 using namespace pacman;
 
 int main() {
+  const auto config = core::loadConfig("config.ini");
   std::unique_ptr<rendering::Renderer> renderer;
 
 #ifdef USE_GUI
-  renderer = std::make_unique<rendering::GUIRenderer>();
+  renderer = std::make_unique<rendering::GUIRenderer>(config);
   cout << "Starting PACMAN in GUI mode...\n";
 #else
   renderer = std::make_unique<rendering::CLIRenderer>();
@@ -31,7 +33,7 @@ int main() {
     return 1;
   }
 
-  core::GameContext context(core::MENU, 300, std::move(renderer));
+  core::GameContext context(core::MENU, config, std::move(renderer));
 
   auto state = core::createInitialState(context);
   state->onEnter();

@@ -135,7 +135,7 @@ public:
     }
 
     if (won && input == 'o' && level == 1) {
-      game_init(context.game);
+      game_init(context.game, context.config);
       context.level = 2;
       requestTransition(createGameplayState(context, 2));
     }
@@ -210,7 +210,7 @@ public:
 
     switch (input) {
     case '1':
-      game_init(context.game);
+      game_init(context.game, context.config);
       context.level = 1;
       requestTransition(createGameplayState(context, 1));
       break;

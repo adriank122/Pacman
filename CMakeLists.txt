@@ -13,6 +13,7 @@ option(BUILD_GUI "Build the GUI version of Pacman" ON)
 
 # Core library sources
 set(CORE_SOURCES
+    src/core/config.cpp
     src/core/game.cpp
     src/core/game_state.cpp
     src/core/game_timer.cpp
@@ -37,6 +38,11 @@ if (BUILD_CLI)
     )
     target_include_directories(pacman-cli PRIVATE ${CORE_INCLUDE_DIR})
     target_link_libraries(pacman-cli PRIVATE pacman-core pthread)
+    add_custom_command(TARGET pacman-cli POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+        ${CMAKE_SOURCE_DIR}/config.ini
+        ${CMAKE_BINARY_DIR}/config.ini
+        COMMENT "Copying config.ini to build directory")
     install(TARGETS pacman-cli RUNTIME DESTINATION bin)
     message(STATUS "Pacman CLI build configured")
 endif()
@@ -59,6 +65,12 @@ if (BUILD_GUI)
             ${CMAKE_SOURCE_DIR}/resources
             ${CMAKE_BINARY_DIR}/resources
             COMMENT "Copying resources (fonts) to build directory")
+
+        add_custom_command(TARGET pacman-gui POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            ${CMAKE_SOURCE_DIR}/config.ini
+            ${CMAKE_BINARY_DIR}/config.ini
+            COMMENT "Copying config.ini to build directory")
         
         message(STATUS "SFML found - building GUI version")
         install(TARGETS pacman-gui RUNTIME DESTINATION bin)

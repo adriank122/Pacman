@@ -1,6 +1,7 @@
 #ifndef PACMAN_RENDERING_GUI_RENDERER_H
 #define PACMAN_RENDERING_GUI_RENDERER_H
 
+#include "core/config.h"
 #include "core/map.h"
 #include "renderer.h"
 #include <SFML/Graphics.hpp>
@@ -11,7 +12,7 @@ namespace rendering {
 
 class GUIRenderer : public Renderer {
 public:
-  GUIRenderer();
+  explicit GUIRenderer(const core::GameConfig &config);
   ~GUIRenderer();
 
   void showMenu() override;
@@ -32,15 +33,9 @@ public:
 private:
   std::unique_ptr<sf::RenderWindow> window;
   sf::Font fonts;
+  core::GameConfig config;
   char lastKeyPressed;
   std::string currentScreen;
-
-  static const int TILE_SIZE = 16;
-  static const int MAP_WIDTH = 20;
-  static const int MAP_HEIGHT = 17;
-  static const int WINDOW_WIDTH = 320;
-  static const int WINDOW_HEIGHT = 272;
-  static const int UI_HEIGHT = 80;
 
   void renderTile(int row, int col, core::MapObjectType tileType,
                   sf::RenderWindow &win);

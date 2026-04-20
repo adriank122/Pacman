@@ -7,7 +7,7 @@ namespace pacman {
 namespace core {
 
 Pacman::Pacman()
-    : lives(3), points(0), xp_(13), yp_(9), prev_xp_(13), prev_yp_(9),
+    : lives(0), points(0), xp_(0), yp_(0), prev_xp_(0), prev_yp_(0),
       direction_('\0') {}
 
 int Pacman::x() const { return xp_; }
@@ -34,8 +34,8 @@ void Pacman::move(SMap &map) {
   if (map.map[xp_][yp_] == GHOST) {
     lives--;
     map.map[xp_][yp_] = GHOST;
-    map.xp = 13;
-    map.yp = 9;
+    map.xp = map.start_xp;
+    map.yp = map.start_yp;
     xp_ = map.xp;
     yp_ = map.yp;
   }
@@ -62,13 +62,13 @@ void Pacman::move(SMap &map) {
         currentPoints++;
       }
       if (map.map[xp][yp - 1] == POWER_UP) {
-        currentPoints += 5;
+        currentPoints += map.powerUpScore;
       }
       if (map.map[xp][yp - 1] == GHOST) {
         lives--;
         map.map[xp][yp] = EMPTY;
-        xp = 13;
-        yp = 9;
+        xp = map.start_xp;
+        yp = map.start_yp;
       }
       map.map[xp][yp] = EMPTY;
       yp--;
@@ -81,13 +81,13 @@ void Pacman::move(SMap &map) {
         currentPoints++;
       }
       if (map.map[xp - 1][yp] == POWER_UP) {
-        currentPoints += 5;
+        currentPoints += map.powerUpScore;
       }
       if (map.map[xp - 1][yp] == GHOST) {
         lives--;
         map.map[xp][yp] = EMPTY;
-        xp = 13;
-        yp = 9;
+        xp = map.start_xp;
+        yp = map.start_yp;
       }
       map.map[xp][yp] = EMPTY;
       xp--;
@@ -100,13 +100,13 @@ void Pacman::move(SMap &map) {
         currentPoints++;
       }
       if (map.map[xp + 1][yp] == POWER_UP) {
-        currentPoints += 5;
+        currentPoints += map.powerUpScore;
       }
       if (map.map[xp + 1][yp] == GHOST) {
         lives--;
         map.map[xp][yp] = EMPTY;
-        xp = 13;
-        yp = 9;
+        xp = map.start_xp;
+        yp = map.start_yp;
       }
       map.map[xp][yp] = EMPTY;
       xp++;
@@ -126,13 +126,13 @@ void Pacman::move(SMap &map) {
         currentPoints++;
       }
       if (map.map[xp][yp + 1] == POWER_UP) {
-        currentPoints += 5;
+        currentPoints += map.powerUpScore;
       }
       if (map.map[xp][yp + 1] == GHOST) {
         lives--;
         map.map[xp][yp] = EMPTY;
-        xp = 13;
-        yp = 9;
+        xp = map.start_xp;
+        yp = map.start_yp;
       }
       map.map[xp][yp] = EMPTY;
       yp++;
@@ -146,8 +146,8 @@ void Pacman::move(SMap &map) {
   if (map.map[xp][yp] == GHOST) {
     lives--;
     map.map[xp][yp] = GHOST;
-    xp = 13;
-    yp = 9;
+    xp = map.start_xp;
+    yp = map.start_yp;
   }
 
   map.map[xp][yp] = PACMAN_PLAYER;

@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 
+#include "core/config.h"
 #include "core/game.h"
 #include "rendering/renderer.h"
 
@@ -12,13 +13,15 @@ namespace core {
 
 class GameContext {
 public:
-  GameContext(GameState state, int delay,
+  GameContext(GameState state, const GameConfig &config,
               std::unique_ptr<rendering::Renderer> renderer)
-      : game(), renderer(std::move(renderer)), quit(false), level(1) {
+      : config(config), game(), renderer(std::move(renderer)), quit(false),
+        level(1) {
     game.state = state;
-    game.delay = delay;
+    game.delay = config.gameTickDelayMs;
   }
 
+  GameConfig config;
   SGame game;
   std::unique_ptr<rendering::Renderer> renderer;
   bool quit;
