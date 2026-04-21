@@ -78,7 +78,6 @@ void map_create1(SMap &map) {
   map.map[14][7] = WALL;
   map.map[14][12] = WALL;
   map.map[14][14] = WALL;
-
 }
 
 void map_create2(SMap &map) {
@@ -251,7 +250,6 @@ void map_create3(SMap &map) {
   map.map[15][1] = POWER_UP;
   map.map[1][18] = POWER_UP;
   map.map[15][18] = POWER_UP;
-
 }
 
 void map_show(SMap map) {

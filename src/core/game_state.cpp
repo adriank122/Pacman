@@ -1,4 +1,5 @@
 #include "core/game_state.h"
+#include "core/collision.h"
 #include "core/entity.h"
 #include "core/game.h"
 #include "core/ghost.h"
@@ -90,6 +91,7 @@ public:
       context.game.pman.setDirection(lastDirection);
     }
     context.game.pman.move(context.game.map);
+    checkCollisions(context.game);
 
     game_count(context.game);
 

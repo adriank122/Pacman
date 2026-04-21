@@ -13,6 +13,7 @@ option(BUILD_GUI "Build the GUI version of Pacman" ON)
 
 # Core library sources
 set(CORE_SOURCES
+    src/core/collision.cpp
     src/core/config.cpp
     src/core/game.cpp
     src/core/game_state.cpp
