@@ -31,13 +31,6 @@ void Pacman::savePreviousPosition() {
 void Pacman::move(SMap &map) {
   savePreviousPosition();
 
-  if (map.map[xp_][yp_] == GHOST) {
-    lives--;
-    map.map[xp_][yp_] = GHOST;
-    xp_ = spawnX;
-    yp_ = spawnY;
-  }
-
   if (direction_ == Direction::NONE) {
     return;
   }
@@ -56,18 +49,10 @@ void Pacman::move(SMap &map) {
       break;
     }
     if (map.map[xp][yp - 1] != WALL) {
-      if (map.map[xp][yp - 1] == PELLET) {
+      if (map.map[xp][yp - 1] == PELLET)
         currentPoints++;
-      }
-      if (map.map[xp][yp - 1] == POWER_UP) {
+      if (map.map[xp][yp - 1] == POWER_UP)
         currentPoints += map.powerUpScore;
-      }
-      if (map.map[xp][yp - 1] == GHOST) {
-        lives--;
-        map.map[xp][yp] = EMPTY;
-        xp = spawnX;
-        yp = spawnY;
-      }
       map.map[xp][yp] = EMPTY;
       yp--;
     }
@@ -75,18 +60,10 @@ void Pacman::move(SMap &map) {
 
   case Direction::UP:
     if (map.map[xp - 1][yp] != WALL) {
-      if (map.map[xp - 1][yp] == PELLET) {
+      if (map.map[xp - 1][yp] == PELLET)
         currentPoints++;
-      }
-      if (map.map[xp - 1][yp] == POWER_UP) {
+      if (map.map[xp - 1][yp] == POWER_UP)
         currentPoints += map.powerUpScore;
-      }
-      if (map.map[xp - 1][yp] == GHOST) {
-        lives--;
-        map.map[xp][yp] = EMPTY;
-        xp = spawnX;
-        yp = spawnY;
-      }
       map.map[xp][yp] = EMPTY;
       xp--;
     }
@@ -94,18 +71,10 @@ void Pacman::move(SMap &map) {
 
   case Direction::DOWN:
     if (map.map[xp + 1][yp] != WALL) {
-      if (map.map[xp + 1][yp] == PELLET) {
+      if (map.map[xp + 1][yp] == PELLET)
         currentPoints++;
-      }
-      if (map.map[xp + 1][yp] == POWER_UP) {
+      if (map.map[xp + 1][yp] == POWER_UP)
         currentPoints += map.powerUpScore;
-      }
-      if (map.map[xp + 1][yp] == GHOST) {
-        lives--;
-        map.map[xp][yp] = EMPTY;
-        xp = spawnX;
-        yp = spawnY;
-      }
       map.map[xp][yp] = EMPTY;
       xp++;
     }
@@ -120,18 +89,10 @@ void Pacman::move(SMap &map) {
       break;
     }
     if (map.map[xp][yp + 1] != WALL) {
-      if (map.map[xp][yp + 1] == PELLET) {
+      if (map.map[xp][yp + 1] == PELLET)
         currentPoints++;
-      }
-      if (map.map[xp][yp + 1] == POWER_UP) {
+      if (map.map[xp][yp + 1] == POWER_UP)
         currentPoints += map.powerUpScore;
-      }
-      if (map.map[xp][yp + 1] == GHOST) {
-        lives--;
-        map.map[xp][yp] = EMPTY;
-        xp = spawnX;
-        yp = spawnY;
-      }
       map.map[xp][yp] = EMPTY;
       yp++;
     }
@@ -139,13 +100,6 @@ void Pacman::move(SMap &map) {
 
   default:
     break;
-  }
-
-  if (map.map[xp][yp] == GHOST) {
-    lives--;
-    map.map[xp][yp] = GHOST;
-    xp = spawnX;
-    yp = spawnY;
   }
 
   map.map[xp][yp] = PACMAN_PLAYER;

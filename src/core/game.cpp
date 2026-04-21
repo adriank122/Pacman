@@ -19,13 +19,6 @@ void game_count(SGame &game) {
       if (game.map.map[i][j] == core::PELLET ||
           game.map.map[i][j] == core::POWER_UP)
         game.food++;
-
-  if ((game.ghost1.x() == game.pman.x() && game.ghost1.y() == game.pman.y()) ||
-      (game.ghost2.x() == game.pman.x() && game.ghost2.y() == game.pman.y())) {
-    game.pman.lives--;
-    game.pman.setPosition(game.pman.spawnX, game.pman.spawnY);
-    game.map.map[game.pman.spawnX][game.pman.spawnY] = core::PACMAN_PLAYER;
-  }
 }
 
 void game_init(SGame &game, const GameConfig &config) {
