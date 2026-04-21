@@ -1,5 +1,5 @@
 #include "core/game_state.h"
-#include "core/collision.h"
+#include "core/systems.h"
 #include "core/entity.h"
 #include "core/game.h"
 #include "core/ghost.h"
@@ -90,7 +90,8 @@ public:
     if (lastDirection != Direction::NONE) {
       context.game.pman.setDirection(lastDirection);
     }
-    context.game.pman.move(context.game.map);
+    MapObjectType consumed = context.game.pman.move(context.game.map);
+    applyScoring(context.game, consumed);
     checkCollisions(context.game);
 
     game_count(context.game);

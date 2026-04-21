@@ -28,31 +28,27 @@ void Pacman::savePreviousPosition() {
   prev_yp_ = yp_;
 }
 
-void Pacman::move(SMap &map) {
+MapObjectType Pacman::move(SMap &map) {
   savePreviousPosition();
 
   if (direction_ == Direction::NONE) {
-    return;
+    return EMPTY;
   }
 
-  int currentPoints = points;
   int xp = xp_;
   int yp = yp_;
+  MapObjectType consumed = EMPTY;
 
   switch (direction_) {
   case Direction::LEFT:
     if (xp == 8 && yp == 0) {
+      consumed = map.map[8][19];
       map.map[xp][yp] = EMPTY;
-      if (map.map[8][19] == PELLET)
-        currentPoints++;
       yp = 19;
       break;
     }
     if (map.map[xp][yp - 1] != WALL) {
-      if (map.map[xp][yp - 1] == PELLET)
-        currentPoints++;
-      if (map.map[xp][yp - 1] == POWER_UP)
-        currentPoints += map.powerUpScore;
+      consumed = map.map[xp][yp - 1];
       map.map[xp][yp] = EMPTY;
       yp--;
     }
@@ -60,10 +56,7 @@ void Pacman::move(SMap &map) {
 
   case Direction::UP:
     if (map.map[xp - 1][yp] != WALL) {
-      if (map.map[xp - 1][yp] == PELLET)
-        currentPoints++;
-      if (map.map[xp - 1][yp] == POWER_UP)
-        currentPoints += map.powerUpScore;
+      consumed = map.map[xp - 1][yp];
       map.map[xp][yp] = EMPTY;
       xp--;
     }
@@ -71,10 +64,7 @@ void Pacman::move(SMap &map) {
 
   case Direction::DOWN:
     if (map.map[xp + 1][yp] != WALL) {
-      if (map.map[xp + 1][yp] == PELLET)
-        currentPoints++;
-      if (map.map[xp + 1][yp] == POWER_UP)
-        currentPoints += map.powerUpScore;
+      consumed = map.map[xp + 1][yp];
       map.map[xp][yp] = EMPTY;
       xp++;
     }
@@ -82,17 +72,13 @@ void Pacman::move(SMap &map) {
 
   case Direction::RIGHT:
     if (xp == 8 && yp == 19) {
+      consumed = map.map[8][0];
       map.map[xp][yp] = EMPTY;
-      if (map.map[8][0] == PELLET)
-        currentPoints++;
       yp = 0;
       break;
     }
     if (map.map[xp][yp + 1] != WALL) {
-      if (map.map[xp][yp + 1] == PELLET)
-        currentPoints++;
-      if (map.map[xp][yp + 1] == POWER_UP)
-        currentPoints += map.powerUpScore;
+      consumed = map.map[xp][yp + 1];
       map.map[xp][yp] = EMPTY;
       yp++;
     }
@@ -105,7 +91,7 @@ void Pacman::move(SMap &map) {
   map.map[xp][yp] = PACMAN_PLAYER;
   xp_ = xp;
   yp_ = yp;
-  points = currentPoints;
+  return consumed;
 }
 
 } // namespace core
