@@ -32,7 +32,7 @@ void Ghost::savePreviousPosition() {
   prev_yg = yg;
 }
 
-void Ghost::move(SMap &map) {
+MapObjectType Ghost::move(SMap &map) {
   savePreviousPosition();
   int x = xg, y = yg;
 
@@ -444,6 +444,7 @@ void Ghost::move(SMap &map) {
   yg = y;
 
   map.map[xg][yg] = GHOST;
+  return EMPTY;
 }
 
 } // namespace core

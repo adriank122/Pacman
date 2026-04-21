@@ -18,7 +18,7 @@ public:
   void setPosition(int x, int y) override;
   void setDirection(Direction direction) override;
   void savePreviousPosition() override;
-  void move(SMap &map) override;
+  MapObjectType move(SMap &map) override;
 
   int lives;
   int points;
