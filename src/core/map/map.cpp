@@ -1,5 +1,5 @@
-#include "core/map.h"
-#include "core/config.h"
+#include "core/map/map.h"
+#include "core/config/config.h"
 #include <iomanip>
 #include <iostream>
 

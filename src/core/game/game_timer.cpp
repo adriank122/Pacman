@@ -1,4 +1,4 @@
-#include "core/game_timer.h"
+#include "core/game/game_timer.h"
 #include <algorithm>
 
 namespace pacman {

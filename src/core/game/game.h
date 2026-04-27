@@ -1,9 +1,9 @@
 #ifndef PACMAN_CORE_GAME_H
 #define PACMAN_CORE_GAME_H
 
-#include "ghost.h"
-#include "map.h"
-#include "pman.h"
+#include "core/entities/ghost.h"
+#include "core/entities/pman.h"
+#include "core/map/map.h"
 #include <string>
 
 namespace pacman {

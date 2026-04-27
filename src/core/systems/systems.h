@@ -1,8 +1,8 @@
 #ifndef PACMAN_CORE_SYSTEMS_H
 #define PACMAN_CORE_SYSTEMS_H
 
-#include "core/game.h"
-#include "core/map.h"
+#include "core/game/game.h"
+#include "core/map/map.h"
 
 namespace pacman {
 namespace core {

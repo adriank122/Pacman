@@ -1,7 +1,7 @@
 #ifndef PACMAN_CORE_GHOST_H
 #define PACMAN_CORE_GHOST_H
 
-#include "core/entity.h"
+#include "core/entities/entity.h"
 
 namespace pacman {
 namespace core {

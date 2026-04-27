@@ -1,5 +1,5 @@
-#include "core/game.h"
-#include "core/config.h"
+#include "core/game/game.h"
+#include "core/config/config.h"
 #include "rendering/renderer.h"
 #include <algorithm>
 #include <fstream>

@@ -1,8 +1,8 @@
 #ifndef PACMAN_RENDERING_GUI_RENDERER_H
 #define PACMAN_RENDERING_GUI_RENDERER_H
 
-#include "core/config.h"
-#include "core/map.h"
+#include "core/config/config.h"
+#include "core/map/map.h"
 #include "renderer.h"
 #include <SFML/Graphics.hpp>
 #include <memory>

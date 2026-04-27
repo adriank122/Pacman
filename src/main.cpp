@@ -1,7 +1,7 @@
-#include "core/config.h"
-#include "core/game.h"
-#include "core/game_state.h"
-#include "core/game_timer.h"
+#include "core/config/config.h"
+#include "core/game/game.h"
+#include "core/game/game_timer.h"
+#include "core/states/game_state.h"
 #include "rendering/renderer.h"
 #include <iostream>
 #include <memory>
