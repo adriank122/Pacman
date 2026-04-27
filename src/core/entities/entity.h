@@ -1,7 +1,7 @@
 #ifndef PACMAN_CORE_ENTITY_H
 #define PACMAN_CORE_ENTITY_H
 
-#include "map.h"
+#include "core/map/map.h"
 
 namespace pacman {
 namespace core {

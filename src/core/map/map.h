@@ -1,7 +1,7 @@
 #ifndef PACMAN_CORE_MAP_H
 #define PACMAN_CORE_MAP_H
 
-#include "core/config.h"
+#include "core/config/config.h"
 
 namespace pacman {
 namespace core {

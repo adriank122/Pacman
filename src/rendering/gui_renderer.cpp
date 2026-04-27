@@ -1,6 +1,6 @@
 #include "rendering/gui_renderer.h"
-#include "core/game.h"
-#include "core/map.h"
+#include "core/game/game.h"
+#include "core/map/map.h"
 #include "utils/platform_utils.h"
 #include <fstream>
 #include <iomanip>

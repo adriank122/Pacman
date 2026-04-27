@@ -4,8 +4,8 @@
 #include <memory>
 #include <string>
 
-#include "core/config.h"
-#include "core/game.h"
+#include "core/config/config.h"
+#include "core/game/game.h"
 #include "rendering/renderer.h"
 
 namespace pacman {

@@ -1,4 +1,4 @@
-#include "core/ghost.h"
+#include "core/entities/ghost.h"
 #include <array>
 #include <vector>
 

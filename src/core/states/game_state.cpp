@@ -1,10 +1,10 @@
-#include "core/game_state.h"
-#include "core/entity.h"
-#include "core/game.h"
-#include "core/ghost.h"
-#include "core/map.h"
-#include "core/pman.h"
-#include "core/systems.h"
+#include "core/states/game_state.h"
+#include "core/entities/entity.h"
+#include "core/entities/ghost.h"
+#include "core/entities/pman.h"
+#include "core/game/game.h"
+#include "core/map/map.h"
+#include "core/systems/systems.h"
 
 #include <iostream>
 

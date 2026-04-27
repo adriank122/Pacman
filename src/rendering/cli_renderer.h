@@ -1,7 +1,7 @@
 #ifndef PACMAN_RENDERING_CLI_RENDERER_H
 #define PACMAN_RENDERING_CLI_RENDERER_H
 
-#include "core/map.h"
+#include "core/map/map.h"
 #include "renderer.h"
 #include <fstream>
 
