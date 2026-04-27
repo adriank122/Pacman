@@ -1,10 +1,10 @@
 #include "core/game_state.h"
-#include "core/systems.h"
 #include "core/entity.h"
 #include "core/game.h"
 #include "core/ghost.h"
 #include "core/map.h"
 #include "core/pman.h"
+#include "core/systems.h"
 
 #include <iostream>
 
@@ -25,7 +25,6 @@ public:
         paused(false) {}
 
   void onEnter() override {
-    context.game.state = PLAYING;
     context.level = level;
     context.renderer->clear();
 
@@ -136,7 +135,6 @@ public:
       : IGameState(ctx), reason(std::move(reason)), level(level), won(won) {}
 
   void onEnter() override {
-    context.game.state = GAME_OVER;
     context.renderer->clear();
     context.renderer->showGameOver(reason);
 
@@ -179,7 +177,6 @@ public:
   explicit InstructionsState(GameContext &ctx) : IGameState(ctx) {}
 
   void onEnter() override {
-    context.game.state = INSTRUCTIONS;
     context.renderer->clear();
     context.renderer->showInstructions();
   }
@@ -200,7 +197,6 @@ public:
   explicit LeaderboardState(GameContext &ctx) : IGameState(ctx) {}
 
   void onEnter() override {
-    context.game.state = LEADERBOARD;
     context.renderer->clear();
     context.renderer->showLeaderboard();
   }
@@ -221,7 +217,6 @@ public:
   explicit MainMenuState(GameContext &ctx) : IGameState(ctx) {}
 
   void onEnter() override {
-    context.game.state = MENU;
     context.renderer->clear();
     context.renderer->showMenu();
   }

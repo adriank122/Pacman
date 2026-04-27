@@ -15,8 +15,6 @@ class Renderer;
 
 namespace core {
 
-enum GameState { MENU, PLAYING, INSTRUCTIONS, LEADERBOARD, GAME_OVER, QUIT };
-
 struct SGame {
   Pacman pman;
   SMap map;
@@ -24,7 +22,6 @@ struct SGame {
   int timer;
   int delay;
   int food;
-  GameState state;
 };
 
 void game_count(SGame &game);
