@@ -33,7 +33,7 @@ int main() {
     return 1;
   }
 
-  core::GameContext context(core::MENU, config, std::move(renderer));
+  core::GameContext context(config, std::move(renderer));
 
   auto state = core::createInitialState(context);
   state->onEnter();

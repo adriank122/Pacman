@@ -13,11 +13,10 @@ namespace core {
 
 class GameContext {
 public:
-  GameContext(GameState state, const GameConfig &config,
+  GameContext(const GameConfig &config,
               std::unique_ptr<rendering::Renderer> renderer)
       : config(config), game(), renderer(std::move(renderer)), quit(false),
         level(1) {
-    game.state = state;
     game.delay = config.gameTickDelayMs;
   }
 
