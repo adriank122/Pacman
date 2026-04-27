@@ -270,18 +270,9 @@ void GUIRenderer::drawGameUI(const core::SGame &game, sf::RenderWindow &win) {
   ss << "Lives: " << game.pman.lives;
   drawText(ss.str(), 10, config.windowHeight + 45, 12, sf::Color::Yellow, win);
 
-  int food_count = 0;
-  for (int i = 0; i < config.mapHeight; i++) {
-    for (int j = 0; j < config.mapWidth; j++) {
-      if (game.map.map[i][j] == core::PELLET ||
-          game.map.map[i][j] == core::POWER_UP)
-        food_count++;
-    }
-  }
-
   ss.str("");
   ss.clear();
-  ss << "Food: " << food_count;
+  ss << "Food: " << game.food;
   drawText(ss.str(), 150, config.windowHeight + 5, 12, sf::Color::Magenta, win);
 }
 
