@@ -20,9 +20,7 @@ public:
   void savePreviousPosition() override;
   MapObjectType move(SMap &map) override;
 
-  int ifcookie;
   Direction last_move;
-  int if_boost;
   int xg, yg, prev_xg, prev_yg;
 };
 

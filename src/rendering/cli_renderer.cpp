@@ -39,7 +39,24 @@ void CLIRenderer::showMenu() {
 void CLIRenderer::showGameState(const core::SGame &game,
                                 double /* interpolation */) {
   clear();
-  showMap(game.map);
+
+  char display[17][20];
+  for (int i = 0; i < 17; i++)
+    for (int j = 0; j < 20; j++)
+      display[i][j] = mapObjectTypeToChar(game.map.map[i][j]);
+
+  const core::Ghost *ghosts[] = {&game.ghost1, &game.ghost2, &game.ghost3,
+                                 &game.ghost4};
+  for (const core::Ghost *g : ghosts)
+    display[g->x()][g->y()] = 'A';
+  display[game.pman.x()][game.pman.y()] = 'O';
+
+  for (int i = 0; i < 17; i++) {
+    for (int j = 0; j < 20; j++)
+      cout << setw(2) << display[i][j];
+    cout << "\n";
+  }
+
   showGameCounter(game);
 }
 
@@ -73,16 +90,7 @@ char CLIRenderer::mapObjectTypeToChar(core::MapObjectType type) {
 void CLIRenderer::showGameCounter(const core::SGame &game) {
   cout << "Time remaining: " << game.timer / 1000 << "\n\n";
   cout << "Points: " << game.pman.points << "\n\n";
-
-  int food_count = 0;
-  for (int i = 0; i < 17; i++) {
-    for (int j = 0; j < 20; j++) {
-      if (game.map.map[i][j] == core::PELLET ||
-          game.map.map[i][j] == core::POWER_UP)
-        food_count++;
-    }
-  }
-  cout << "Food count: " << food_count << "\n\n";
+  cout << "Food count: " << game.food << "\n\n";
   cout << "Lives: " << game.pman.lives << "\n\n";
 }
 
