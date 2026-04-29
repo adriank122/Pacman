@@ -15,7 +15,6 @@ The motiviation for this project was to practice C++ skills on game project.
 
 ## TODOs
 
-- Unit tests
 - Variable timestep driven update
 - Ghost movement logic improvement
 - Multiple difficulty
@@ -46,6 +45,34 @@ make
 This will build:
 - `pacman-cli` - CLI version
 - `pacman-gui` - GUI version
+
+## Testing
+
+Run all tests:
+
+```bash
+cd build && ctest
+```
+
+Run only a specific suite (e.g. all `LoadConfig` tests) with regex:
+
+```bash
+cd build && ctest -R ^LoadConfig\.
+```
+
+Run a single test by its full name:
+
+```bash
+cd build && ctest -R LoadConfig.TrimsWhitespaceAroundKeyAndValue
+```
+
+The argument is a substring match against `Suite/TestName`, so any unique prefix or fragment works.
+
+Or run all tests via CTest:
+
+```bash
+cd build && ctest --output-on-failure
+```
 
 ## Usage
 

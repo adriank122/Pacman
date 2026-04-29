@@ -26,6 +26,20 @@ set(CORE_SOURCES
 
 set(CORE_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
+enable_testing()
+
+include(FetchContent)
+
+FetchContent_Declare(
+    googletest
+    URL https://github.com/google/googletest/archive/refs/tags/v1.17.0.zip
+)
+
+# Prevent GoogleTest from overriding our compiler/linker options
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+
+FetchContent_MakeAvailable(googletest)
+
 # Create core library
 add_library(pacman-core STATIC ${CORE_SOURCES})
 target_include_directories(pacman-core PUBLIC ${CORE_INCLUDE_DIR})
@@ -80,3 +94,5 @@ if (BUILD_GUI)
         message(STATUS "SFML not found - GUI version will not be built")
     endif()
 endif()
+
+add_subdirectory(tests)
