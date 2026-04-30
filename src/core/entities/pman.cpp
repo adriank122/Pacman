@@ -1,7 +1,4 @@
 #include "core/entities/pman.h"
-#include <iostream>
-
-using namespace std;
 
 namespace pacman {
 namespace core {
@@ -28,69 +25,51 @@ void Pacman::savePreviousPosition() {
   prev_yp_ = yp_;
 }
 
-MapObjectType Pacman::move(SMap &map) {
+TileType Pacman::move(Map &map) {
   savePreviousPosition();
 
-  if (direction_ == Direction::NONE) {
-    return EMPTY;
-  }
+  if (direction_ == Direction::NONE)
+    return TileType::EMPTY;
 
-  int xp = xp_;
-  int yp = yp_;
-  MapObjectType consumed = EMPTY;
+  int newRow = xp_;
+  int newCol = yp_;
 
   switch (direction_) {
   case Direction::LEFT:
-    if (xp == 8 && yp == 0) {
-      consumed = map.map[8][19];
-      map.map[xp][yp] = EMPTY;
-      yp = 19;
+    if (xp_ == 8 && yp_ == 0) {
+      newCol = 19;
       break;
     }
-    if (map.map[xp][yp - 1] != WALL) {
-      consumed = map.map[xp][yp - 1];
-      map.map[xp][yp] = EMPTY;
-      yp--;
-    }
-    break;
-
-  case Direction::UP:
-    if (map.map[xp - 1][yp] != WALL) {
-      consumed = map.map[xp - 1][yp];
-      map.map[xp][yp] = EMPTY;
-      xp--;
-    }
-    break;
-
-  case Direction::DOWN:
-    if (map.map[xp + 1][yp] != WALL) {
-      consumed = map.map[xp + 1][yp];
-      map.map[xp][yp] = EMPTY;
-      xp++;
-    }
+    if (!map.isWall(xp_, yp_ - 1))
+      newCol = yp_ - 1;
     break;
 
   case Direction::RIGHT:
-    if (xp == 8 && yp == 19) {
-      consumed = map.map[8][0];
-      map.map[xp][yp] = EMPTY;
-      yp = 0;
+    if (xp_ == 8 && yp_ == 19) {
+      newCol = 0;
       break;
     }
-    if (map.map[xp][yp + 1] != WALL) {
-      consumed = map.map[xp][yp + 1];
-      map.map[xp][yp] = EMPTY;
-      yp++;
-    }
+    if (!map.isWall(xp_, yp_ + 1))
+      newCol = yp_ + 1;
+    break;
+
+  case Direction::UP:
+    if (!map.isWall(xp_ - 1, yp_))
+      newRow = xp_ - 1;
+    break;
+
+  case Direction::DOWN:
+    if (!map.isWall(xp_ + 1, yp_))
+      newRow = xp_ + 1;
     break;
 
   default:
     break;
   }
 
-  map.map[xp][yp] = PACMAN_PLAYER;
-  xp_ = xp;
-  yp_ = yp;
+  TileType consumed = map.consumePellet(newRow, newCol);
+  xp_ = newRow;
+  yp_ = newCol;
   return consumed;
 }
 

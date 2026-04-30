@@ -177,7 +177,7 @@ void GUIRenderer::sleep(int milliseconds) {
   handleEvents();
 }
 
-void GUIRenderer::renderTile(int row, int col, core::MapObjectType tileType,
+void GUIRenderer::renderTile(int row, int col, core::TileType tileType,
                              sf::RenderWindow &win) {
   int x = col * config.tileSize;
   int y = row * config.tileSize;
@@ -188,29 +188,23 @@ void GUIRenderer::renderTile(int row, int col, core::MapObjectType tileType,
   sf::CircleShape shape;
 
   switch (tileType) {
-  case core::WALL:
+  case core::TileType::WALL:
     tile.setFillColor(sf::Color::Blue);
     win.draw(tile);
     break;
-  case core::PELLET:
+  case core::TileType::PELLET:
     shape.setRadius(2);
     shape.setFillColor(sf::Color::Yellow);
     shape.setPosition(x + config.tileSize / 2 - 2, y + config.tileSize / 2 - 2);
     win.draw(shape);
     break;
-  case core::POWER_UP:
+  case core::TileType::POWER_UP:
     shape.setRadius(4);
     shape.setFillColor(sf::Color::Magenta);
     shape.setPosition(x + config.tileSize / 2 - 4, y + config.tileSize / 2 - 4);
     win.draw(shape);
     break;
-  case core::PACMAN_PLAYER:
-  case core::GHOST:
-    // Entities are drawn separately with interpolation in GUI mode.
-    break;
-  case core::EMPTY:
-    break;
-  default:
+  case core::TileType::EMPTY:
     break;
   }
 }
@@ -426,12 +420,12 @@ void GUIRenderer::showGameState(const core::Game &game, double interpolation) {
   window->display();
 }
 
-void GUIRenderer::showMap(const core::SMap &map) {
+void GUIRenderer::showMap(const core::Map &map) {
   if (!window)
     return;
-  for (int i = 0; i < config.mapHeight; i++) {
-    for (int j = 0; j < config.mapWidth; j++) {
-      renderTile(i, j, map.map[i][j], *window);
+  for (int i = 0; i < map.height(); i++) {
+    for (int j = 0; j < map.width(); j++) {
+      renderTile(i, j, map.getTile(i, j), *window);
     }
   }
 }

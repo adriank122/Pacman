@@ -15,7 +15,7 @@ public:
 
   void showMenu() override;
   void showGameState(const core::Game &game, double interpolation) override;
-  void showMap(const core::SMap &map) override;
+  void showMap(const core::Map &map) override;
   void showGameCounter(const core::Game &game) override;
   void showGameOver(const std::string &reason) override;
   void showInstructions() override;
@@ -31,7 +31,7 @@ public:
 
 private:
   void showLeaderboardList();
-  char mapObjectTypeToChar(core::MapObjectType type);
+  char tileTypeToChar(core::TileType type);
 };
 
 } // namespace rendering

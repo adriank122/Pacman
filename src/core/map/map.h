@@ -1,28 +1,36 @@
 #ifndef PACMAN_CORE_MAP_H
 #define PACMAN_CORE_MAP_H
 
-#include "core/config/config.h"
+#include <string>
+#include <vector>
 
 namespace pacman {
 namespace core {
 
-enum MapObjectType { EMPTY, WALL, PELLET, POWER_UP, PACMAN_PLAYER, GHOST };
+enum class TileType { EMPTY, WALL, PELLET, POWER_UP };
 
-constexpr int MAP_WIDTH = 20;
-constexpr int MAP_HEIGHT = 17;
+class Map {
+public:
+  Map();
+  Map(int width, int height);
 
-struct SMap {
-  MapObjectType map[MAP_HEIGHT][MAP_WIDTH];
-  int width;
-  int height;
-  int powerUpScore;
+  int width() const;
+  int height() const;
+
+  TileType getTile(int row, int col) const;
+  void setTile(int row, int col, TileType type);
+
+  bool isWall(int row, int col) const;
+  bool hasPellet(int row, int col) const;
+  TileType consumePellet(int row, int col);
+
+  bool inBounds(int row, int col) const;
+
+private:
+  int width_;
+  int height_;
+  std::vector<TileType> tiles_;
 };
-
-void init_map(SMap &map, const GameConfig &config);
-void map_create1(SMap &map);
-void map_create2(SMap &map);
-void map_create3(SMap &map);
-void map_show(SMap map);
 
 } // namespace core
 } // namespace pacman

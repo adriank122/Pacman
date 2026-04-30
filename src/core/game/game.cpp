@@ -13,14 +13,14 @@ namespace core {
 void Game::count() {
   food = 0;
 
-  for (int i = 0; i < map.height; i++)
-    for (int j = 0; j < map.width; j++)
-      if (map.map[i][j] == core::PELLET || map.map[i][j] == core::POWER_UP)
+  for (int i = 0; i < map.height(); i++)
+    for (int j = 0; j < map.width(); j++)
+      if (map.hasPellet(i, j))
         food++;
 }
 
 void Game::init(const GameConfig &config) {
-  init_map(map, config);
+  powerUpScore = config.powerUpScore;
   pman = Pacman();
   pman.spawnX = config.pacmanStartX;
   pman.spawnY = config.pacmanStartY;

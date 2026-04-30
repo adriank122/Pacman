@@ -4,6 +4,7 @@
 #include "core/entities/pman.h"
 #include "core/game/game.h"
 #include "core/map/map.h"
+#include "core/map/map_loader.h"
 #include "core/systems/systems.h"
 
 #include <iostream>
@@ -28,13 +29,8 @@ public:
     context.level = level;
     context.renderer->clear();
 
-    if (level == 1) {
-      map_create1(context.game.map);
-    } else {
-      map_create2(context.game.map);
-    }
-    context.game.map.map[context.game.pman.x()][context.game.pman.y()] =
-        PACMAN_PLAYER;
+    context.game.map = MapLoader::load("resources/maps/level" +
+                                       std::to_string(level) + ".map");
 
     context.game.count();
   }
@@ -87,7 +83,7 @@ public:
     if (lastDirection != Direction::NONE) {
       context.game.pman.setDirection(lastDirection);
     }
-    MapObjectType consumed = context.game.pman.move(context.game.map);
+    TileType consumed = context.game.pman.move(context.game.map);
     applyScoring(context.game, consumed);
     checkCollisions(context.game);
 

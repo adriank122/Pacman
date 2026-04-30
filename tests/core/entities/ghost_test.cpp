@@ -4,10 +4,7 @@
 
 using namespace pacman::core;
 
-static SMap makeOpenMap() {
-  SMap m{};
-  return m;
-}
+static Map makeOpenMap() { return Map(20, 17); }
 
 TEST(GhostDefaults, InitialPosition) {
   Ghost g;
@@ -52,9 +49,9 @@ TEST(GhostMove, MoveAvoidsWalls) {
   Ghost g;
   g.setPosition(5, 5);
   g.setDirection(Direction::UP);
-  SMap m = makeOpenMap();
-  m.map[4][5] = WALL; // UP - blocked
-  m.map[5][6] = WALL; // RIGHT - blocked
+  Map m = makeOpenMap();
+  m.setTile(4, 5, TileType::WALL); // UP - blocked
+  m.setTile(5, 6, TileType::WALL); // RIGHT - blocked
   // map[6][5] = EMPTY (DOWN = reverse, excluded by no-reverse rule)
   // map[5][4] = EMPTY (LEFT - the only valid candidate)
   g.move(m);
@@ -67,9 +64,9 @@ TEST(GhostMove, MoveDoesNotReverse) {
   Ghost g;
   g.setPosition(5, 5);
   g.setDirection(Direction::RIGHT);
-  SMap m = makeOpenMap();
-  m.map[6][5] = WALL; // DOWN - blocked
-  m.map[5][6] = WALL; // RIGHT - blocked
+  Map m = makeOpenMap();
+  m.setTile(6, 5, TileType::WALL); // DOWN - blocked
+  m.setTile(5, 6, TileType::WALL); // RIGHT - blocked
   // map[5][4] = EMPTY (LEFT = reverse, excluded)
   // map[4][5] = EMPTY (UP - the only valid candidate)
   g.move(m);
@@ -83,10 +80,10 @@ TEST(GhostMove, MoveReversesAtDeadEnd) {
   Ghost g;
   g.setPosition(5, 5);
   g.setDirection(Direction::RIGHT);
-  SMap m = makeOpenMap();
-  m.map[4][5] = WALL; // UP - blocked
-  m.map[6][5] = WALL; // DOWN - blocked
-  m.map[5][6] = WALL; // RIGHT - blocked
+  Map m = makeOpenMap();
+  m.setTile(4, 5, TileType::WALL); // UP - blocked
+  m.setTile(6, 5, TileType::WALL); // DOWN - blocked
+  m.setTile(5, 6, TileType::WALL); // RIGHT - blocked
   // map[5][4] = EMPTY (LEFT = reverse, only option at dead end)
   g.move(m);
   EXPECT_EQ(g.x(), 5);
@@ -99,16 +96,16 @@ TEST(GhostMove, MoveReturnsEmpty) {
   Ghost g;
   g.setPosition(5, 5);
   g.setDirection(Direction::UP);
-  SMap m = makeOpenMap();
-  MapObjectType result = g.move(m);
-  EXPECT_EQ(result, EMPTY);
+  Map m = makeOpenMap();
+  TileType result = g.move(m);
+  EXPECT_EQ(result, TileType::EMPTY);
 }
 
 TEST(GhostMove, MoveSavesPreviousPosition) {
   Ghost g;
   g.setPosition(5, 5);
   g.setDirection(Direction::UP);
-  SMap m = makeOpenMap();
+  Map m = makeOpenMap();
   g.move(m);
   EXPECT_EQ(g.prev_x(), 5);
   EXPECT_EQ(g.prev_y(), 5);
@@ -119,9 +116,9 @@ TEST(GhostMove, MoveUpdatesLastMove) {
   Ghost g;
   g.setPosition(5, 5);
   g.setDirection(Direction::RIGHT);
-  SMap m = makeOpenMap();
-  m.map[6][5] = WALL; // DOWN - blocked
-  m.map[5][6] = WALL; // RIGHT - blocked
+  Map m = makeOpenMap();
+  m.setTile(6, 5, TileType::WALL); // DOWN - blocked
+  m.setTile(5, 6, TileType::WALL); // RIGHT - blocked
   // map[5][4] = EMPTY (LEFT = reverse, excluded)
   // map[4][5] = EMPTY (UP - only valid candidate)
   g.move(m);
