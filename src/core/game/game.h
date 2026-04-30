@@ -5,28 +5,24 @@
 #include "core/entities/pman.h"
 #include "core/map/map.h"
 #include <string>
+#include <vector>
 
 namespace pacman {
-
-// Forward declaration of Renderer at correct namespace level
-namespace rendering {
-class Renderer;
-}
-
 namespace core {
 
-struct SGame {
+class Game {
+public:
   Pacman pman;
   SMap map;
-  Ghost ghost1, ghost2, ghost3, ghost4;
+  std::vector<Ghost> ghosts;
   int timer;
   int delay;
   int food;
-};
 
-void game_count(SGame &game);
-void game_init(SGame &game, const GameConfig &config);
-void save_leaderboard(const SGame &game, const std::string &playerName);
+  void count();
+  void init(const GameConfig &config);
+  void saveLeaderboard(const std::string &playerName) const;
+};
 
 } // namespace core
 } // namespace pacman

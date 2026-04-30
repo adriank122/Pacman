@@ -1,6 +1,5 @@
 #include "core/game/game.h"
 #include "core/config/config.h"
-#include "rendering/renderer.h"
 #include <algorithm>
 #include <fstream>
 #include <iostream>
@@ -11,37 +10,33 @@ using namespace std;
 namespace pacman {
 namespace core {
 
-void game_count(SGame &game) {
-  game.food = 0;
+void Game::count() {
+  food = 0;
 
-  for (int i = 0; i < game.map.height; i++)
-    for (int j = 0; j < game.map.width; j++)
-      if (game.map.map[i][j] == core::PELLET ||
-          game.map.map[i][j] == core::POWER_UP)
-        game.food++;
+  for (int i = 0; i < map.height; i++)
+    for (int j = 0; j < map.width; j++)
+      if (map.map[i][j] == core::PELLET || map.map[i][j] == core::POWER_UP)
+        food++;
 }
 
-void game_init(SGame &game, const GameConfig &config) {
-  init_map(game.map, config);
-  game.pman = Pacman();
-  game.pman.spawnX = config.pacmanStartX;
-  game.pman.spawnY = config.pacmanStartY;
-  game.pman.setPosition(config.pacmanStartX, config.pacmanStartY);
-  game.pman.savePreviousPosition();
-  game.timer = config.startingTimerMs;
-  game.delay = config.gameTickDelayMs;
-  game.pman.lives = config.startingLives;
-  game.ghost1 = Ghost();
-  game.ghost1.setPosition(config.ghost1StartX, config.ghost1StartY);
-  game.ghost2 = Ghost();
-  game.ghost2.setPosition(config.ghost2StartX, config.ghost2StartY);
-  game.ghost3 = Ghost();
-  game.ghost3.setPosition(config.ghost3StartX, config.ghost3StartY);
-  game.ghost4 = Ghost();
-  game.ghost4.setPosition(config.ghost4StartX, config.ghost4StartY);
+void Game::init(const GameConfig &config) {
+  init_map(map, config);
+  pman = Pacman();
+  pman.spawnX = config.pacmanStartX;
+  pman.spawnY = config.pacmanStartY;
+  pman.setPosition(config.pacmanStartX, config.pacmanStartY);
+  pman.savePreviousPosition();
+  timer = config.startingTimerMs;
+  delay = config.gameTickDelayMs;
+  pman.lives = config.startingLives;
+  ghosts.clear();
+  ghosts.emplace_back(config.ghost1StartX, config.ghost1StartY);
+  ghosts.emplace_back(config.ghost2StartX, config.ghost2StartY);
+  ghosts.emplace_back(config.ghost3StartX, config.ghost3StartY);
+  ghosts.emplace_back(config.ghost4StartX, config.ghost4StartY);
 }
 
-void save_leaderboard(const SGame &game, const std::string &playerName) {
+void Game::saveLeaderboard(const std::string &playerName) const {
   vector<pair<string, int>> entries;
 
   ifstream f("leaderboard.txt");
@@ -58,7 +53,7 @@ void save_leaderboard(const SGame &game, const std::string &playerName) {
   f.close();
 
   entries.push_back(
-      {playerName.empty() ? "Anonymous" : playerName, game.pman.points});
+      {playerName.empty() ? "Anonymous" : playerName, pman.points});
 
   sort(entries.begin(), entries.end(),
        [](const auto &a, const auto &b) { return a.second > b.second; });

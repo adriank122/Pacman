@@ -14,9 +14,9 @@ public:
   ~CLIRenderer();
 
   void showMenu() override;
-  void showGameState(const core::SGame &game, double interpolation) override;
+  void showGameState(const core::Game &game, double interpolation) override;
   void showMap(const core::SMap &map) override;
-  void showGameCounter(const core::SGame &game) override;
+  void showGameCounter(const core::Game &game) override;
   void showGameOver(const std::string &reason) override;
   void showInstructions() override;
   void showLeaderboard() override;
