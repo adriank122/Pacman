@@ -36,7 +36,7 @@ void CLIRenderer::showMenu() {
   cout << "4 -->\tQuit\n\n";
 }
 
-void CLIRenderer::showGameState(const core::SGame &game,
+void CLIRenderer::showGameState(const core::Game &game,
                                 double /* interpolation */) {
   clear();
 
@@ -45,10 +45,8 @@ void CLIRenderer::showGameState(const core::SGame &game,
     for (int j = 0; j < 20; j++)
       display[i][j] = mapObjectTypeToChar(game.map.map[i][j]);
 
-  const core::Ghost *ghosts[] = {&game.ghost1, &game.ghost2, &game.ghost3,
-                                 &game.ghost4};
-  for (const core::Ghost *g : ghosts)
-    display[g->x()][g->y()] = 'A';
+  for (const core::Ghost &g : game.ghosts)
+    display[g.x()][g.y()] = 'A';
   display[game.pman.x()][game.pman.y()] = 'O';
 
   for (int i = 0; i < 17; i++) {
@@ -87,7 +85,7 @@ char CLIRenderer::mapObjectTypeToChar(core::MapObjectType type) {
   return ' ';
 }
 
-void CLIRenderer::showGameCounter(const core::SGame &game) {
+void CLIRenderer::showGameCounter(const core::Game &game) {
   cout << "Time remaining: " << game.timer / 1000 << "\n\n";
   cout << "Points: " << game.pman.points << "\n\n";
   cout << "Food count: " << game.food << "\n\n";

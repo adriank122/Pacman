@@ -8,6 +8,8 @@ namespace core {
 Ghost::Ghost()
     : last_move(Direction::NONE), xg(0), yg(0), prev_xg(0), prev_yg(0) {}
 
+Ghost::Ghost(int x, int y) : Ghost() { setPosition(x, y); }
+
 int Ghost::x() const { return xg; }
 int Ghost::y() const { return yg; }
 int Ghost::prev_x() const { return prev_xg; }

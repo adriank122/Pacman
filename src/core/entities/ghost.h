@@ -9,6 +9,7 @@ namespace core {
 class Ghost : public Entity {
 public:
   Ghost();
+  Ghost(int x, int y);
 
   int x() const override;
   int y() const override;

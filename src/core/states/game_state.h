@@ -21,7 +21,7 @@ public:
   }
 
   GameConfig config;
-  SGame game;
+  Game game;
   std::unique_ptr<rendering::Renderer> renderer;
   bool quit;
   int level;

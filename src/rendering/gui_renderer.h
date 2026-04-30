@@ -16,9 +16,9 @@ public:
   ~GUIRenderer();
 
   void showMenu() override;
-  void showGameState(const core::SGame &game, double interpolation) override;
+  void showGameState(const core::Game &game, double interpolation) override;
   void showMap(const core::SMap &map) override;
-  void showGameCounter(const core::SGame &game) override;
+  void showGameCounter(const core::Game &game) override;
   void showGameOver(const std::string &reason) override;
   void showInstructions() override;
   void showLeaderboard() override;
@@ -48,7 +48,7 @@ private:
                         const sf::Color &color, sf::RenderWindow &win);
   void handleEvents();
   void drawMenu(sf::RenderWindow &win);
-  void drawGameUI(const core::SGame &game, sf::RenderWindow &win);
+  void drawGameUI(const core::Game &game, sf::RenderWindow &win);
   void drawInstructions(sf::RenderWindow &win);
   void drawLeaderboard(sf::RenderWindow &win);
   void drawGameOver(const std::string &reason, sf::RenderWindow &win);

@@ -5,7 +5,7 @@
 
 namespace pacman {
 namespace core {
-struct SGame;
+class Game;
 struct SMap;
 } // namespace core
 
@@ -17,9 +17,9 @@ public:
 
   // Rendering functions
   virtual void showMenu() = 0;
-  virtual void showGameState(const core::SGame &game, double interpolation) = 0;
+  virtual void showGameState(const core::Game &game, double interpolation) = 0;
   virtual void showMap(const core::SMap &map) = 0;
-  virtual void showGameCounter(const core::SGame &game) = 0;
+  virtual void showGameCounter(const core::Game &game) = 0;
   virtual void showGameOver(const std::string &reason) = 0;
   virtual void showInstructions() = 0;
   virtual void showLeaderboard() = 0;

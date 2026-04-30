@@ -36,7 +36,7 @@ public:
     context.game.map.map[context.game.pman.x()][context.game.pman.y()] =
         PACMAN_PLAYER;
 
-    game_count(context.game);
+    context.game.count();
   }
 
   void handleInput(char input) override {
@@ -81,10 +81,8 @@ public:
       return;
     }
 
-    context.game.ghost1.move(context.game.map);
-    context.game.ghost2.move(context.game.map);
-    context.game.ghost3.move(context.game.map);
-    context.game.ghost4.move(context.game.map);
+    for (Ghost &ghost : context.game.ghosts)
+      ghost.move(context.game.map);
 
     if (lastDirection != Direction::NONE) {
       context.game.pman.setDirection(lastDirection);
@@ -93,7 +91,7 @@ public:
     applyScoring(context.game, consumed);
     checkCollisions(context.game);
 
-    game_count(context.game);
+    context.game.count();
 
     if (context.game.pman.lives <= 0) {
       requestTransition(
@@ -140,7 +138,7 @@ public:
 
     if (!won) {
       std::string name = context.renderer->promptPlayerName();
-      save_leaderboard(context.game, name);
+      context.game.saveLeaderboard(name);
       requestTransition(createLeaderboardState(context));
     }
   }
@@ -156,7 +154,7 @@ public:
     }
 
     if (won && input == 'o' && level == 1) {
-      game_init(context.game, context.config);
+      context.game.init(context.config);
       context.level = 2;
       requestTransition(createGameplayState(context, 2));
     }
@@ -228,7 +226,7 @@ public:
 
     switch (input) {
     case '1':
-      game_init(context.game, context.config);
+      context.game.init(context.config);
       context.level = 1;
       requestTransition(createGameplayState(context, 1));
       break;

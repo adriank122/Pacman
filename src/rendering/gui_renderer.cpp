@@ -245,7 +245,7 @@ void GUIRenderer::drawMenu(sf::RenderWindow &win) {
   drawCenteredText("Select option:", 220, 12, sf::Color::Cyan, win);
 }
 
-void GUIRenderer::drawGameUI(const core::SGame &game, sf::RenderWindow &win) {
+void GUIRenderer::drawGameUI(const core::Game &game, sf::RenderWindow &win) {
   sf::RectangleShape uiBg(sf::Vector2f(config.windowWidth, config.uiHeight));
   uiBg.setFillColor(sf::Color(30, 30, 30));
   uiBg.setPosition(0, config.windowHeight);
@@ -387,7 +387,7 @@ void GUIRenderer::showMenu() {
   window->display();
 }
 
-void GUIRenderer::showGameState(const core::SGame &game, double interpolation) {
+void GUIRenderer::showGameState(const core::Game &game, double interpolation) {
   if (!window)
     return;
   currentScreen = "game";
@@ -419,10 +419,8 @@ void GUIRenderer::showGameState(const core::SGame &game, double interpolation) {
     window->draw(ghostShape);
   };
 
-  drawGhost(game.ghost1);
-  drawGhost(game.ghost2);
-  drawGhost(game.ghost3);
-  drawGhost(game.ghost4);
+  for (const core::Ghost &ghost : game.ghosts)
+    drawGhost(ghost);
 
   drawGameUI(game, *window);
   window->display();
@@ -438,7 +436,7 @@ void GUIRenderer::showMap(const core::SMap &map) {
   }
 }
 
-void GUIRenderer::showGameCounter(const core::SGame &) {}
+void GUIRenderer::showGameCounter(const core::Game &) {}
 
 void GUIRenderer::showGameOver(const string &reason) {
   if (!window)

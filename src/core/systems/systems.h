@@ -7,8 +7,8 @@
 namespace pacman {
 namespace core {
 
-void checkCollisions(SGame &game);
-void applyScoring(SGame &game, MapObjectType consumed);
+void checkCollisions(Game &game);
+void applyScoring(Game &game, MapObjectType consumed);
 
 } // namespace core
 } // namespace pacman
