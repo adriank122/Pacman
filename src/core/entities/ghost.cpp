@@ -6,7 +6,7 @@ namespace pacman {
 namespace core {
 
 Ghost::Ghost()
-    : last_move(Direction::LEFT), xg(0), yg(0), prev_xg(0), prev_yg(0) {}
+    : last_move(Direction::NONE), xg(0), yg(0), prev_xg(0), prev_yg(0) {}
 
 int Ghost::x() const { return xg; }
 int Ghost::y() const { return yg; }
