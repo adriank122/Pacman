@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <iostream>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -40,17 +41,20 @@ void CLIRenderer::showGameState(const core::Game &game,
                                 double /* interpolation */) {
   clear();
 
-  char display[17][20];
-  for (int i = 0; i < 17; i++)
-    for (int j = 0; j < 20; j++)
-      display[i][j] = mapObjectTypeToChar(game.map.map[i][j]);
+  int rows = game.map.height();
+  int cols = game.map.width();
+
+  vector<vector<char>> display(rows, vector<char>(cols));
+  for (int i = 0; i < rows; i++)
+    for (int j = 0; j < cols; j++)
+      display[i][j] = tileTypeToChar(game.map.getTile(i, j));
 
   for (const core::Ghost &g : game.ghosts)
     display[g.x()][g.y()] = 'A';
   display[game.pman.x()][game.pman.y()] = 'O';
 
-  for (int i = 0; i < 17; i++) {
-    for (int j = 0; j < 20; j++)
+  for (int i = 0; i < rows; i++) {
+    for (int j = 0; j < cols; j++)
       cout << setw(2) << display[i][j];
     cout << "\n";
   }
@@ -58,29 +62,24 @@ void CLIRenderer::showGameState(const core::Game &game,
   showGameCounter(game);
 }
 
-void CLIRenderer::showMap(const core::SMap &map) {
-  for (int i = 0; i < 17; i++) {
-    for (int j = 0; j < 20; j++) {
-      cout << setw(2) << mapObjectTypeToChar(map.map[i][j]);
-    }
+void CLIRenderer::showMap(const core::Map &map) {
+  for (int i = 0; i < map.height(); i++) {
+    for (int j = 0; j < map.width(); j++)
+      cout << setw(2) << tileTypeToChar(map.getTile(i, j));
     cout << "\n";
   }
 }
 
-char CLIRenderer::mapObjectTypeToChar(core::MapObjectType type) {
+char CLIRenderer::tileTypeToChar(core::TileType type) {
   switch (type) {
-  case core::EMPTY:
+  case core::TileType::EMPTY:
     return ' ';
-  case core::WALL:
+  case core::TileType::WALL:
     return 'x';
-  case core::PELLET:
+  case core::TileType::PELLET:
     return '.';
-  case core::POWER_UP:
+  case core::TileType::POWER_UP:
     return 'e';
-  case core::PACMAN_PLAYER:
-    return 'O';
-  case core::GHOST:
-    return 'A';
   }
   return ' ';
 }

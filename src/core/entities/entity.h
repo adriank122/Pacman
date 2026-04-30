@@ -20,7 +20,7 @@ public:
   virtual void setPosition(int x, int y) = 0;
   virtual void setDirection(Direction direction) = 0;
   virtual void savePreviousPosition() = 0;
-  virtual MapObjectType move(SMap &map) = 0;
+  virtual TileType move(Map &map) = 0;
 };
 
 } // namespace core

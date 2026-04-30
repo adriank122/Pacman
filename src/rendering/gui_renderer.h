@@ -17,7 +17,7 @@ public:
 
   void showMenu() override;
   void showGameState(const core::Game &game, double interpolation) override;
-  void showMap(const core::SMap &map) override;
+  void showMap(const core::Map &map) override;
   void showGameCounter(const core::Game &game) override;
   void showGameOver(const std::string &reason) override;
   void showInstructions() override;
@@ -38,7 +38,7 @@ private:
   char lastKeyPressed;
   std::string currentScreen;
 
-  void renderTile(int row, int col, core::MapObjectType tileType,
+  void renderTile(int row, int col, core::TileType tileType,
                   sf::RenderWindow &win);
   void drawNamePrompt(const std::string &name, sf::RenderWindow &win);
   void drawText(const std::string &text, float x, float y,

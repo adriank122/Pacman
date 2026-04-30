@@ -45,9 +45,7 @@ constexpr std::array<MovePlan, 4> ALL_MOVES = {{
     {0, 1, Direction::RIGHT},
 }};
 
-bool isTileAvailable(const SMap &map, int x, int y) {
-  return map.map[x][y] != WALL;
-}
+bool isTileAvailable(const Map &map, int x, int y) { return !map.isWall(x, y); }
 
 Direction reverseOf(Direction dir) {
   switch (dir) {
@@ -66,7 +64,7 @@ Direction reverseOf(Direction dir) {
 
 } // namespace
 
-MapObjectType Ghost::move(SMap &map) {
+TileType Ghost::move(Map &map) {
   savePreviousPosition();
 
   Direction reverse = reverseOf(last_move);
@@ -86,7 +84,7 @@ MapObjectType Ghost::move(SMap &map) {
   }
 
   if (candidates.empty())
-    return EMPTY;
+    return TileType::EMPTY;
 
   // No crossroad: only one option, take it; crossroad: pick randomly
   const MovePlan &chosen = candidates.size() == 1
@@ -96,7 +94,7 @@ MapObjectType Ghost::move(SMap &map) {
   xg += chosen.dx;
   yg += chosen.dy;
   last_move = chosen.dir;
-  return EMPTY;
+  return TileType::EMPTY;
 }
 
 } // namespace core

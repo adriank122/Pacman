@@ -19,7 +19,7 @@ public:
   void setPosition(int x, int y) override;
   void setDirection(Direction direction) override;
   void savePreviousPosition() override;
-  MapObjectType move(SMap &map) override;
+  TileType move(Map &map) override;
 
   Direction last_move;
   int xg, yg, prev_xg, prev_yg;
