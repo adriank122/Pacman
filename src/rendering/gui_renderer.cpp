@@ -1,6 +1,7 @@
 #include "rendering/gui_renderer.h"
 #include "core/game/game.h"
 #include "core/map/map.h"
+#include "input_handler/gui_input_handler.h"
 #include "utils/platform_utils.h"
 #include <fstream>
 #include <iomanip>
@@ -13,7 +14,7 @@ namespace pacman {
 namespace rendering {
 
 GUIRenderer::GUIRenderer(const core::GameConfig &config)
-    : config(config), lastKeyPressed(0), currentScreen("menu") {
+    : config(config), currentScreen("menu") {
   int totalHeight = config.windowHeight + config.uiHeight;
   window = std::make_unique<sf::RenderWindow>(
       sf::VideoMode(config.windowWidth, totalHeight), "PACMAN");
@@ -33,77 +34,10 @@ GUIRenderer::~GUIRenderer() {
   }
 }
 
-void GUIRenderer::handleEvents() {
-  if (!window)
-    return;
-
-  sf::Event event;
-  while (window->pollEvent(event)) {
-    if (event.type == sf::Event::Closed) {
-      window->close();
-    } else if (event.type == sf::Event::KeyPressed) {
-      switch (event.key.code) {
-      case sf::Keyboard::W:
-        lastKeyPressed = 'w';
-        break;
-      case sf::Keyboard::A:
-        lastKeyPressed = 'a';
-        break;
-      case sf::Keyboard::S:
-        lastKeyPressed = 's';
-        break;
-      case sf::Keyboard::D:
-        lastKeyPressed = 'd';
-        break;
-      case sf::Keyboard::Num1:
-        lastKeyPressed = '1';
-        break;
-      case sf::Keyboard::Num2:
-        lastKeyPressed = '2';
-        break;
-      case sf::Keyboard::Num3:
-        lastKeyPressed = '3';
-        break;
-      case sf::Keyboard::Num4:
-        lastKeyPressed = '4';
-        break;
-      case sf::Keyboard::O:
-        lastKeyPressed = 'o';
-        break;
-      case sf::Keyboard::M:
-        lastKeyPressed = 'm';
-        break;
-      case sf::Keyboard::Space:
-        lastKeyPressed = ' ';
-        break;
-      case sf::Keyboard::Escape:
-        lastKeyPressed = 27;
-        break;
-      case sf::Keyboard::Return:
-        lastKeyPressed = 13;
-        break;
-      default:
-        break;
-      }
-    }
-  }
-}
-
 void GUIRenderer::clear() {
   if (window) {
     window->clear(sf::Color::Black);
   }
-}
-
-char GUIRenderer::getChar() {
-  char key = lastKeyPressed;
-  lastKeyPressed = 0;
-  return key;
-}
-
-bool GUIRenderer::keyAvailable() {
-  handleEvents();
-  return lastKeyPressed != 0 && window->isOpen();
 }
 
 bool GUIRenderer::isOpen() const { return window ? window->isOpen() : false; }
@@ -172,9 +106,10 @@ void GUIRenderer::drawNamePrompt(const std::string &name,
                    win);
 }
 
-void GUIRenderer::sleep(int milliseconds) {
-  utils::sleep_ms(milliseconds);
-  handleEvents();
+void GUIRenderer::sleep(int milliseconds) { utils::sleep_ms(milliseconds); }
+
+std::unique_ptr<input_handler::InputHandler> GUIRenderer::createInputHandler() {
+  return std::make_unique<input_handler::GUIInputHandler>(window.get());
 }
 
 void GUIRenderer::renderTile(int row, int col, core::TileType tileType,
