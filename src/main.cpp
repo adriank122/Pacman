@@ -2,14 +2,17 @@
 #include "core/game/game.h"
 #include "core/game/game_timer.h"
 #include "core/states/game_state.h"
+#include "input_handler/input.h"
 #include "rendering/renderer.h"
 #include <iostream>
 #include <memory>
 #include <string>
 
 #ifdef USE_GUI
+#include "input_handler/gui_input_handler.h"
 #include "rendering/gui_renderer.h"
 #else
+#include "input_handler/cli_input_handler.h"
 #include "rendering/cli_renderer.h"
 #endif
 
@@ -19,12 +22,16 @@ using namespace pacman;
 int main() {
   const auto config = core::loadConfig("config.ini");
   std::unique_ptr<rendering::Renderer> renderer;
+  std::unique_ptr<input_handler::InputHandler> inputHandler;
 
 #ifdef USE_GUI
-  renderer = std::make_unique<rendering::GUIRenderer>(config);
+  auto guiRenderer = std::make_unique<rendering::GUIRenderer>(config);
+  inputHandler = guiRenderer->createInputHandler();
+  renderer = std::move(guiRenderer);
   cout << "Starting PACMAN in GUI mode...\n";
 #else
   renderer = std::make_unique<rendering::CLIRenderer>();
+  inputHandler = std::make_unique<input_handler::CLIInputHandler>();
   cout << "Starting PACMAN in CLI mode...\n";
 #endif
 
@@ -33,7 +40,8 @@ int main() {
     return 1;
   }
 
-  core::GameContext context(config, std::move(renderer));
+  core::GameContext context(config, std::move(renderer),
+                            std::move(inputHandler));
 
   auto state = core::createInitialState(context);
   state->onEnter();
@@ -47,9 +55,9 @@ int main() {
       context.game.timer = 0;
     }
 
-    char input = '\0';
-    if (context.renderer->keyAvailable()) {
-      input = context.renderer->getChar();
+    input_handler::Input input;
+    if (context.inputHandler->keyAvailable()) {
+      input = context.inputHandler->getInput();
     }
 
     state->handleInput(input);

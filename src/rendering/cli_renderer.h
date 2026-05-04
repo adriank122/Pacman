@@ -23,8 +23,6 @@ public:
   void showPauseOverlay() override;
   void clear() override;
 
-  char getChar() override;
-  bool keyAvailable() override;
   void sleep(int milliseconds) override;
   bool isOpen() const override;
   std::string promptPlayerName() override;

@@ -35,17 +35,17 @@ public:
     context.game.count();
   }
 
-  void handleInput(char input) override {
-    if (input == '\0') {
+  void handleInput(input_handler::Input input) override {
+    if (input.isNull()) {
       return;
     }
 
-    if (input == 27) {
+    if (input.value() == 27) {
       requestTransition(createMainMenuState(context));
       return;
     }
 
-    if (input == ' ') {
+    if (input.value() == ' ') {
       paused = !paused;
       return;
     }
@@ -54,7 +54,7 @@ public:
       return;
     }
 
-    switch (input) {
+    switch (input.value()) {
     case 'w':
       lastDirection = Direction::UP;
       break;
@@ -139,17 +139,17 @@ public:
     }
   }
 
-  void handleInput(char input) override {
-    if (input == '\0') {
+  void handleInput(input_handler::Input input) override {
+    if (input.isNull()) {
       return;
     }
 
-    if (input == 'm') {
+    if (input.value() == 'm') {
       requestTransition(createMainMenuState(context));
       return;
     }
 
-    if (won && input == 'o' && level == 1) {
+    if (won && input.value() == 'o' && level == 1) {
       context.game.init(context.config);
       context.level = 2;
       requestTransition(createGameplayState(context, 2));
@@ -175,8 +175,8 @@ public:
     context.renderer->showInstructions();
   }
 
-  void handleInput(char input) override {
-    if (input == '1') {
+  void handleInput(input_handler::Input input) override {
+    if (input.value() == '1') {
       requestTransition(createMainMenuState(context));
     }
   }
@@ -195,8 +195,8 @@ public:
     context.renderer->showLeaderboard();
   }
 
-  void handleInput(char input) override {
-    if (input == '1') {
+  void handleInput(input_handler::Input input) override {
+    if (input.value() == '1') {
       requestTransition(createMainMenuState(context));
     }
   }
@@ -215,12 +215,12 @@ public:
     context.renderer->showMenu();
   }
 
-  void handleInput(char input) override {
-    if (input == '\0') {
+  void handleInput(input_handler::Input input) override {
+    if (input.isNull()) {
       return;
     }
 
-    switch (input) {
+    switch (input.value()) {
     case '1':
       context.game.init(context.config);
       context.level = 1;

@@ -51,6 +51,7 @@ if (BUILD_CLI)
     add_executable(pacman-cli
         src/main.cpp
         src/rendering/cli_renderer.cpp
+        src/input_handler/cli_input_handler.cpp
     )
     target_include_directories(pacman-cli PRIVATE ${CORE_INCLUDE_DIR})
     target_link_libraries(pacman-cli PRIVATE pacman-core pthread)
@@ -76,6 +77,7 @@ if (BUILD_GUI)
         add_executable(pacman-gui
             src/main.cpp
             src/rendering/gui_renderer.cpp
+            src/input_handler/gui_input_handler.cpp
         )
         target_include_directories(pacman-gui PRIVATE ${CORE_INCLUDE_DIR})
         target_compile_definitions(pacman-gui PRIVATE USE_GUI=1)

@@ -27,8 +27,6 @@ public:
   virtual void clear() = 0;
 
   // Input functions
-  virtual char getChar() = 0;
-  virtual bool keyAvailable() = 0;
   virtual void sleep(int milliseconds) = 0;
   virtual bool isOpen() const = 0;
   virtual std::string promptPlayerName() = 0;

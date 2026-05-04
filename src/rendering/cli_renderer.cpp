@@ -19,10 +19,6 @@ CLIRenderer::~CLIRenderer() {}
 
 void CLIRenderer::clear() { utils::clear_screen(); }
 
-char CLIRenderer::getChar() { return utils::get_char(); }
-
-bool CLIRenderer::keyAvailable() { return utils::key_available(); }
-
 void CLIRenderer::sleep(int milliseconds) { utils::sleep_ms(milliseconds); }
 
 bool CLIRenderer::isOpen() const { return true; }

@@ -3,6 +3,7 @@
 
 #include "core/config/config.h"
 #include "core/map/map.h"
+#include "input_handler/input_handler.h"
 #include "renderer.h"
 #include <SFML/Graphics.hpp>
 #include <memory>
@@ -25,17 +26,15 @@ public:
   void showPauseOverlay() override;
   void clear() override;
 
-  char getChar() override;
-  bool keyAvailable() override;
   void sleep(int milliseconds) override;
   bool isOpen() const override;
   std::string promptPlayerName() override;
+  std::unique_ptr<input_handler::InputHandler> createInputHandler();
 
 private:
   std::unique_ptr<sf::RenderWindow> window;
   sf::Font fonts;
   core::GameConfig config;
-  char lastKeyPressed;
   std::string currentScreen;
 
   void renderTile(int row, int col, core::TileType tileType,
@@ -46,7 +45,6 @@ private:
                 sf::RenderWindow &win);
   void drawCenteredText(const std::string &text, float y, unsigned int fontSize,
                         const sf::Color &color, sf::RenderWindow &win);
-  void handleEvents();
   void drawMenu(sf::RenderWindow &win);
   void drawGameUI(const core::Game &game, sf::RenderWindow &win);
   void drawInstructions(sf::RenderWindow &win);
