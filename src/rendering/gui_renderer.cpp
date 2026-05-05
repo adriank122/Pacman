@@ -191,12 +191,12 @@ void GUIRenderer::drawGameUI(const core::Game &game, sf::RenderWindow &win) {
 
   ss.str("");
   ss.clear();
-  ss << "Points: " << game.pman.points;
+  ss << "Points: " << game.points;
   drawText(ss.str(), 10, config.windowHeight + 25, 12, sf::Color::Cyan, win);
 
   ss.str("");
   ss.clear();
-  ss << "Lives: " << game.pman.lives;
+  ss << "Lives: " << game.lives;
   drawText(ss.str(), 10, config.windowHeight + 45, 12, sf::Color::Yellow, win);
 
   ss.str("");

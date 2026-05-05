@@ -12,15 +12,26 @@ class Entity {
 public:
   virtual ~Entity() = default;
 
-  virtual int x() const = 0;
-  virtual int y() const = 0;
-  virtual int prev_x() const = 0;
-  virtual int prev_y() const = 0;
-  virtual Direction direction() const = 0;
-  virtual void setPosition(int x, int y) = 0;
-  virtual void setDirection(Direction direction) = 0;
-  virtual void savePreviousPosition() = 0;
+  int x() const { return x_; }
+  int y() const { return y_; }
+  int prev_x() const { return prev_x_; }
+  int prev_y() const { return prev_y_; }
+  Direction direction() const { return direction_; }
+  void setPosition(int x, int y) {
+    x_ = x;
+    y_ = y;
+  }
+  void setDirection(Direction d) { direction_ = d; }
+  void savePreviousPosition() {
+    prev_x_ = x_;
+    prev_y_ = y_;
+  }
+
   virtual TileType move(Map &map) = 0;
+
+protected:
+  int x_ = 0, y_ = 0, prev_x_ = 0, prev_y_ = 0;
+  Direction direction_ = Direction::NONE;
 };
 
 } // namespace core

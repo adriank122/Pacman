@@ -6,18 +6,6 @@ using namespace pacman::core;
 
 static Map makeOpenMap() { return Map(20, 17); }
 
-TEST(PacmanDefaults, InitialLivesAndPoints) {
-  Pacman p;
-  EXPECT_EQ(p.lives, 0);
-  EXPECT_EQ(p.points, 0);
-}
-
-TEST(PacmanDefaults, InitialSpawnCoords) {
-  Pacman p;
-  EXPECT_EQ(p.spawnX, 0);
-  EXPECT_EQ(p.spawnY, 0);
-}
-
 TEST(PacmanDefaults, InitialPosition) {
   Pacman p;
   EXPECT_EQ(p.x(), 0);

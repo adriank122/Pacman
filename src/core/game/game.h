@@ -16,6 +16,10 @@ public:
   Pacman pman;
   Map map;
   std::vector<Ghost> ghosts;
+  int lives;
+  int points;
+  int spawnX;
+  int spawnY;
   int timer;
   int delay;
   int food;
