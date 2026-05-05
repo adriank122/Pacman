@@ -22,7 +22,7 @@ public:
   void showGameCounter(const core::Game &game) override;
   void showGameOver(const std::string &reason) override;
   void showInstructions() override;
-  void showLeaderboard() override;
+  void showLeaderboard(const std::vector<core::LeaderboardEntry> &entries) override;
   void showPauseOverlay() override;
   void clear() override;
 
@@ -48,7 +48,8 @@ private:
   void drawMenu(sf::RenderWindow &win);
   void drawGameUI(const core::Game &game, sf::RenderWindow &win);
   void drawInstructions(sf::RenderWindow &win);
-  void drawLeaderboard(sf::RenderWindow &win);
+  void drawLeaderboard(const std::vector<core::LeaderboardEntry> &entries,
+                       sf::RenderWindow &win);
   void drawGameOver(const std::string &reason, sf::RenderWindow &win);
 };
 

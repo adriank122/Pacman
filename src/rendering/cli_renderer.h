@@ -3,7 +3,6 @@
 
 #include "core/map/map.h"
 #include "renderer.h"
-#include <fstream>
 
 namespace pacman {
 namespace rendering {
@@ -19,7 +18,7 @@ public:
   void showGameCounter(const core::Game &game) override;
   void showGameOver(const std::string &reason) override;
   void showInstructions() override;
-  void showLeaderboard() override;
+  void showLeaderboard(const std::vector<core::LeaderboardEntry> &entries) override;
   void showPauseOverlay() override;
   void clear() override;
 
@@ -28,7 +27,6 @@ public:
   std::string promptPlayerName() override;
 
 private:
-  void showLeaderboardList();
   char tileTypeToChar(core::TileType type);
 };
 

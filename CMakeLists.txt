@@ -22,6 +22,7 @@ set(CORE_SOURCES
     src/core/game/game_timer.cpp
     src/core/systems/systems.cpp
     src/core/states/game_state.cpp
+    src/core/leaderboard/leaderboard.cpp
     src/utils/platform_utils.cpp
 )
 

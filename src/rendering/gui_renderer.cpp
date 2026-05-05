@@ -3,7 +3,6 @@
 #include "core/map/map.h"
 #include "input_handler/gui_input_handler.h"
 #include "utils/platform_utils.h"
-#include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
@@ -224,33 +223,27 @@ void GUIRenderer::drawInstructions(sf::RenderWindow &win) {
                    win);
 }
 
-void GUIRenderer::drawLeaderboard(sf::RenderWindow &win) {
+void GUIRenderer::drawLeaderboard(
+    const std::vector<core::LeaderboardEntry> &entries, sf::RenderWindow &win) {
   drawCenteredText("HIGH SCORES", 10, 20, sf::Color::Yellow, win);
 
   drawText("Name", 30, 40, 12, sf::Color(180, 180, 180), win);
   drawText("Score", config.windowWidth - 80, 40, 12, sf::Color(180, 180, 180),
            win);
 
-  ifstream rankFile("leaderboard.txt");
-  if (!rankFile.is_open()) {
+  if (entries.empty()) {
     drawCenteredText("No scores yet", 150, 16, sf::Color::Red, win);
     drawCenteredText("Press 1 to return to menu", 230, 12, sf::Color::Yellow,
                      win);
     return;
   }
 
-  string line;
   int yPos = 60;
   int rank = 1;
 
-  while (getline(rankFile, line) && rank <= 10 &&
-         yPos < config.windowHeight - 20) {
-    auto tab = line.find('\t');
-    if (tab == string::npos)
-      continue;
-
-    string name = line.substr(0, tab);
-    string score = line.substr(tab + 1);
+  for (const auto &e : entries) {
+    if (yPos >= config.windowHeight - 20)
+      break;
 
     sf::Color rankColor = sf::Color::White;
     if (rank == 1)
@@ -261,14 +254,14 @@ void GUIRenderer::drawLeaderboard(sf::RenderWindow &win) {
       rankColor = sf::Color(184, 134, 11);
 
     stringstream rankStr;
-    rankStr << rank << ". " << name;
+    rankStr << rank << ". " << e.name;
     drawText(rankStr.str(), 30, yPos, 13, rankColor, win);
-    drawText(score, config.windowWidth - 80, yPos, 13, rankColor, win);
+    drawText(std::to_string(e.score), config.windowWidth - 80, yPos, 13,
+             rankColor, win);
 
     yPos += 20;
-    rank++;
+    ++rank;
   }
-  rankFile.close();
 
   drawCenteredText("Press 1 to return to menu", 230, 12, sf::Color::Yellow,
                    win);
@@ -410,12 +403,13 @@ void GUIRenderer::showInstructions() {
   window->display();
 }
 
-void GUIRenderer::showLeaderboard() {
+void GUIRenderer::showLeaderboard(
+    const std::vector<core::LeaderboardEntry> &entries) {
   if (!window)
     return;
   currentScreen = "ranking";
   window->clear(sf::Color::Black);
-  drawLeaderboard(*window);
+  drawLeaderboard(entries, *window);
   window->display();
 }
 

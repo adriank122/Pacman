@@ -5,7 +5,6 @@
 #include "core/entities/ghost.h"
 #include "core/entities/pman.h"
 #include "core/map/map.h"
-#include <string>
 #include <vector>
 
 namespace pacman {
@@ -27,7 +26,6 @@ public:
 
   void count();
   void init(const GameConfig &config);
-  void saveLeaderboard(const std::string &playerName) const;
 };
 
 } // namespace core
