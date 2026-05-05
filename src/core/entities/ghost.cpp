@@ -5,29 +5,9 @@
 namespace pacman {
 namespace core {
 
-Ghost::Ghost()
-    : last_move(Direction::NONE), xg(0), yg(0), prev_xg(0), prev_yg(0) {}
-
-Ghost::Ghost(int x, int y) : Ghost() { setPosition(x, y); }
-
-int Ghost::x() const { return xg; }
-int Ghost::y() const { return yg; }
-int Ghost::prev_x() const { return prev_xg; }
-int Ghost::prev_y() const { return prev_yg; }
-Direction Ghost::direction() const { return last_move; }
-
-void Ghost::setPosition(int x, int y) {
-  xg = x;
-  yg = y;
-  prev_xg = x;
-  prev_yg = y;
-}
-
-void Ghost::setDirection(Direction direction) { last_move = direction; }
-
-void Ghost::savePreviousPosition() {
-  prev_xg = xg;
-  prev_yg = yg;
+Ghost::Ghost(int x, int y) {
+  setPosition(x, y);
+  savePreviousPosition();
 }
 
 namespace {
@@ -67,18 +47,18 @@ Direction reverseOf(Direction dir) {
 TileType Ghost::move(Map &map) {
   savePreviousPosition();
 
-  Direction reverse = reverseOf(last_move);
+  Direction reverse = reverseOf(direction_);
   std::vector<MovePlan> candidates;
 
   for (const MovePlan &m : ALL_MOVES) {
-    if (m.dir != reverse && isTileAvailable(map, xg + m.dx, yg + m.dy))
+    if (m.dir != reverse && isTileAvailable(map, x_ + m.dx, y_ + m.dy))
       candidates.push_back(m);
   }
 
   // At a dead end allow reversing
   if (candidates.empty()) {
     for (const MovePlan &m : ALL_MOVES) {
-      if (isTileAvailable(map, xg + m.dx, yg + m.dy))
+      if (isTileAvailable(map, x_ + m.dx, y_ + m.dy))
         candidates.push_back(m);
     }
   }
@@ -91,9 +71,9 @@ TileType Ghost::move(Map &map) {
                                ? candidates[0]
                                : candidates[std::rand() % candidates.size()];
 
-  xg += chosen.dx;
-  yg += chosen.dy;
-  last_move = chosen.dir;
+  x_ += chosen.dx;
+  y_ += chosen.dy;
+  direction_ = chosen.dir;
   return TileType::EMPTY;
 }
 

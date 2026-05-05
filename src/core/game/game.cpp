@@ -22,13 +22,14 @@ void Game::count() {
 void Game::init(const GameConfig &config) {
   powerUpScore = config.powerUpScore;
   pman = Pacman();
-  pman.spawnX = config.pacmanStartX;
-  pman.spawnY = config.pacmanStartY;
+  spawnX = config.pacmanStartX;
+  spawnY = config.pacmanStartY;
   pman.setPosition(config.pacmanStartX, config.pacmanStartY);
   pman.savePreviousPosition();
   timer = config.startingTimerMs;
   delay = config.gameTickDelayMs;
-  pman.lives = config.startingLives;
+  lives = config.startingLives;
+  points = 0;
   ghosts.clear();
   ghosts.emplace_back(config.ghost1StartX, config.ghost1StartY);
   ghosts.emplace_back(config.ghost2StartX, config.ghost2StartY);
@@ -52,8 +53,7 @@ void Game::saveLeaderboard(const std::string &playerName) const {
   }
   f.close();
 
-  entries.push_back(
-      {playerName.empty() ? "Anonymous" : playerName, pman.points});
+  entries.push_back({playerName.empty() ? "Anonymous" : playerName, points});
 
   sort(entries.begin(), entries.end(),
        [](const auto &a, const auto &b) { return a.second > b.second; });

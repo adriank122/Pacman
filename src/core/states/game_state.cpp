@@ -89,7 +89,7 @@ public:
 
     context.game.count();
 
-    if (context.game.pman.lives <= 0) {
+    if (context.game.lives <= 0) {
       requestTransition(
           std::make_unique<GameOverState>(context, "lives", level, false));
       return;

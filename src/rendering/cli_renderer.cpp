@@ -82,9 +82,9 @@ char CLIRenderer::tileTypeToChar(core::TileType type) {
 
 void CLIRenderer::showGameCounter(const core::Game &game) {
   cout << "Time remaining: " << game.timer / 1000 << "\n\n";
-  cout << "Points: " << game.pman.points << "\n\n";
+  cout << "Points: " << game.points << "\n\n";
   cout << "Food count: " << game.food << "\n\n";
-  cout << "Lives: " << game.pman.lives << "\n\n";
+  cout << "Lives: " << game.lives << "\n\n";
 }
 
 void CLIRenderer::showGameOver(const std::string &reason) {

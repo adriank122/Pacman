@@ -6,8 +6,8 @@ namespace core {
 void checkCollisions(Game &game) {
   for (const Ghost &ghost : game.ghosts) {
     if (ghost.x() == game.pman.x() && ghost.y() == game.pman.y()) {
-      game.pman.lives--;
-      game.pman.setPosition(game.pman.spawnX, game.pman.spawnY);
+      game.lives--;
+      game.pman.setPosition(game.spawnX, game.spawnY);
       return;
     }
   }
@@ -15,9 +15,9 @@ void checkCollisions(Game &game) {
 
 void applyScoring(Game &game, TileType consumed) {
   if (consumed == TileType::PELLET) {
-    game.pman.points++;
+    game.points++;
   } else if (consumed == TileType::POWER_UP) {
-    game.pman.points += game.powerUpScore;
+    game.points += game.powerUpScore;
   }
 }
 
