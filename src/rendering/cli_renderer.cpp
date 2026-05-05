@@ -2,7 +2,6 @@
 #include "core/game/game.h"
 #include "core/map/map.h"
 #include "utils/platform_utils.h"
-#include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <string>
@@ -118,10 +117,18 @@ void CLIRenderer::showInstructions() {
   cout << "1 -->Back to main menu\n";
 }
 
-void CLIRenderer::showLeaderboard() {
+void CLIRenderer::showLeaderboard(
+    const std::vector<core::LeaderboardEntry> &entries) {
   clear();
-  cout << "Leaderboard:\n";
-  showLeaderboardList();
+  cout << "Leaderboard:\n\n\n";
+  cout << left << setw(6) << "Rank" << setw(22) << "Name"
+       << "Score\n";
+  cout << string(38, '-') << "\n\n";
+  int rank = 1;
+  for (const auto &e : entries) {
+    cout << left << setw(6) << rank << setw(22) << e.name << e.score << "\n\n";
+    ++rank;
+  }
   cout << "\n\n\n";
   cout << "1 -->Back to main menu";
 }
@@ -129,27 +136,6 @@ void CLIRenderer::showLeaderboard() {
 void CLIRenderer::showPauseOverlay() {
   cout << "\n--- PAUSED ---\n";
   cout << "Press Space to continue, Esc to return to the main menu\n";
-}
-
-void CLIRenderer::showLeaderboardList() {
-  cout << "\n\n";
-  cout << left << setw(6) << "Rank" << setw(22) << "Name"
-       << "Score\n";
-  cout << string(38, '-') << "\n\n";
-
-  ifstream f("leaderboard.txt");
-  string line;
-  int rank = 1;
-  while (getline(f, line) && rank <= 10) {
-    auto tab = line.find('\t');
-    if (tab == string::npos)
-      continue;
-    string name = line.substr(0, tab);
-    string score = line.substr(tab + 1);
-    cout << left << setw(6) << rank << setw(22) << name << score << "\n\n";
-    rank++;
-  }
-  f.close();
 }
 
 } // namespace rendering

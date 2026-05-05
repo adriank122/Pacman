@@ -1,7 +1,9 @@
 #ifndef PACMAN_RENDERING_RENDERER_H
 #define PACMAN_RENDERING_RENDERER_H
 
+#include "core/leaderboard/leaderboard.h"
 #include <string>
+#include <vector>
 
 namespace pacman {
 namespace core {
@@ -22,7 +24,7 @@ public:
   virtual void showGameCounter(const core::Game &game) = 0;
   virtual void showGameOver(const std::string &reason) = 0;
   virtual void showInstructions() = 0;
-  virtual void showLeaderboard() = 0;
+  virtual void showLeaderboard(const std::vector<core::LeaderboardEntry> &entries) = 0;
   virtual void showPauseOverlay() = 0;
   virtual void clear() = 0;
 

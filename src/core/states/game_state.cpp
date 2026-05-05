@@ -134,7 +134,7 @@ public:
 
     if (!won) {
       std::string name = context.renderer->promptPlayerName();
-      context.game.saveLeaderboard(name);
+      context.leaderboard.addEntry(name, context.game.points);
       requestTransition(createLeaderboardState(context));
     }
   }
@@ -192,7 +192,7 @@ public:
 
   void onEnter() override {
     context.renderer->clear();
-    context.renderer->showLeaderboard();
+    context.renderer->showLeaderboard(context.leaderboard.entries());
   }
 
   void handleInput(input_handler::Input input) override {
