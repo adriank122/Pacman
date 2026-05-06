@@ -41,38 +41,12 @@ void GUIRenderer::clear() {
 
 bool GUIRenderer::isOpen() const { return window ? window->isOpen() : false; }
 
-std::string GUIRenderer::promptPlayerName() {
+void GUIRenderer::showNamePrompt(const std::string &name) {
   if (!window)
-    return "Anonymous";
-
-  std::string name;
-
-  while (window->isOpen()) {
-    sf::Event event;
-    while (window->pollEvent(event)) {
-      if (event.type == sf::Event::Closed) {
-        window->close();
-        return name.empty() ? "Anonymous" : name;
-      }
-      if (event.type == sf::Event::TextEntered) {
-        sf::Uint32 c = event.text.unicode;
-        if (c == 13 || c == 10) {
-          return name.empty() ? "Anonymous" : name;
-        } else if (c == 8) {
-          if (!name.empty())
-            name.pop_back();
-        } else if (c >= 32 && c < 128 && name.size() < 20) {
-          name += static_cast<char>(c);
-        }
-      }
-    }
-
-    window->clear(sf::Color::Black);
-    drawNamePrompt(name, *window);
-    window->display();
-  }
-
-  return name.empty() ? "Anonymous" : name;
+    return;
+  window->clear(sf::Color::Black);
+  drawNamePrompt(name, *window);
+  window->display();
 }
 
 void GUIRenderer::drawNamePrompt(const std::string &name,
@@ -282,13 +256,15 @@ void GUIRenderer::drawGameOver(const string &reason, sf::RenderWindow &win) {
     win.draw(msgBox);
     drawCenteredText("GAME OVER", 60, 24, sf::Color::White, win);
     drawCenteredText("You ran out of lives!", 100, 16, sf::Color::Yellow, win);
-    drawCenteredText("Press 'm' for menu", 140, 12, sf::Color::White, win);
+    drawCenteredText("Press Enter to continue or 'm' for menu", 140, 11,
+                     sf::Color::White, win);
   } else if (reason == "time") {
     msgBox.setFillColor(sf::Color(128, 60, 0));
     win.draw(msgBox);
     drawCenteredText("TIME'S UP!", 60, 24, sf::Color::White, win);
     drawCenteredText("You ran out of time!", 100, 16, sf::Color::Yellow, win);
-    drawCenteredText("Press 'm' for menu", 140, 12, sf::Color::White, win);
+    drawCenteredText("Press Enter to continue or 'm' for menu", 140, 11,
+                     sf::Color::White, win);
   } else if (reason == "won") {
     msgBox.setFillColor(sf::Color(0, 128, 0));
     win.draw(msgBox);

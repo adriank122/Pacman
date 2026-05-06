@@ -58,6 +58,11 @@ void GUIInputHandler::handleEvents() {
       default:
         break;
       }
+    } else if (event.type == sf::Event::TextEntered) {
+      sf::Uint32 c = event.text.unicode;
+      if (c == 8 || (c >= 32 && c < 128)) {
+        lastKeyPressed_ = static_cast<char>(c);
+      }
     }
   }
 }
