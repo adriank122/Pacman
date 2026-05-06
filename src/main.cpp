@@ -1,6 +1,4 @@
 #include "core/config/config.h"
-#include "core/game/game.h"
-#include "core/game/game_timer.h"
 #include "core/states/game_state.h"
 #include "input_handler/input.h"
 #include "rendering/renderer.h"
@@ -46,14 +44,8 @@ int main() {
   auto state = core::createInitialState(context);
   state->onEnter();
 
-  core::GameTimer timer(context.game.delay);
-
   while (!context.quit && context.renderer->isOpen()) {
-    int elapsed = timer.advance();
-    context.game.timer -= elapsed;
-    if (context.game.timer < 0) {
-      context.game.timer = 0;
-    }
+    (void)context.timer.advance();
 
     input_handler::Input input;
     if (context.inputHandler->keyAvailable()) {
@@ -65,12 +57,13 @@ int main() {
 #ifndef USE_GUI
     bool didUpdate = false;
 #endif
-    while (timer.hasTick() && !context.quit && context.renderer->isOpen()) {
+    while (context.timer.hasTick() && !context.quit &&
+           context.renderer->isOpen()) {
       state->update();
 #ifndef USE_GUI
       didUpdate = true;
 #endif
-      timer.consumeTick();
+      context.timer.consumeTick();
 
       auto nextState = state->takeNextState();
       if (nextState) {
@@ -79,8 +72,6 @@ int main() {
         break;
       }
     }
-
-    context.interpolation = timer.interpolation();
 
 #ifdef USE_GUI
     state->render();

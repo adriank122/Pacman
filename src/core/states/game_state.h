@@ -2,37 +2,12 @@
 #define PACMAN_CORE_GAME_STATE_H
 
 #include <memory>
-#include <string>
 
-#include "core/config/config.h"
-#include "core/game/game.h"
-#include "core/leaderboard/leaderboard.h"
+#include "core/game_context.h"
 #include "input_handler/input.h"
-#include "input_handler/input_handler.h"
-#include "rendering/renderer.h"
 
 namespace pacman {
 namespace core {
-
-class GameContext {
-public:
-  GameContext(const GameConfig &config,
-              std::unique_ptr<rendering::Renderer> renderer,
-              std::unique_ptr<input_handler::InputHandler> inputHandler)
-      : config(config), game(), leaderboard(), renderer(std::move(renderer)),
-        inputHandler(std::move(inputHandler)), quit(false), level(1) {
-    game.delay = config.gameTickDelayMs;
-  }
-
-  GameConfig config;
-  Game game;
-  Leaderboard leaderboard;
-  std::unique_ptr<rendering::Renderer> renderer;
-  std::unique_ptr<input_handler::InputHandler> inputHandler;
-  bool quit;
-  int level;
-  double interpolation = 0.0;
-};
 
 class IGameState {
 public:

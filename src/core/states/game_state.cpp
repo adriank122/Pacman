@@ -3,11 +3,10 @@
 #include "core/entities/ghost.h"
 #include "core/entities/pman.h"
 #include "core/game/game.h"
+                                                                                                                                                                                          #include "core/leaderboard/leaderboard.h"
 #include "core/map/map.h"
 #include "core/map/map_loader.h"
 #include "core/systems/systems.h"
-
-#include <iostream>
 
 namespace pacman {
 namespace core {
@@ -26,13 +25,12 @@ public:
         paused(false) {}
 
   void onEnter() override {
-    context.level = level;
     context.renderer->clear();
 
-    context.game.map = MapLoader::load("resources/maps/level" +
-                                       std::to_string(level) + ".map");
-
-    context.game.count();
+    game.init(context.config);
+    game.map = MapLoader::load("resources/maps/level" +
+                               std::to_string(level) + ".map");
+    game.count();
   }
 
   void handleInput(input_handler::Input input) override {
@@ -77,40 +75,48 @@ public:
       return;
     }
 
-    for (Ghost &ghost : context.game.ghosts)
-      ghost.move(context.game.map);
+    for (Ghost &ghost : game.ghosts)
+      ghost.move(game.map);
 
     if (lastDirection != Direction::NONE) {
-      context.game.pman.setDirection(lastDirection);
+      game.pman.setDirection(lastDirection);
     }
-    TileType consumed = context.game.pman.move(context.game.map);
-    applyScoring(context.game, consumed);
-    checkCollisions(context.game);
+    TileType consumed = game.pman.move(game.map);
+    applyScoring(game, consumed);
+    checkCollisions(game);
 
-    context.game.count();
+    game.count();
 
-    if (context.game.lives <= 0) {
+    game.timer -= context.config.gameTickDelayMs;
+    if (game.timer < 0) {
+      game.timer = 0;
+    }
+
+    if (game.lives <= 0) {
       requestTransition(
-          std::make_unique<GameOverState>(context, "lives", level, false));
+          std::make_unique<GameOverState>(context, "lives", level, false,
+                                         game.points));
       return;
     }
 
-    if (context.game.timer <= 0) {
+    if (game.timer <= 0) {
       requestTransition(
-          std::make_unique<GameOverState>(context, "time", level, false));
+          std::make_unique<GameOverState>(context, "time", level, false,
+                                         game.points));
       return;
     }
 
-    if (context.game.food <= 0) {
+    if (game.food <= 0) {
       requestTransition(
-          std::make_unique<GameOverState>(context, "won", level, true));
+          std::make_unique<GameOverState>(context, "won", level, true,
+                                         game.points));
       return;
     }
   }
 
   void render() override {
     context.renderer->clear();
-    context.renderer->showGameState(context.game, context.interpolation);
+    context.renderer->showGameState(game, context.timer.interpolation());
     if (paused) {
       context.renderer->showPauseOverlay();
     }
@@ -120,13 +126,16 @@ private:
   int level;
   Direction lastDirection;
   bool paused;
+  Game game;
 };
 
 // Game over state
 class GameOverState : public IGameState {
 public:
-  GameOverState(GameContext &ctx, std::string reason, int level, bool won)
-      : IGameState(ctx), reason(std::move(reason)), level(level), won(won) {}
+  GameOverState(GameContext &ctx, std::string reason, int level, bool won,
+                int points)
+      : IGameState(ctx), reason(std::move(reason)), level(level), won(won),
+        points(points) {}
 
   void onEnter() override {
     context.renderer->clear();
@@ -134,7 +143,8 @@ public:
 
     if (!won) {
       std::string name = context.renderer->promptPlayerName();
-      context.leaderboard.addEntry(name, context.game.points);
+      Leaderboard lb;
+      lb.addEntry(name, points);
       requestTransition(createLeaderboardState(context));
     }
   }
@@ -150,8 +160,6 @@ public:
     }
 
     if (won && input.value() == 'o' && level == 1) {
-      context.game.init(context.config);
-      context.level = 2;
       requestTransition(createGameplayState(context, 2));
     }
   }
@@ -163,6 +171,7 @@ private:
   std::string reason;
   int level;
   bool won;
+  int points;
 };
 
 // Instructions state
@@ -192,7 +201,8 @@ public:
 
   void onEnter() override {
     context.renderer->clear();
-    context.renderer->showLeaderboard(context.leaderboard.entries());
+    Leaderboard lb;
+    context.renderer->showLeaderboard(lb.entries());
   }
 
   void handleInput(input_handler::Input input) override {
@@ -222,8 +232,6 @@ public:
 
     switch (input.value()) {
     case '1':
-      context.game.init(context.config);
-      context.level = 1;
       requestTransition(createGameplayState(context, 1));
       break;
     case '2':
