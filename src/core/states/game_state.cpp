@@ -16,6 +16,7 @@ class GameplayState;
 class InstructionsState;
 class LeaderboardState;
 class GameOverState;
+class NameEntryState;
 
 // Gameplay state
 class GameplayState : public IGameState {
@@ -25,8 +26,6 @@ public:
         paused(false) {}
 
   void onEnter() override {
-    context.renderer->clear();
-
     game.init(context.config);
     game.map = MapLoader::load("resources/maps/level" + std::to_string(level) +
                                ".map");
@@ -134,17 +133,7 @@ public:
       : IGameState(ctx), reason(std::move(reason)), level(level), won(won),
         points(points) {}
 
-  void onEnter() override {
-    context.renderer->clear();
-    context.renderer->showGameOver(reason);
-
-    if (!won) {
-      std::string name = context.renderer->promptPlayerName();
-      Leaderboard lb;
-      lb.addEntry(name, points);
-      requestTransition(createLeaderboardState(context));
-    }
-  }
+  void onEnter() override {}
 
   void handleInput(input_handler::Input input) override {
     if (input.isNull()) {
@@ -158,11 +147,17 @@ public:
 
     if (won && input.value() == 'o' && level == 1) {
       requestTransition(createGameplayState(context, 2));
+      return;
+    }
+
+    if (!won && (input.value() == 13 || input.value() == '\n')) {
+      requestTransition(createNameEntryState(context, points));
     }
   }
 
   void update() override {}
-  void render() override {}
+
+  void render() override { context.renderer->showGameOver(reason); }
 
 private:
   std::string reason;
@@ -176,10 +171,7 @@ class InstructionsState : public IGameState {
 public:
   explicit InstructionsState(GameContext &ctx) : IGameState(ctx) {}
 
-  void onEnter() override {
-    context.renderer->clear();
-    context.renderer->showInstructions();
-  }
+  void onEnter() override {}
 
   void handleInput(input_handler::Input input) override {
     if (input.value() == '1') {
@@ -188,7 +180,7 @@ public:
   }
 
   void update() override {}
-  void render() override {}
+  void render() override { context.renderer->showInstructions(); }
 };
 
 // Leaderboard state
@@ -196,11 +188,7 @@ class LeaderboardState : public IGameState {
 public:
   explicit LeaderboardState(GameContext &ctx) : IGameState(ctx) {}
 
-  void onEnter() override {
-    context.renderer->clear();
-    Leaderboard lb;
-    context.renderer->showLeaderboard(lb.entries());
-  }
+  void onEnter() override { entries = Leaderboard().entries(); }
 
   void handleInput(input_handler::Input input) override {
     if (input.value() == '1') {
@@ -209,7 +197,10 @@ public:
   }
 
   void update() override {}
-  void render() override {}
+  void render() override { context.renderer->showLeaderboard(entries); }
+
+private:
+  std::vector<core::LeaderboardEntry> entries;
 };
 
 // Main menu state
@@ -217,10 +208,7 @@ class MainMenuState : public IGameState {
 public:
   explicit MainMenuState(GameContext &ctx) : IGameState(ctx) {}
 
-  void onEnter() override {
-    context.renderer->clear();
-    context.renderer->showMenu();
-  }
+  void onEnter() override {}
 
   void handleInput(input_handler::Input input) override {
     if (input.isNull()) {
@@ -246,7 +234,40 @@ public:
   }
 
   void update() override {}
-  void render() override {}
+  void render() override { context.renderer->showMenu(); }
+};
+
+// Name entry state
+class NameEntryState : public IGameState {
+public:
+  NameEntryState(GameContext &ctx, int points)
+      : IGameState(ctx), points(points) {}
+
+  void onEnter() override {}
+
+  void handleInput(input_handler::Input input) override {
+    if (input.isNull())
+      return;
+    char c = input.value();
+    if (c == 13 || c == '\n') {
+      Leaderboard lb;
+      lb.addEntry(name.empty() ? "Anonymous" : name, points);
+      requestTransition(createLeaderboardState(context));
+    } else if (c == 27) {
+      requestTransition(createMainMenuState(context));
+    } else if ((c == 8 || c == 127) && !name.empty()) {
+      name.pop_back();
+    } else if (c >= 32 && c < 127 && name.size() < 20) {
+      name += c;
+    }
+  }
+
+  void update() override {}
+  void render() override { context.renderer->showNamePrompt(name); }
+
+private:
+  int points;
+  std::string name;
 };
 
 std::unique_ptr<IGameState> createMainMenuState(GameContext &context) {
@@ -264,6 +285,11 @@ std::unique_ptr<IGameState> createInstructionsState(GameContext &context) {
 
 std::unique_ptr<IGameState> createLeaderboardState(GameContext &context) {
   return std::make_unique<LeaderboardState>(context);
+}
+
+std::unique_ptr<IGameState> createNameEntryState(GameContext &context,
+                                                 int points) {
+  return std::make_unique<NameEntryState>(context, points);
 }
 
 std::unique_ptr<IGameState> createInitialState(GameContext &context) {

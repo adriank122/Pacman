@@ -37,6 +37,8 @@ std::unique_ptr<IGameState> createGameplayState(GameContext &context,
                                                 int level);
 std::unique_ptr<IGameState> createInstructionsState(GameContext &context);
 std::unique_ptr<IGameState> createLeaderboardState(GameContext &context);
+std::unique_ptr<IGameState> createNameEntryState(GameContext &context,
+                                                 int points);
 
 } // namespace core
 } // namespace pacman

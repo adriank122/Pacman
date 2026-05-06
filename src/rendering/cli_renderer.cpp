@@ -98,10 +98,14 @@ void CLIRenderer::showGameOver(const std::string &reason) {
     cout << "Press 'm' to return to the main menu.\n\n";
     return;
   }
-  cout << "Enter your name and press Enter:\n\n";
+  cout << "Press Enter to enter your name, 'm' to return to menu.\n\n";
 }
 
-std::string CLIRenderer::promptPlayerName() { return utils::read_line(); }
+void CLIRenderer::showNamePrompt(const std::string &name) {
+  clear();
+  cout << "Enter your name:\n\n" << name << "_\n\n";
+  cout << "Press Enter to confirm.\n";
+}
 
 void CLIRenderer::showInstructions() {
   clear();

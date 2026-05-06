@@ -26,12 +26,12 @@ public:
   virtual void showInstructions() = 0;
   virtual void showLeaderboard(const std::vector<core::LeaderboardEntry> &entries) = 0;
   virtual void showPauseOverlay() = 0;
+  virtual void showNamePrompt(const std::string &name) = 0;
   virtual void clear() = 0;
 
   // Input functions
   virtual void sleep(int milliseconds) = 0;
   virtual bool isOpen() const = 0;
-  virtual std::string promptPlayerName() = 0;
 };
 
 } // namespace rendering

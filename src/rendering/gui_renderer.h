@@ -23,12 +23,12 @@ public:
   void showGameOver(const std::string &reason) override;
   void showInstructions() override;
   void showLeaderboard(const std::vector<core::LeaderboardEntry> &entries) override;
+  void showNamePrompt(const std::string &name) override;
   void showPauseOverlay() override;
   void clear() override;
 
   void sleep(int milliseconds) override;
   bool isOpen() const override;
-  std::string promptPlayerName() override;
   std::unique_ptr<input_handler::InputHandler> createInputHandler();
 
 private:
