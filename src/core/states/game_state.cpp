@@ -3,7 +3,7 @@
 #include "core/entities/ghost.h"
 #include "core/entities/pman.h"
 #include "core/game/game.h"
-                                                                                                                                                                                          #include "core/leaderboard/leaderboard.h"
+#include "core/leaderboard/leaderboard.h"
 #include "core/map/map.h"
 #include "core/map/map_loader.h"
 #include "core/systems/systems.h"
@@ -28,8 +28,8 @@ public:
     context.renderer->clear();
 
     game.init(context.config);
-    game.map = MapLoader::load("resources/maps/level" +
-                               std::to_string(level) + ".map");
+    game.map = MapLoader::load("resources/maps/level" + std::to_string(level) +
+                               ".map");
     game.count();
   }
 
@@ -93,23 +93,20 @@ public:
     }
 
     if (game.lives <= 0) {
-      requestTransition(
-          std::make_unique<GameOverState>(context, "lives", level, false,
-                                         game.points));
+      requestTransition(std::make_unique<GameOverState>(context, "lives", level,
+                                                        false, game.points));
       return;
     }
 
     if (game.timer <= 0) {
-      requestTransition(
-          std::make_unique<GameOverState>(context, "time", level, false,
-                                         game.points));
+      requestTransition(std::make_unique<GameOverState>(context, "time", level,
+                                                        false, game.points));
       return;
     }
 
     if (game.food <= 0) {
-      requestTransition(
-          std::make_unique<GameOverState>(context, "won", level, true,
-                                         game.points));
+      requestTransition(std::make_unique<GameOverState>(context, "won", level,
+                                                        true, game.points));
       return;
     }
   }

@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "core/game_context.h"
+#include "core/game_context/game_context.h"
 #include "input_handler/input.h"
 
 namespace pacman {
